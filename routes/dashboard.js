@@ -8,24 +8,55 @@ router.get('/', async (req, res) => {
   try {
     // Get key metrics
     const [participantCount] = await db('participants').count('* as count');
-    const [eventCount] = await db('event_templates').count('* as count');
+    const [eventCount] = await db('events').count('* as count');
     const [surveyCount] = await db('surveys').count('* as count');
     const [milestoneCount] = await db('milestones').count('* as count');
     const [donationSum] = await db('donations').sum('donation_amount as total');
 
-    // Get recent surveys with high satisfaction
-    const recentSurveys = await db('surveys')
-      .join('participants', 'surveys.participant_email', 'participants.participant_email')
-      .select('surveys.*', 'participants.first_name', 'participants.last_name')
-      .orderBy('surveys.survey_date', 'desc')
-      .limit(10);
+    // Get all participants data
+    const participants = await db('participants')
+      .select('*')
+      .orderBy('participant_last_name', 'asc')
+      .limit(50);
 
-    // Get milestone achievement rates
-    const milestoneStats = await db('milestones')
-      .join('milestone_types', 'milestones.milestone_type_id', 'milestone_types.milestone_type_id')
-      .select('milestone_types.category')
-      .count('* as count')
-      .groupBy('milestone_types.category');
+    // Get all events data
+    const events = await db('events')
+      .select('*')
+      .orderBy('event_name', 'asc')
+      .limit(50);
+
+    // Get all donations data with participant names
+    const donations = await db('donations')
+      .leftJoin('participants', 'donations.participant_id', 'participants.participant_id')
+      .select('donations.*',
+              'participants.participant_first_name as first_name',
+              'participants.participant_last_name as last_name')
+      .orderBy('donations.donation_date', 'desc')
+      .limit(50);
+
+    // Get all surveys data with participant names
+    const surveys = await db('surveys')
+      .leftJoin('registrations', 'surveys.registration_id', 'registrations.registration_id')
+      .leftJoin('participants', 'registrations.participant_id', 'participants.participant_id')
+      .leftJoin('eventoccurrences', 'registrations.event_occurrence_id', 'eventoccurrences.event_occurrence_id')
+      .leftJoin('events', 'eventoccurrences.event_template_id', 'events.event_template_id')
+      .select('surveys.*',
+              'participants.participant_first_name as first_name',
+              'participants.participant_last_name as last_name',
+              'events.event_name')
+      .orderBy('surveys.survey_submission_date', 'desc')
+      .limit(50);
+
+    // Get all milestones data with participant and milestone type info
+    const milestones = await db('milestones')
+      .join('participants', 'milestones.participant_id', 'participants.participant_id')
+      .join('milestonetypes', 'milestones.milestone_type_id', 'milestonetypes.milestone_type_id')
+      .select('milestones.*',
+              'participants.participant_first_name as first_name',
+              'participants.participant_last_name as last_name',
+              'milestonetypes.milestone_title')
+      .orderBy('milestones.milestone_date', 'desc')
+      .limit(50);
 
     res.render('dashboard/index', {
       title: 'Dashboard',
@@ -36,8 +67,11 @@ router.get('/', async (req, res) => {
         milestones: milestoneCount.count,
         totalDonations: donationSum.total || 0
       },
-      recentSurveys,
-      milestoneStats,
+      participants,
+      events,
+      donations,
+      surveys,
+      milestones,
       tableauUrl: process.env.TABLEAU_DASHBOARD_URL || null,
       isManager: req.session.user.role === 'manager'
     });
