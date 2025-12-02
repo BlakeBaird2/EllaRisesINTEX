@@ -7,27 +7,11 @@ require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
-const knex = require('knex');
+const db = require('./config/database');
 
 // Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 3000;
-
-// ========================================================================
-// Database Configuration
-// ========================================================================
-const db = knex({
-  client: 'pg',
-  connection: {
-    host: process.env.DB_HOST || 'localhost',
-    port: process.env.DB_PORT || 5432,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false
-  },
-  pool: { min: 2, max: 10 }
-});
 
 // ========================================================================
 // Middleware Configuration
@@ -76,10 +60,10 @@ const requireManager = (req, res, next) => {
   if (!req.session.user) {
     return res.redirect('/login?error=Please login to access this page');
   }
-  if (req.session.user.role !== 'manager') {
+  if (req.session.user.role !== 'manager' && req.session.user.role !== 'admin') {
     return res.status(403).render('error', {
       title: 'Access Denied',
-      message: 'You do not have permission to access this page.',
+      message: 'You do not have permission to access this page. Manager or admin access required.',
       error: { status: 403 }
     });
   }
@@ -112,9 +96,9 @@ app.use('/events', requireLogin, eventRoutes);
 app.use('/surveys', requireLogin, surveyRoutes);
 app.use('/milestones', requireLogin, milestoneRoutes);
 app.use('/donations', requireLogin, donationRoutes);
-app.use('/dashboard', requireLogin, dashboardRoutes);
 
 // Manager-only routes
+app.use('/dashboard', requireManager, dashboardRoutes);
 app.use('/users', requireManager, userRoutes);
 
 // ========================================================================

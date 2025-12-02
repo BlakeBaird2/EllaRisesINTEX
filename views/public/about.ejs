@@ -1,10 +1,39 @@
 <!DOCTYPE html>
-<html><head><title><%= title %></title><link rel="stylesheet" href="/css/style.css"></head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | Ella Rises</title>
+  <link rel="icon" type="image/png" href="/images/EllaRisesHeart.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    @media (min-width: 769px) and (max-width: 1440px) {
+      main .container {
+        padding-top: 1rem !important;
+      }
+    }
+  </style>
+</head>
 <body>
 <%- include('../partials/header') %>
-<main class="container">
-  <h1>About Ella Rises</h1>
-  <p>Ella Rises partners with UVU and BYU to provide STEAM programs that encourage women to pursue their interests in science, technology, engineering, arts, and mathematics.</p>
+<main>
+  <div class="container" style="padding: 3rem 0;">
+    <h1 style="text-align: left; margin-bottom: 2rem; margin-left: 1.5rem;">About Ella Rises</h1>
+
+    <section style="background: var(--pink-light); padding: 3rem 2rem; border-radius: 12px; margin-bottom: 2rem; margin-left: 1rem; margin-right: 1rem;">
+      <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+        <img src="/images/EllaRisesProfileClear.png" alt="Ella Rises Profile" style="max-width: 300px; width: 100%; margin-bottom: 2rem;">
+        <p style="font-family: 'DM Serif Display', serif; font-size: 1.3rem; line-height: 1.8; color: var(--text);">
+          Ella Rises partners with UVU and BYU to provide STEAM programs that encourage women to pursue their interests in science, technology, engineering, arts, and mathematics.
+        </p>
+      </div>
+    </section>
+  </div>
 </main>
 <%- include('../partials/footer') %>
-</body></html>
+<script src="/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node:*)",
+      "Bash(del test-login.js)",
+      "Bash(timeout 3 npm start)",
+      "Bash(for file in dashboard.js donations.js events.js milestones.js participants.js public.js surveys.js)",
+      "Bash(do sed -i \"s|const { db } = require(''../server'')|const db = require(''../config/database'')|g\" \"$file\")",
+      "Bash(done)",
+      "Bash(if [ -f \"nul\" ])",
+      "Bash(then rm nul)",
+      "Bash(fi)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -1,7 +1,7 @@
 // Milestone Routes - Manages milestone types and participant milestones
 const express = require('express');
 const router = express.Router();
-const { db } = require('../server');
+const db = require('../config/database');
 
 // List all milestones with participant info
 router.get('/', async (req, res) => {

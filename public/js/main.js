@@ -1,7 +1,35 @@
 // Ella Rises - Main JavaScript
 
-// Confirmation for delete actions
+// Mobile menu toggle
 document.addEventListener('DOMContentLoaded', () => {
+  const menuToggle = document.querySelector('.menu-toggle');
+  const mobileNav = document.querySelector('header nav.header-nav-mobile');
+  const header = document.querySelector('header');
+  const navLinks = document.querySelectorAll('header nav.header-nav-mobile a');
+  const body = document.body;
+
+  if (menuToggle) {
+    menuToggle.addEventListener('click', () => {
+      menuToggle.classList.toggle('active');
+      mobileNav.classList.toggle('active');
+      header.classList.toggle('menu-open');
+      body.classList.toggle('menu-open');
+      menuToggle.setAttribute('aria-expanded', menuToggle.classList.contains('active'));
+    });
+
+    // Close menu when a link is clicked
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        menuToggle.classList.remove('active');
+        mobileNav.classList.remove('active');
+        header.classList.remove('menu-open');
+        body.classList.remove('menu-open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+
+  // Confirmation for delete actions
   const deleteForms = document.querySelectorAll('form[action*="delete"]');
   
   deleteForms.forEach(form => {

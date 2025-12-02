@@ -6,7 +6,7 @@
 
 const express = require('express');
 const router = express.Router();
-const { db } = require('../server');
+const db = require('../config/database');
 
 // ========================================================================
 // GET /participants - List all participants

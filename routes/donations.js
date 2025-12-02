@@ -1,7 +1,7 @@
 // Donation Routes - Manages donations
 const express = require('express');
 const router = express.Router();
-const { db } = require('../server');
+const db = require('../config/database');
 
 // List all donations
 router.get('/', async (req, res) => {
