@@ -8,13 +8,16 @@
     
     <nav class="header-nav">
       <% if (isLoggedIn) { %>
-        <a href="/dashboard">Dashboard</a>
-        <a href="/participants">Participants</a>
-        <a href="/events">Events</a>
-        <a href="/surveys">Surveys</a>
-        <a href="/milestones">Milestones</a>
-        <a href="/donations">Donations</a>
+        <a href="/profile">Profile</a>
         <% if (isManager) { %>
+          <a href="/dashboard">Dashboard</a>
+          <a href="/participants">Participants</a>
+        <% } %>
+        <a href="/events">Events</a>
+        <a href="/milestones">Milestones</a>
+        <% if (isManager) { %>
+          <a href="/surveys">Surveys</a>
+          <a href="/donations">Donations</a>
           <a href="/users">Users</a>
         <% } %>
         <a href="/auth/logout" class="btn-logout">Logout</a>
@@ -35,13 +38,16 @@
   
   <nav class="header-nav-mobile">
     <% if (isLoggedIn) { %>
-      <a href="/dashboard">Dashboard</a>
-      <a href="/participants">Participants</a>
-      <a href="/events">Events</a>
-      <a href="/surveys">Surveys</a>
-      <a href="/milestones">Milestones</a>
-      <a href="/donations">Donations</a>
+      <a href="/profile">Profile</a>
       <% if (isManager) { %>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/participants">Participants</a>
+      <% } %>
+      <a href="/events">Events</a>
+      <a href="/milestones">Milestones</a>
+      <% if (isManager) { %>
+        <a href="/surveys">Surveys</a>
+        <a href="/donations">Donations</a>
         <a href="/users">Users</a>
       <% } %>
       <a href="/auth/logout" class="btn-logout">Logout</a>

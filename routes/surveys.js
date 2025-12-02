@@ -65,7 +65,7 @@ router.get('/', async (req, res) => {
       search: search || '',
       currentPage: parseInt(page),
       totalPages,
-      isManager: req.session.user.role === 'manager'
+      isManager: req.session.user.role === 'manager' || req.session.user.role === 'admin'
     });
 
   } catch (error) {
@@ -100,7 +100,7 @@ router.get('/:id', async (req, res) => {
     res.render('surveys/detail', {
       title: 'Survey Details',
       survey,
-      isManager: req.session.user.role === 'manager'
+      isManager: req.session.user.role === 'manager' || req.session.user.role === 'admin'
     });
 
   } catch (error) {
@@ -117,7 +117,7 @@ router.get('/:id', async (req, res) => {
 // POST /surveys/:id/delete - Delete survey (Manager only)
 // ========================================================================
 router.post('/:id/delete', async (req, res) => {
-  if (req.session.user.role !== 'manager') {
+  if (req.session.user.role !== 'manager' && req.session.user.role !== 'admin') {
     return res.status(403).send('Access denied');
   }
 

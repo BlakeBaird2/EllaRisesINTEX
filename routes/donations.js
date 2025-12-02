@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
     res.render('donations/index', {
       title: 'Donations',
       donations,
-      isManager: req.session.user.role === 'manager'
+      isManager: req.session.user.role === 'manager' || req.session.user.role === 'admin'
     });
   } catch (error) {
     console.error('Error:', error);
@@ -45,7 +45,7 @@ router.get('/:id', async (req, res) => {
     res.render('donations/detail', {
       title: 'Donation Details',
       donation,
-      isManager: req.session.user.role === 'manager'
+      isManager: req.session.user.role === 'manager' || req.session.user.role === 'admin'
     });
   } catch (error) {
     console.error('Error:', error);
@@ -55,7 +55,7 @@ router.get('/:id', async (req, res) => {
 
 // Delete donation (Manager only)
 router.post('/:id/delete', async (req, res) => {
-  if (req.session.user.role !== 'manager') return res.status(403).send('Access denied');
+  if (req.session.user.role !== 'manager' && req.session.user.role !== 'admin') return res.status(403).send('Access denied');
   
   try {
     await db('donations').where({ donation_id: req.params.id }).del();

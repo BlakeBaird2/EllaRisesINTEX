@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
     res.render('milestones/index', {
       title: 'Participant Milestones',
       milestones,
-      isManager: req.session.user.role === 'manager'
+      isManager: req.session.user.role === 'manager' || req.session.user.role === 'admin'
     });
   } catch (error) {
     console.error('Error:', error);
@@ -34,7 +34,7 @@ router.get('/types', async (req, res) => {
     res.render('milestones/types', {
       title: 'Milestone Types',
       types,
-      isManager: req.session.user.role === 'manager'
+      isManager: req.session.user.role === 'manager' || req.session.user.role === 'admin'
     });
   } catch (error) {
     console.error('Error:', error);
@@ -44,7 +44,7 @@ router.get('/types', async (req, res) => {
 
 // Add milestone to participant (Manager only)
 router.post('/', async (req, res) => {
-  if (req.session.user.role !== 'manager') return res.status(403).send('Access denied');
+  if (req.session.user.role !== 'manager' && req.session.user.role !== 'admin') return res.status(403).send('Access denied');
   
   try {
     await db('milestones').insert({
@@ -62,7 +62,7 @@ router.post('/', async (req, res) => {
 
 // Delete milestone (Manager only)
 router.post('/:id/delete', async (req, res) => {
-  if (req.session.user.role !== 'manager') return res.status(403).send('Access denied');
+  if (req.session.user.role !== 'manager' && req.session.user.role !== 'admin') return res.status(403).send('Access denied');
   
   try {
     await db('milestones').where({ milestone_id: req.params.id }).del();

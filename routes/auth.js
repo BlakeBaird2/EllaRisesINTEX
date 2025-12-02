@@ -49,13 +49,19 @@ router.post('/login', async (req, res) => {
     // Verify password
     // Check if password is hashed (bcrypt hashes start with $2a$, $2b$, or $2y$ and are 60 chars)
     let passwordMatch = false;
-    if (user.password_hash.length === 60 && user.password_hash.startsWith('$2')) {
+    if (user.password_hash && user.password_hash.length === 60 && user.password_hash.startsWith('$2')) {
       // Bcrypt hashed password
       passwordMatch = await bcrypt.compare(password, user.password_hash);
-    } else {
+    } else if (user.password_hash) {
       // Plain text password (for development/testing only - INSECURE!)
       console.warn('WARNING: Using plain text password comparison. This is insecure!');
       passwordMatch = password === user.password_hash;
+    } else {
+      // No password hash set
+      return res.render('auth/login', {
+        title: 'Login',
+        error: 'Invalid username or password'
+      });
     }
 
     if (!passwordMatch) {

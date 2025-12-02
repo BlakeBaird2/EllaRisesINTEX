@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
         totalDonations: parseFloat(donationSum.total) || 0
       },
       tableauUrl: process.env.TABLEAU_DASHBOARD_URL || null,
-      isManager: req.session.user.role === 'manager'
+      isManager: req.session.user.role === 'manager' || req.session.user.role === 'admin'
     });
   } catch (error) {
     console.error('Error:', error);

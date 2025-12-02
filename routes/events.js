@@ -62,7 +62,7 @@ router.get('/', async (req, res) => {
       selectedType: type || '',
       currentPage: parseInt(page),
       totalPages,
-      isManager: req.session.user.role === 'manager'
+      isManager: req.session.user.role === 'manager' || req.session.user.role === 'admin'
     });
 
   } catch (error) {
@@ -79,7 +79,7 @@ router.get('/', async (req, res) => {
 // GET /events/new - Show create event form (Manager only)
 // ========================================================================
 router.get('/new', async (req, res) => {
-  if (req.session.user.role !== 'manager') {
+  if (req.session.user.role !== 'manager' && req.session.user.role !== 'admin') {
     return res.status(403).send('Access denied');
   }
 
@@ -96,7 +96,7 @@ router.get('/new', async (req, res) => {
 // POST /events - Create new event template (Manager only)
 // ========================================================================
 router.post('/', async (req, res) => {
-  if (req.session.user.role !== 'manager') {
+  if (req.session.user.role !== 'manager' && req.session.user.role !== 'admin') {
     return res.status(403).send('Access denied');
   }
 
@@ -166,7 +166,7 @@ router.get('/:id', async (req, res) => {
       title: event.event_name,
       event,
       occurrences,
-      isManager: req.session.user.role === 'manager'
+      isManager: req.session.user.role === 'manager' || req.session.user.role === 'admin'
     });
 
   } catch (error) {
@@ -183,7 +183,7 @@ router.get('/:id', async (req, res) => {
 // GET /events/:id/edit - Show edit form (Manager only)
 // ========================================================================
 router.get('/:id/edit', async (req, res) => {
-  if (req.session.user.role !== 'manager') {
+  if (req.session.user.role !== 'manager' && req.session.user.role !== 'admin') {
     return res.status(403).send('Access denied');
   }
 
@@ -222,7 +222,7 @@ router.get('/:id/edit', async (req, res) => {
 // POST /events/:id - Update event template (Manager only)
 // ========================================================================
 router.post('/:id', async (req, res) => {
-  if (req.session.user.role !== 'manager') {
+  if (req.session.user.role !== 'manager' && req.session.user.role !== 'admin') {
     return res.status(403).send('Access denied');
   }
 
@@ -259,7 +259,7 @@ router.post('/:id', async (req, res) => {
 // POST /events/:id/delete - Delete event template (Manager only)
 // ========================================================================
 router.post('/:id/delete', async (req, res) => {
-  if (req.session.user.role !== 'manager') {
+  if (req.session.user.role !== 'manager' && req.session.user.role !== 'admin') {
     return res.status(403).send('Access denied');
   }
 
@@ -284,7 +284,7 @@ router.post('/:id/delete', async (req, res) => {
 // GET /events/:id/occurrences/new - Create new occurrence (Manager only)
 // ========================================================================
 router.get('/:id/occurrences/new', async (req, res) => {
-  if (req.session.user.role !== 'manager') {
+  if (req.session.user.role !== 'manager' && req.session.user.role !== 'admin') {
     return res.status(403).send('Access denied');
   }
 
@@ -324,7 +324,7 @@ router.get('/:id/occurrences/new', async (req, res) => {
 // POST /events/:id/occurrences - Create event occurrence (Manager only)
 // ========================================================================
 router.post('/:id/occurrences', async (req, res) => {
-  if (req.session.user.role !== 'manager') {
+  if (req.session.user.role !== 'manager' && req.session.user.role !== 'admin') {
     return res.status(403).send('Access denied');
   }
 

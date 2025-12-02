@@ -54,7 +54,7 @@ router.get('/', async (req, res) => {
       search: search || '',
       currentPage: parseInt(page),
       totalPages,
-      isManager: req.session.user.role === 'manager'
+      isManager: req.session.user.role === 'manager' || req.session.user.role === 'admin'
     });
 
   } catch (error) {
@@ -71,7 +71,7 @@ router.get('/', async (req, res) => {
 // GET /participants/new - Show create participant form (Manager only)
 // ========================================================================
 router.get('/new', async (req, res) => {
-  if (req.session.user.role !== 'manager') {
+  if (req.session.user.role !== 'manager' && req.session.user.role !== 'admin') {
     return res.status(403).send('Access denied');
   }
 
@@ -88,7 +88,7 @@ router.get('/new', async (req, res) => {
 // POST /participants - Create new participant (Manager only)
 // ========================================================================
 router.post('/', async (req, res) => {
-  if (req.session.user.role !== 'manager') {
+  if (req.session.user.role !== 'manager' && req.session.user.role !== 'admin') {
     return res.status(403).send('Access denied');
   }
 
@@ -178,7 +178,7 @@ router.get('/:id', async (req, res) => {
       participant,
       milestones,
       events,
-      isManager: req.session.user.role === 'manager'
+      isManager: req.session.user.role === 'manager' || req.session.user.role === 'admin'
     });
 
   } catch (error) {
@@ -195,7 +195,7 @@ router.get('/:id', async (req, res) => {
 // GET /participants/:id/edit - Show edit form (Manager only)
 // ========================================================================
 router.get('/:id/edit', async (req, res) => {
-  if (req.session.user.role !== 'manager') {
+  if (req.session.user.role !== 'manager' && req.session.user.role !== 'admin') {
     return res.status(403).send('Access denied');
   }
 
@@ -234,7 +234,7 @@ router.get('/:id/edit', async (req, res) => {
 // POST /participants/:id - Update participant (Manager only)
 // ========================================================================
 router.post('/:id', async (req, res) => {
-  if (req.session.user.role !== 'manager') {
+  if (req.session.user.role !== 'manager' && req.session.user.role !== 'admin') {
     return res.status(403).send('Access denied');
   }
 
@@ -289,7 +289,7 @@ router.post('/:id', async (req, res) => {
 // POST /participants/:id/delete - Delete participant (Manager only)
 // ========================================================================
 router.post('/:id/delete', async (req, res) => {
-  if (req.session.user.role !== 'manager') {
+  if (req.session.user.role !== 'manager' && req.session.user.role !== 'admin') {
     return res.status(403).send('Access denied');
   }
 

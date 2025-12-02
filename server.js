@@ -46,7 +46,7 @@ app.use(session({
 // Make user session available to all views
 app.use((req, res, next) => {
   res.locals.user = req.session.user || null;
-  res.locals.isManager = req.session.user?.role === 'manager';
+  res.locals.isManager = req.session.user?.role === 'manager' || req.session.user?.role === 'admin';
   res.locals.isLoggedIn = !!req.session.user;
   next();
 });
@@ -87,6 +87,7 @@ const milestoneRoutes = require('./routes/milestones');
 const donationRoutes = require('./routes/donations');
 const userRoutes = require('./routes/users');
 const dashboardRoutes = require('./routes/dashboard');
+const profileRoutes = require('./routes/profile');
 
 // ========================================================================
 // Route Mounting
@@ -96,6 +97,7 @@ app.use('/', publicRoutes);
 app.use('/auth', authRoutes);
 
 // Protected routes (require login)
+app.use('/profile', requireLogin, profileRoutes);
 app.use('/participants', requireLogin, participantRoutes);
 app.use('/events', requireLogin, eventRoutes);
 app.use('/surveys', requireLogin, surveyRoutes);
