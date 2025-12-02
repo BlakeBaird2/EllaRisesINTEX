@@ -128,10 +128,40 @@ header h1 a {
 
 header nav {
   display: flex;
-  gap: 1rem;
+  gap: 0.30rem;
   align-items: center;
   flex-wrap: nowrap;
   justify-content: flex-end;
+}
+
+header nav > * {
+  margin: 0;
+  padding: 0;
+}
+
+header nav .dropdown {
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+}
+
+header nav .dropdown .dropdown-toggle {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  transition: all 0.3s;
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  white-space: nowrap;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+}
+
+header nav .dropdown .dropdown-toggle:hover {
+  background: rgba(255,255,255,0.15);
+  transform: translateY(-2px);
 }
 
 header nav.header-nav-mobile {
@@ -153,6 +183,127 @@ header nav a {
 header nav a:hover {
   background: rgba(255,255,255,0.15);
   transform: translateY(-2px);
+}
+
+/* ========================================================================
+   Dropdown Menu
+   ======================================================================== */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+}
+
+.dropdown-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.dropdown-toggle i {
+  font-size: 0.75rem;
+  transition: transform 0.3s ease;
+}
+
+.dropdown.active .dropdown-toggle i {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  min-width: 200px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+  border-radius: 8px;
+  padding: 0.5rem 0;
+  margin-top: 0.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  border: 1px solid var(--pink-light);
+}
+
+.dropdown.active .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 0.75rem 1.5rem;
+  color: var(--text);
+  text-decoration: none;
+  transition: all 0.2s;
+  font-weight: 500;
+  border-radius: 0;
+}
+
+.dropdown-menu a:hover {
+  background: var(--pink-light);
+  color: var(--primary);
+  transform: none;
+  padding-left: 2rem;
+}
+
+.dropdown-menu a:first-child {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.dropdown-menu a:last-child {
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+/* Mobile Dropdown */
+.dropdown-mobile {
+  position: relative;
+}
+
+.dropdown-toggle-mobile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.dropdown-toggle-mobile i {
+  font-size: 0.75rem;
+  transition: transform 0.3s ease;
+}
+
+.dropdown-mobile.active .dropdown-toggle-mobile i {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu-mobile {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  background: rgba(255,255,255,0.1);
+}
+
+.dropdown-mobile.active .dropdown-menu-mobile {
+  max-height: 500px;
+}
+
+.dropdown-menu-mobile a {
+  padding-left: 3rem;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.9);
+}
+
+.dropdown-menu-mobile a:hover {
+  background: rgba(255,255,255,0.2);
+  color: white;
 }
 
 header nav a.btn-primary {
@@ -260,6 +411,84 @@ h2 {
 .btn-logout:hover {
   background: white;
   color: var(--primary);
+}
+
+/* ========================================================================
+   Standardized Action Buttons
+   ======================================================================== */
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.btn-small {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 8px;
+  display: inline-block;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-small:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.btn-edit {
+  background: var(--secondary);
+  color: white;
+}
+
+.btn-edit:hover {
+  background: #89a48b;
+}
+
+.btn-delete {
+  background: var(--accent);
+  color: white;
+}
+
+.btn-delete:hover {
+  background: #b02a4d;
+}
+
+.btn-view {
+  background: var(--blue-gray);
+  color: white;
+}
+
+.btn-view:hover {
+  background: #7a9ba8;
+}
+
+.btn-add {
+  background: var(--secondary);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  display: inline-block;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  white-space: nowrap;
+}
+
+.btn-add:hover {
+  background: #89a48b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
 /* ========================================================================
@@ -636,7 +865,7 @@ footer a:hover {
   header nav.header-nav-mobile {
     display: flex;
     flex-direction: column;
-    gap: 0;
+    gap: 0.5rem;
     align-items: stretch;
     justify-content: flex-start;
     padding: 0;
@@ -652,7 +881,7 @@ footer a:hover {
   }
 
   header nav.header-nav-mobile.active {
-    max-height: 400px;
+    max-height: 600px;
     box-shadow: none;
     padding: 1rem 0;
     background: #99B7C6;
@@ -668,6 +897,17 @@ footer a:hover {
     border-bottom: none;
     color: white;
     text-decoration: none;
+    margin: 0;
+  }
+
+  header nav.header-nav-mobile .dropdown-mobile {
+    margin: 0;
+  }
+
+  header nav.header-nav-mobile .dropdown-toggle-mobile {
+    padding: 1rem 2rem;
+    width: 100%;
+    justify-content: space-between;
   }
 
   header nav.header-nav-mobile a.btn-primary {
@@ -716,6 +956,53 @@ footer a:hover {
 
   .metrics {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  .metric {
+    min-height: 120px;
+    padding: 2rem 1.5rem;
+  }
+
+  .metric h3 {
+    font-size: 2.5rem;
+  }
+
+  .metric.donation-metric {
+    grid-column: span 1;
+    min-height: 140px;
+    padding: 2.5rem 1.5rem;
+  }
+
+  .metric.donation-metric h3 {
+    font-size: 2.8rem;
+  }
+
+  .dashboard-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+  }
+
+  .dashboard-header h1 {
+    font-size: 2rem;
+  }
+
+  .dashboard-header p {
+    font-size: 1rem;
+  }
+
+  .tableau-embed {
+    margin-top: 2rem;
+    padding: 1.5rem;
+  }
+
+  .tableau-embed h2 {
+    font-size: 1.5rem;
+  }
+
+  .tableau-embed iframe {
+    height: 500px;
   }
 
   table {

@@ -16,10 +16,10 @@ router.get('/', async (req, res) => {
     res.render('dashboard/index', {
       title: 'Dashboard',
       metrics: {
-        participants: participantCount.count,
-        events: eventCount.count,
-        surveys: surveyCount.count,
-        milestones: milestoneCount.count,
+        participants: parseInt(participantCount.count) || 0,
+        events: parseInt(eventCount.count) || 0,
+        surveys: parseInt(surveyCount.count) || 0,
+        milestones: parseInt(milestoneCount.count) || 0,
         totalDonations: parseFloat(donationSum.total) || 0
       },
       tableauUrl: process.env.TABLEAU_DASHBOARD_URL || null,

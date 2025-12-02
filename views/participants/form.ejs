@@ -6,13 +6,26 @@
   <h1><%= title %></h1>
   <form method="POST" action="<%= action %>">
     <input type="email" name="participant_email" value="<%= participant.participant_email || '' %>" placeholder="Email *" required <%= participant.participant_id ? 'readonly' : '' %>>
-    <input type="text" name="first_name" value="<%= participant.first_name || '' %>" placeholder="First Name *" required>
-    <input type="text" name="last_name" value="<%= participant.last_name || '' %>" placeholder="Last Name *" required>
-    <input type="date" name="date_of_birth" value="<%= participant.date_of_birth || '' %>" placeholder="Date of Birth">
-    <input type="text" name="high_school" value="<%= participant.high_school || '' %>" placeholder="High School">
-    <input type="text" name="intended_college" value="<%= participant.intended_college || '' %>" placeholder="Intended College">
-    <input type="text" name="grade_level" value="<%= participant.grade_level || '' %>" placeholder="Grade Level">
-    <input type="text" name="phone" value="<%= participant.phone || '' %>" placeholder="Phone">
+    <input type="text" name="first_name" value="<%= participant.first_name || participant.participant_first_name || '' %>" placeholder="First Name *" required>
+    <input type="text" name="last_name" value="<%= participant.last_name || participant.participant_last_name || '' %>" placeholder="Last Name *" required>
+    <input type="date" name="date_of_birth" value="<%= participant.date_of_birth || '' %>" placeholder="Date of Birth *" required>
+    <select name="gender" required>
+      <option value="">Select Gender</option>
+      <option value="Female" <%= (participant.gender === 'Female') ? 'selected' : '' %>>Female</option>
+      <option value="Male" <%= (participant.gender === 'Male') ? 'selected' : '' %>>Male</option>
+      <option value="Non-binary" <%= (participant.gender === 'Non-binary') ? 'selected' : '' %>>Non-binary</option>
+      <option value="Prefer not to say" <%= (participant.gender === 'Prefer not to say') ? 'selected' : '' %>>Prefer not to say</option>
+      <option value="Other" <%= (participant.gender === 'Other') ? 'selected' : '' %>>Other</option>
+    </select>
+    <input type="text" name="race_ethnicity" value="<%= participant.race_ethnicity || '' %>" placeholder="Race/Ethnicity *" required>
+    <input type="text" name="high_school" value="<%= participant.high_school || '' %>" placeholder="High School *" required>
+    <input type="text" name="intended_college" value="<%= participant.intended_college || '' %>" placeholder="Intended College *" required>
+    <input type="text" name="grade_level" value="<%= participant.grade_level || '' %>" placeholder="Grade Level *" required>
+    <input type="text" name="address_street" value="<%= participant.address_street || '' %>" placeholder="Street Address *" required>
+    <input type="text" name="address_city" value="<%= participant.address_city || '' %>" placeholder="City *" required>
+    <input type="text" name="address_state" value="<%= participant.address_state || '' %>" placeholder="State *" required>
+    <input type="text" name="address_zip" value="<%= participant.address_zip || '' %>" placeholder="ZIP Code *" required>
+    <input type="tel" name="phone" value="<%= participant.phone || '' %>" placeholder="Phone *" required>
     <button type="submit">Save</button>
     <a href="/participants" class="btn-secondary">Cancel</a>
   </form>

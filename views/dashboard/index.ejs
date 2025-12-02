@@ -38,55 +38,6 @@
       background: white;
     }
 
-    .action-buttons {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-
-    .btn-small {
-      padding: 0.4rem 0.8rem;
-      font-size: 0.85rem;
-      text-decoration: none;
-      border-radius: 6px;
-      display: inline-block;
-      transition: all 0.3s;
-    }
-
-    .btn-edit {
-      background: var(--secondary);
-      color: white;
-    }
-
-    .btn-edit:hover {
-      background: #89a48b;
-    }
-
-    .btn-delete {
-      background: var(--accent);
-      color: white;
-    }
-
-    .btn-delete:hover {
-      background: #b02a4d;
-    }
-
-    .btn-add {
-      background: var(--secondary);
-      color: white;
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
-      text-decoration: none;
-      display: inline-block;
-      font-weight: 600;
-      margin-left: 1.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .btn-add:hover {
-      background: #89a48b;
-      transform: translateY(-2px);
-    }
 
     .truncate {
       max-width: 200px;
@@ -95,22 +46,270 @@
       text-overflow: ellipsis;
     }
 
+    /* Enhanced Dashboard Metrics */
     .metrics {
-      margin-bottom: 3rem;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      margin: 3rem 0;
+      padding: 0;
+    }
+
+    @media (max-width: 1024px) {
+      .metrics {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .metrics {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .metric {
+      background: linear-gradient(135deg, #9AB59D 0%, #8BA68E 100%);
+      padding: 2.5rem 2rem;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 6px 20px rgba(154, 181, 157, 0.25);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      box-sizing: border-box;
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .metric::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+      transition: all 0.5s ease;
+    }
+
+    .metric:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 12px 30px rgba(154, 181, 157, 0.35);
+    }
+
+    .metric:hover::before {
+      top: -30%;
+      right: -30%;
+    }
+
+    .metric h3 {
+      font-size: 3rem;
+      color: white;
+      margin-bottom: 0.75rem;
+      font-weight: 700;
+      font-family: 'Montserrat', sans-serif;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: relative;
+      z-index: 1;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      hyphens: auto;
+      line-height: 1.2;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Special handling for donations metric with longer numbers */
+    .metric.donation-metric {
+      grid-column: 1 / span 2;
+      min-height: 180px;
+      padding: 3rem 2.5rem;
+    }
+
+    .metric.donation-metric h3 {
+      font-size: 3.5rem;
+      line-height: 1.3;
+    }
+
+    /* Empty space styling - can be used for future content */
+    .metric-empty {
+      background: transparent;
+      border: 2px dashed rgba(154, 181, 157, 0.3);
+      border-radius: 16px;
+      min-height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .metric-empty::after {
+      content: 'Reserved for future content';
+      color: rgba(154, 181, 157, 0.5);
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    @media (max-width: 1024px) {
+      .metric.donation-metric {
+        grid-column: span 2;
+      }
+      .metric-empty {
+        display: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .metrics {
+        gap: 1.5rem;
+        margin: 2rem 0;
+      }
+
+      .metric {
+        min-height: 120px;
+        padding: 2rem 1.5rem;
+      }
+
+      .metric h3 {
+        font-size: 2.5rem;
+      }
+
+      .metric.donation-metric {
+        grid-column: span 1;
+        min-height: 140px;
+        padding: 2.5rem 1.5rem;
+      }
+
+      .metric.donation-metric h3 {
+        font-size: 2.8rem;
+      }
+
+      .metric-empty {
+        display: none;
+      }
+
+      .dashboard-header {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        padding-left: 0;
+        padding-right: 0;
+      }
+
+      .dashboard-header h1 {
+        font-size: 2rem;
+      }
+
+      .dashboard-header p {
+        font-size: 1rem;
+      }
+
+      .tableau-embed {
+        margin-top: 2rem;
+        padding: 1.5rem;
+      }
+
+      .tableau-embed h2 {
+        font-size: 1.5rem;
+      }
+
+      .tableau-embed iframe {
+        height: 500px;
+      }
+    }
+
+    .metric p {
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0.95;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Dashboard Header */
+    .dashboard-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 3px solid #9AB59D;
+    }
+
+    .dashboard-header h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .dashboard-header p {
+      color: var(--text);
+      font-size: 1.1rem;
+      opacity: 0.8;
+    }
+
+    /* Tableau Embed Styling */
+    .tableau-embed {
+      margin-top: 4rem;
+      padding: 2rem;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      border: 2px solid #9AB59D;
+    }
+
+    .tableau-embed h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #9AB59D;
+    }
+
+    .tableau-embed iframe {
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
     }
   </style>
 </head>
 <body>
 <%- include('../partials/header') %>
 <main class="container" style="padding-top: 2rem;">
-  <h1 style="font-family: 'DM Serif Display', serif;">Dashboard</h1>
+  <div class="dashboard-header">
+    <h1>Dashboard</h1>
+    <p>Overview of Ella Rises program metrics and analytics</p>
+  </div>
 
   <div class="metrics">
-    <div class="metric"><h3><%= metrics.participants %></h3><p>Participants</p></div>
-    <div class="metric"><h3><%= metrics.events %></h3><p>Events</p></div>
-    <div class="metric"><h3><%= metrics.surveys %></h3><p>Surveys</p></div>
-    <div class="metric"><h3><%= metrics.milestones %></h3><p>Milestones</p></div>
-    <div class="metric"><h3>$<%= metrics.totalDonations.toFixed(2) %></h3><p>Total Donations</p></div>
+    <div class="metric">
+      <h3><%= metrics.participants.toLocaleString() %></h3>
+      <p>Participants</p>
+    </div>
+    <div class="metric">
+      <h3><%= metrics.events.toLocaleString() %></h3>
+      <p>Events</p>
+    </div>
+    <div class="metric">
+      <h3><%= metrics.surveys.toLocaleString() %></h3>
+      <p>Surveys</p>
+    </div>
+    <!-- Empty space reserved for future content -->
+    <div class="metric-empty"></div>
+    <div class="metric donation-metric">
+      <h3>$<%= Math.round(parseFloat(metrics.totalDonations)).toLocaleString('en-US') %></h3>
+      <p>Total Donations</p>
+    </div>
+    <div class="metric">
+      <h3><%= metrics.milestones.toLocaleString() %></h3>
+      <p>Milestones</p>
+    </div>
   </div>
 
   <% if (tableauUrl) { %>

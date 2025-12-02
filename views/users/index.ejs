@@ -1,23 +1,86 @@
 <!DOCTYPE html>
-<html><head><title><%= title %></title><link rel="stylesheet" href="/css/style.css"></head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | Ella Rises</title>
+  <link rel="icon" type="image/png" href="/images/EllaRisesHeart.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .page-header h1 {
+      font-family: 'DM Serif Display', serif;
+      margin: 0;
+    }
+
+    .table-container {
+      background: var(--pink-light);
+      padding: 2rem;
+      border-radius: 12px;
+      overflow-x: auto;
+    }
+
+    .table-container table {
+      margin-top: 0;
+      background: white;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
 <body>
 <%- include('../partials/header') %>
-<main class="container">
-  <h1>User Management <a href="/users/new" class="btn">Add New</a></h1>
-  <table>
-    <thead><tr><th>Username</th><th>Email</th><th>Role</th><th>Active</th><th>Actions</th></tr></thead>
-    <tbody>
-      <% users.forEach(u => { %>
-      <tr>
-        <td><%= u.username %></td>
-        <td><%= u.email %></td>
-        <td><%= u.role %></td>
-        <td><%= u.is_active ? 'Yes' : 'No' %></td>
-        <td><a href="/users/<%= u.user_id %>/edit">Edit</a></td>
-      </tr>
-      <% }); %>
-    </tbody>
-  </table>
+<main class="container" style="padding-top: 2rem;">
+  <div class="page-header">
+    <h1>User Management</h1>
+    <a href="/users/new" class="btn">Add New User</a>
+  </div>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Active</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (users.length === 0) { %>
+          <tr><td colspan="5" style="text-align: center;">No users found</td></tr>
+        <% } else { %>
+          <% users.forEach(u => { %>
+            <tr>
+              <td><%= u.username %></td>
+              <td><%= u.email %></td>
+              <td><%= u.role %></td>
+              <td><%= u.is_active ? 'Yes' : 'No' %></td>
+              <td>
+                <div class="action-buttons">
+                  <a href="/users/<%= u.user_id %>/edit" class="btn-small btn-edit">Edit</a>
+                </div>
+              </td>
+            </tr>
+          <% }); %>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
 </main>
 <%- include('../partials/footer') %>
-</body></html>
+<script src="/js/main.js"></script>
+</body>
+</html>

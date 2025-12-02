@@ -98,6 +98,7 @@ app.use('/auth', authRoutes);
 
 // Protected routes (require login)
 app.use('/profile', requireLogin, profileRoutes);
+app.use('/dashboard', requireLogin, dashboardRoutes);
 app.use('/participants', requireLogin, participantRoutes);
 app.use('/events', requireLogin, eventRoutes);
 app.use('/surveys', requireLogin, surveyRoutes);
@@ -105,7 +106,6 @@ app.use('/milestones', requireLogin, milestoneRoutes);
 app.use('/donations', requireLogin, donationRoutes);
 
 // Manager-only routes
-app.use('/dashboard', requireManager, dashboardRoutes);
 app.use('/users', requireManager, userRoutes);
 
 // ========================================================================

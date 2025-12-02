@@ -7,24 +7,29 @@
     </div>
     
     <nav class="header-nav">
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+      <a href="https://givebutter.com/EllaRises" class="btn-primary donate-btn" target="_blank" rel="noopener noreferrer">Donate <img src="/images/EllaRisesHeart.png" alt="" class="donate-heart"></a>
       <% if (isLoggedIn) { %>
+        <div class="dropdown">
+          <a href="/dashboard" class="dropdown-toggle">Dashboard <i class="fa-solid fa-chevron-down"></i></a>
+          <div class="dropdown-menu">
+            <% if (isManager) { %>
+              <a href="/dashboard">Dashboard Overview</a>
+              <a href="/participants">Participants</a>
+            <% } %>
+            <a href="/events">Events</a>
+            <a href="/milestones">Milestones</a>
+            <% if (isManager) { %>
+              <a href="/surveys">Surveys</a>
+              <a href="/donations">Donations</a>
+              <a href="/users">Users</a>
+            <% } %>
+          </div>
+        </div>
         <a href="/profile">Profile</a>
-        <% if (isManager) { %>
-          <a href="/dashboard">Dashboard</a>
-          <a href="/participants">Participants</a>
-        <% } %>
-        <a href="/events">Events</a>
-        <a href="/milestones">Milestones</a>
-        <% if (isManager) { %>
-          <a href="/surveys">Surveys</a>
-          <a href="/donations">Donations</a>
-          <a href="/users">Users</a>
-        <% } %>
         <a href="/auth/logout" class="btn-logout">Logout</a>
       <% } else { %>
-        <a href="/">Home</a>
-        <a href="/about">About</a>
-        <a href="https://givebutter.com/EllaRises" class="btn-primary donate-btn" target="_blank" rel="noopener noreferrer">Donate <img src="/images/EllaRisesHeart.png" alt="" class="donate-heart"></a>
         <a href="/login">Login</a>
       <% } %>
     </nav>
@@ -37,24 +42,29 @@
   </div>
   
   <nav class="header-nav-mobile">
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="https://givebutter.com/EllaRises" class="btn-primary donate-btn" target="_blank" rel="noopener noreferrer">Donate <img src="/images/EllaRisesHeart.png" alt="" class="donate-heart"></a>
     <% if (isLoggedIn) { %>
+      <div class="dropdown-mobile">
+        <a href="/dashboard" class="dropdown-toggle-mobile">Dashboard <i class="fa-solid fa-chevron-down"></i></a>
+        <div class="dropdown-menu-mobile">
+          <% if (isManager) { %>
+            <a href="/dashboard">Dashboard Overview</a>
+            <a href="/participants">Participants</a>
+          <% } %>
+          <a href="/events">Events</a>
+          <a href="/milestones">Milestones</a>
+          <% if (isManager) { %>
+            <a href="/surveys">Surveys</a>
+            <a href="/donations">Donations</a>
+            <a href="/users">Users</a>
+          <% } %>
+        </div>
+      </div>
       <a href="/profile">Profile</a>
-      <% if (isManager) { %>
-        <a href="/dashboard">Dashboard</a>
-        <a href="/participants">Participants</a>
-      <% } %>
-      <a href="/events">Events</a>
-      <a href="/milestones">Milestones</a>
-      <% if (isManager) { %>
-        <a href="/surveys">Surveys</a>
-        <a href="/donations">Donations</a>
-        <a href="/users">Users</a>
-      <% } %>
       <a href="/auth/logout" class="btn-logout">Logout</a>
     <% } else { %>
-      <a href="/">Home</a>
-      <a href="/about">About</a>
-      <a href="https://givebutter.com/EllaRises" class="btn-primary donate-btn" target="_blank" rel="noopener noreferrer">Donate <img src="/images/EllaRisesHeart.png" alt="" class="donate-heart"></a>
       <a href="/login">Login</a>
     <% } %>
   </nav>
