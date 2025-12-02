@@ -2,11 +2,11 @@
   <div class="container">
     <div class="logo">
       <a href="/">
-        <img src="/images/logo.png" alt="Ella Rises">
+        <img src="/images/EllaRisesLogo.png" alt="Ella Rises">
       </a>
     </div>
     
-    <nav>
+    <nav class="header-nav">
       <% if (isLoggedIn) { %>
         <a href="/dashboard">Dashboard</a>
         <a href="/participants">Participants</a>
@@ -21,9 +21,35 @@
       <% } else { %>
         <a href="/">Home</a>
         <a href="/about">About</a>
-        <a href="/donate" class="btn-primary">Donate</a>
+        <a href="https://givebutter.com/EllaRises" class="btn-primary donate-btn" target="_blank" rel="noopener noreferrer">Donate <img src="/images/EllaRisesHeart.png" alt="" class="donate-heart"></a>
         <a href="/login">Login</a>
       <% } %>
     </nav>
+    
+    <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
   </div>
+  
+  <nav class="header-nav-mobile">
+    <% if (isLoggedIn) { %>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/participants">Participants</a>
+      <a href="/events">Events</a>
+      <a href="/surveys">Surveys</a>
+      <a href="/milestones">Milestones</a>
+      <a href="/donations">Donations</a>
+      <% if (isManager) { %>
+        <a href="/users">Users</a>
+      <% } %>
+      <a href="/auth/logout" class="btn-logout">Logout</a>
+    <% } else { %>
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+      <a href="https://givebutter.com/EllaRises" class="btn-primary donate-btn" target="_blank" rel="noopener noreferrer">Donate <img src="/images/EllaRisesHeart.png" alt="" class="donate-heart"></a>
+      <a href="/login">Login</a>
+    <% } %>
+  </nav>
 </header>

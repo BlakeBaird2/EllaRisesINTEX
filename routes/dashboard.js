@@ -1,7 +1,7 @@
 // Dashboard Routes - Analytics and embedded Tableau dashboard
 const express = require('express');
 const router = express.Router();
-const { db } = require('../server');
+const db = require('../config/database');
 
 // Main dashboard
 router.get('/', async (req, res) => {
