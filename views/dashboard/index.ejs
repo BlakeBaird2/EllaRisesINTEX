@@ -9,11 +9,101 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .dashboard-section {
+      margin-bottom: 3rem;
+    }
+
+    .section-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      color: var(--primary);
+      text-align: left;
+      margin-bottom: 1rem;
+      margin-left: 1.5rem;
+      font-weight: 400;
+    }
+
+    .table-container {
+      background: var(--pink-light);
+      padding: 2rem;
+      border-radius: 12px;
+      margin-left: 1rem;
+      margin-right: 1rem;
+      overflow-x: auto;
+    }
+
+    .table-container table {
+      margin-top: 0;
+      background: white;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-small {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.85rem;
+      text-decoration: none;
+      border-radius: 6px;
+      display: inline-block;
+      transition: all 0.3s;
+    }
+
+    .btn-edit {
+      background: var(--secondary);
+      color: white;
+    }
+
+    .btn-edit:hover {
+      background: #89a48b;
+    }
+
+    .btn-delete {
+      background: var(--accent);
+      color: white;
+    }
+
+    .btn-delete:hover {
+      background: #b02a4d;
+    }
+
+    .btn-add {
+      background: var(--secondary);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      display: inline-block;
+      font-weight: 600;
+      margin-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .btn-add:hover {
+      background: #89a48b;
+      transform: translateY(-2px);
+    }
+
+    .truncate {
+      max-width: 200px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .metrics {
+      margin-bottom: 3rem;
+    }
+  </style>
 </head>
 <body>
 <%- include('../partials/header') %>
-<main class="container">
-  <h1>Dashboard</h1>
+<main class="container" style="padding-top: 2rem;">
+  <h1 style="font-family: 'DM Serif Display', serif;">Dashboard</h1>
 
   <div class="metrics">
     <div class="metric"><h3><%= metrics.participants %></h3><p>Participants</p></div>
@@ -21,6 +111,231 @@
     <div class="metric"><h3><%= metrics.surveys %></h3><p>Surveys</p></div>
     <div class="metric"><h3><%= metrics.milestones %></h3><p>Milestones</p></div>
     <div class="metric"><h3>$<%= metrics.totalDonations.toFixed(2) %></h3><p>Total Donations</p></div>
+  </div>
+
+  <!-- Participants Section -->
+  <div class="dashboard-section">
+    <h2 class="section-title">Participants</h2>
+    <% if (isManager) { %>
+      <a href="/participants/new" class="btn-add">+ Add Participant</a>
+    <% } %>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>School/Employer</th>
+            <th>Phone</th>
+            <% if (isManager) { %>
+              <th>Actions</th>
+            <% } %>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (participants.length === 0) { %>
+            <tr><td colspan="<%= isManager ? 6 : 5 %>" style="text-align: center;">No participants found</td></tr>
+          <% } else { %>
+            <% participants.forEach(participant => { %>
+              <tr>
+                <td><a href="/participants/<%= participant.participant_id %>"><%= participant.participant_first_name %> <%= participant.participant_last_name %></a></td>
+                <td><%= participant.participant_email %></td>
+                <td><%= participant.participant_role || 'N/A' %></td>
+                <td class="truncate"><%= participant.participant_school_or_employer || 'N/A' %></td>
+                <td><%= participant.participant_phone || 'N/A' %></td>
+                <% if (isManager) { %>
+                  <td>
+                    <div class="action-buttons">
+                      <a href="/participants/<%= participant.participant_id %>/edit" class="btn-small btn-edit">Edit</a>
+                      <form action="/participants/<%= participant.participant_id %>/delete" method="POST" style="display: inline; margin: 0; padding: 0;" onsubmit="return confirm('Are you sure you want to delete this participant?')">
+                        <button type="submit" class="btn-small btn-delete">Delete</button>
+                      </form>
+                    </div>
+                  </td>
+                <% } %>
+              </tr>
+            <% }) %>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Events Section -->
+  <div class="dashboard-section">
+    <h2 class="section-title">Events</h2>
+    <% if (isManager) { %>
+      <a href="/events/new" class="btn-add">+ Add Event</a>
+    <% } %>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Event Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Capacity</th>
+            <% if (isManager) { %>
+              <th>Actions</th>
+            <% } %>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (events.length === 0) { %>
+            <tr><td colspan="<%= isManager ? 5 : 4 %>" style="text-align: center;">No events found</td></tr>
+          <% } else { %>
+            <% events.forEach(event => { %>
+              <tr>
+                <td><a href="/events/<%= event.event_template_id %>"><%= event.event_name %></a></td>
+                <td><%= event.event_type || 'N/A' %></td>
+                <td class="truncate"><%= event.event_description || 'N/A' %></td>
+                <td><%= event.event_default_capacity || 'N/A' %></td>
+                <% if (isManager) { %>
+                  <td>
+                    <div class="action-buttons">
+                      <a href="/events/<%= event.event_template_id %>/edit" class="btn-small btn-edit">Edit</a>
+                      <form action="/events/<%= event.event_template_id %>/delete" method="POST" style="display: inline; margin: 0; padding: 0;" onsubmit="return confirm('Are you sure you want to delete this event?')">
+                        <button type="submit" class="btn-small btn-delete">Delete</button>
+                      </form>
+                    </div>
+                  </td>
+                <% } %>
+              </tr>
+            <% }) %>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Donations Section -->
+  <div class="dashboard-section">
+    <h2 class="section-title">Donations</h2>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Donor</th>
+            <th>Amount</th>
+            <th>Payment Method</th>
+            <% if (isManager) { %>
+              <th>Actions</th>
+            <% } %>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (donations.length === 0) { %>
+            <tr><td colspan="<%= isManager ? 5 : 4 %>" style="text-align: center;">No donations found</td></tr>
+          <% } else { %>
+            <% donations.forEach(donation => { %>
+              <tr>
+                <td><%= donation.donation_date ? new Date(donation.donation_date).toLocaleDateString() : 'N/A' %></td>
+                <td><%= donation.first_name && donation.last_name ? donation.first_name + ' ' + donation.last_name : 'Anonymous' %></td>
+                <td>$<%= donation.donation_amount ? donation.donation_amount.toFixed(2) : '0.00' %></td>
+                <td><%= donation.payment_method || 'N/A' %></td>
+                <% if (isManager) { %>
+                  <td>
+                    <div class="action-buttons">
+                      <a href="/donations/<%= donation.donation_id %>" class="btn-small btn-edit">View</a>
+                      <form action="/donations/<%= donation.donation_id %>/delete" method="POST" style="display: inline; margin: 0; padding: 0;" onsubmit="return confirm('Are you sure you want to delete this donation?')">
+                        <button type="submit" class="btn-small btn-delete">Delete</button>
+                      </form>
+                    </div>
+                  </td>
+                <% } %>
+              </tr>
+            <% }) %>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Surveys Section -->
+  <div class="dashboard-section">
+    <h2 class="section-title">Post-Event Surveys</h2>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Participant</th>
+            <th>Event</th>
+            <th>Satisfaction</th>
+            <% if (isManager) { %>
+              <th>Actions</th>
+            <% } %>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (surveys.length === 0) { %>
+            <tr><td colspan="<%= isManager ? 5 : 4 %>" style="text-align: center;">No surveys found</td></tr>
+          <% } else { %>
+            <% surveys.forEach(survey => { %>
+              <tr>
+                <td><%= survey.survey_submission_date ? new Date(survey.survey_submission_date).toLocaleDateString() : 'N/A' %></td>
+                <td><%= survey.first_name && survey.last_name ? survey.first_name + ' ' + survey.last_name : 'N/A' %></td>
+                <td class="truncate"><%= survey.event_name || 'N/A' %></td>
+                <td><%= survey.survey_satisfaction_score || 'N/A' %></td>
+                <% if (isManager) { %>
+                  <td>
+                    <div class="action-buttons">
+                      <a href="/surveys/<%= survey.survey_id %>" class="btn-small btn-edit">View</a>
+                      <form action="/surveys/<%= survey.survey_id %>/delete" method="POST" style="display: inline; margin: 0; padding: 0;" onsubmit="return confirm('Are you sure you want to delete this survey?')">
+                        <button type="submit" class="btn-small btn-delete">Delete</button>
+                      </form>
+                    </div>
+                  </td>
+                <% } %>
+              </tr>
+            <% }) %>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Milestones Section -->
+  <div class="dashboard-section">
+    <h2 class="section-title">Participant Milestones</h2>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Date Achieved</th>
+            <th>Participant</th>
+            <th>Milestone</th>
+            <% if (isManager) { %>
+              <th>Actions</th>
+            <% } %>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (milestones.length === 0) { %>
+            <tr><td colspan="<%= isManager ? 4 : 3 %>" style="text-align: center;">No milestones found</td></tr>
+          <% } else { %>
+            <% milestones.forEach(milestone => { %>
+              <tr>
+                <td><%= milestone.milestone_date ? new Date(milestone.milestone_date).toLocaleDateString() : 'N/A' %></td>
+                <td><%= milestone.first_name %> <%= milestone.last_name %></td>
+                <td><%= milestone.milestone_title %></td>
+                <% if (isManager) { %>
+                  <td>
+                    <div class="action-buttons">
+                      <form action="/milestones/<%= milestone.milestone_id %>/delete" method="POST" style="display: inline; margin: 0; padding: 0;" onsubmit="return confirm('Are you sure you want to delete this milestone?')">
+                        <button type="submit" class="btn-small btn-delete">Delete</button>
+                      </form>
+                    </div>
+                  </td>
+                <% } %>
+              </tr>
+            <% }) %>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <% if (tableauUrl) { %>
