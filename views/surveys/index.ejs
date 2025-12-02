@@ -1,23 +1,160 @@
 <!DOCTYPE html>
-<html><head><title><%= title %></title><link rel="stylesheet" href="/css/style.css"></head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | Ella Rises</title>
+  <link rel="icon" type="image/png" href="/images/EllaRisesHeart.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .page-header h1 {
+      font-family: 'DM Serif Display', serif;
+      margin: 0;
+    }
+
+    .search-form {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .search-form input {
+      flex: 1;
+      max-width: 400px;
+    }
+
+    .table-container {
+      background: var(--pink-light);
+      padding: 2rem;
+      border-radius: 12px;
+      overflow-x: auto;
+    }
+
+    .table-container table {
+      margin-top: 0;
+      background: white;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-small {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.85rem;
+      text-decoration: none;
+      border-radius: 6px;
+      display: inline-block;
+      transition: all 0.3s;
+    }
+
+    .btn-edit {
+      background: var(--secondary);
+      color: white;
+    }
+
+    .btn-edit:hover {
+      background: #89a48b;
+    }
+
+    .btn-delete {
+      background: var(--accent);
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-delete:hover {
+      background: #b02a4d;
+    }
+
+    .truncate {
+      max-width: 200px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  </style>
+</head>
 <body>
 <%- include('../partials/header') %>
-<main class="container">
-  <h1>Post-Event Surveys</h1>
-  <table>
-    <thead><tr><th>Participant</th><th>Event</th><th>Date</th><th>Satisfaction</th><th>Actions</th></tr></thead>
-    <tbody>
-      <% surveys.forEach(s => { %>
-      <tr>
-        <td><%= s.first_name %> <%= s.last_name %></td>
-        <td><%= s.event_name %></td>
-        <td><%= s.survey_date %></td>
-        <td><%= s.satisfaction_rating || 'N/A' %>/5</td>
-        <td><a href="/surveys/<%= s.survey_id %>">View</a></td>
-      </tr>
-      <% }); %>
-    </tbody>
-  </table>
+<main class="container" style="padding-top: 2rem;">
+  <div class="page-header">
+    <h1>Post-Event Surveys</h1>
+  </div>
+
+  <form method="GET" class="search-form">
+    <input type="text" name="search" placeholder="Search by participant or event..." value="<%= search %>">
+    <button type="submit">Search</button>
+  </form>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Participant</th>
+          <th>Event</th>
+          <th>Satisfaction</th>
+          <% if (isManager) { %>
+            <th>Actions</th>
+          <% } %>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (surveys.length === 0) { %>
+          <tr><td colspan="<%= isManager ? 5 : 4 %>" style="text-align: center;">No surveys found</td></tr>
+        <% } else { %>
+          <% surveys.forEach(survey => { %>
+            <tr>
+              <td><%= survey.survey_submission_date ? new Date(survey.survey_submission_date).toLocaleDateString() : 'N/A' %></td>
+              <td><%= survey.first_name && survey.last_name ? survey.first_name + ' ' + survey.last_name : 'N/A' %></td>
+              <td class="truncate"><%= survey.event_name || 'N/A' %></td>
+              <td><%= survey.survey_satisfaction_score || 'N/A' %></td>
+              <% if (isManager) { %>
+                <td>
+                  <div class="action-buttons">
+                    <a href="/surveys/<%= survey.survey_id %>" class="btn-small btn-edit">View</a>
+                    <form action="/surveys/<%= survey.survey_id %>/delete" method="POST" style="display: inline; margin: 0; padding: 0;" onsubmit="return confirm('Are you sure you want to delete this survey?')">
+                      <button type="submit" class="btn-small btn-delete">Delete</button>
+                    </form>
+                  </div>
+                </td>
+              <% } %>
+            </tr>
+          <% }) %>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+
+  <% if (totalPages > 1) { %>
+  <div class="pagination" style="margin-top: 2rem; text-align: center;">
+    <% if (currentPage > 1) { %>
+      <a href="?page=<%= currentPage - 1 %><%= search ? '&search=' + search : '' %>">Previous</a>
+    <% } %>
+    <span>Page <%= currentPage %> of <%= totalPages %></span>
+    <% if (currentPage < totalPages) { %>
+      <a href="?page=<%= currentPage + 1 %><%= search ? '&search=' + search : '' %>">Next</a>
+    <% } %>
+  </div>
+  <% } %>
 </main>
 <%- include('../partials/footer') %>
-</body></html>
+<script src="/js/main.js"></script>
+</body>
+</html>

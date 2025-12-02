@@ -18,26 +18,44 @@ router.get('/', async (req, res) => {
 
   try {
     let query = db('surveys')
-      .join('participants', 'surveys.participant_email', 'participants.participant_email')
-      .select('surveys.*', 'participants.first_name', 'participants.last_name');
+      .leftJoin('registrations', 'surveys.registration_id', 'registrations.registration_id')
+      .leftJoin('participants', 'registrations.participant_id', 'participants.participant_id')
+      .leftJoin('eventoccurrences', 'registrations.event_occurrence_id', 'eventoccurrences.event_occurrence_id')
+      .leftJoin('events', 'eventoccurrences.event_template_id', 'events.event_template_id')
+      .select('surveys.*',
+              'participants.participant_first_name as first_name',
+              'participants.participant_last_name as last_name',
+              'events.event_name');
 
     // Search functionality
     if (search) {
       query = query.where(function() {
-        this.where('participants.first_name', 'ilike', `%${search}%`)
-          .orWhere('participants.last_name', 'ilike', `%${search}%`)
-          .orWhere('surveys.event_name', 'ilike', `%${search}%`);
+        this.where('participants.participant_first_name', 'ilike', `%${search}%`)
+          .orWhere('participants.participant_last_name', 'ilike', `%${search}%`)
+          .orWhere('events.event_name', 'ilike', `%${search}%`);
       });
     }
 
     // Get total count
-    const countQuery = query.clone().count('* as count');
-    const [{ count }] = await countQuery;
+    let countQuery = db('surveys');
+    if (search) {
+      countQuery = countQuery
+        .leftJoin('registrations', 'surveys.registration_id', 'registrations.registration_id')
+        .leftJoin('participants', 'registrations.participant_id', 'participants.participant_id')
+        .leftJoin('eventoccurrences', 'registrations.event_occurrence_id', 'eventoccurrences.event_occurrence_id')
+        .leftJoin('events', 'eventoccurrences.event_template_id', 'events.event_template_id')
+        .where(function() {
+          this.where('participants.participant_first_name', 'ilike', `%${search}%`)
+            .orWhere('participants.participant_last_name', 'ilike', `%${search}%`)
+            .orWhere('events.event_name', 'ilike', `%${search}%`);
+        });
+    }
+    const [{ count }] = await countQuery.count('surveys.survey_id as count');
     const totalPages = Math.ceil(count / limit);
 
     // Get paginated results
     const surveys = await query
-      .orderBy('surveys.survey_date', 'desc')
+      .orderBy('surveys.survey_submission_date', 'desc')
       .limit(limit)
       .offset(offset);
 

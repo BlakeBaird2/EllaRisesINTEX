@@ -22,20 +22,29 @@ router.get('/', async (req, res) => {
     // Search functionality
     if (search) {
       query = query.where(function() {
-        this.where('first_name', 'ilike', `%${search}%`)
-          .orWhere('last_name', 'ilike', `%${search}%`)
+        this.where('participant_first_name', 'ilike', `%${search}%`)
+          .orWhere('participant_last_name', 'ilike', `%${search}%`)
           .orWhere('participant_email', 'ilike', `%${search}%`);
       });
     }
 
     // Get total count for pagination
-    const countQuery = query.clone().count('* as count');
-    const [{ count }] = await countQuery;
+    const [{ count }] = await db('participants')
+      .count('* as count')
+      .where(builder => {
+        if (search) {
+          builder.where(function() {
+            this.where('participant_first_name', 'ilike', `%${search}%`)
+              .orWhere('participant_last_name', 'ilike', `%${search}%`)
+              .orWhere('participant_email', 'ilike', `%${search}%`);
+          });
+        }
+      });
     const totalPages = Math.ceil(count / limit);
 
     // Get paginated results
     const participants = await query
-      .orderBy('last_name', 'asc')
+      .orderBy('participant_last_name', 'asc')
       .limit(limit)
       .offset(offset);
 

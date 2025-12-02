@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
   const offset = (page - 1) * limit;
 
   try {
-    let query = db('event_templates').select('*');
+    let query = db('events').select('*');
 
     // Search functionality
     if (search) {
@@ -30,8 +30,16 @@ router.get('/', async (req, res) => {
     }
 
     // Get total count for pagination
-    const countQuery = query.clone().count('* as count');
-    const [{ count }] = await countQuery;
+    const [{ count }] = await db('events')
+      .count('* as count')
+      .where(builder => {
+        if (search) {
+          builder.where('event_name', 'ilike', `%${search}%`);
+        }
+        if (type) {
+          builder.where('event_type', type);
+        }
+      });
     const totalPages = Math.ceil(count / limit);
 
     // Get paginated results
@@ -41,8 +49,9 @@ router.get('/', async (req, res) => {
       .offset(offset);
 
     // Get distinct event types for filter
-    const eventTypes = await db('event_templates')
+    const eventTypes = await db('events')
       .distinct('event_type')
+      .whereNotNull('event_type')
       .orderBy('event_type');
 
     res.render('events/index', {

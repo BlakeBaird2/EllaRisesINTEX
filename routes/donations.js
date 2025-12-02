@@ -7,8 +7,10 @@ const db = require('../config/database');
 router.get('/', async (req, res) => {
   try {
     const donations = await db('donations')
-      .leftJoin('participants', 'donations.participant_email', 'participants.participant_email')
-      .select('donations.*', 'participants.first_name', 'participants.last_name')
+      .leftJoin('participants', 'donations.participant_id', 'participants.participant_id')
+      .select('donations.*',
+              'participants.participant_first_name as first_name',
+              'participants.participant_last_name as last_name')
       .orderBy('donations.donation_date', 'desc')
       .limit(100);
 

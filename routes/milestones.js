@@ -7,11 +7,13 @@ const db = require('../config/database');
 router.get('/', async (req, res) => {
   try {
     const milestones = await db('milestones')
-      .join('participants', 'milestones.participant_email', 'participants.participant_email')
-      .join('milestone_types', 'milestones.milestone_type_id', 'milestone_types.milestone_type_id')
-      .select('milestones.*', 'participants.first_name', 'participants.last_name',
-              'milestone_types.milestone_name', 'milestone_types.category')
-      .orderBy('milestones.date_achieved', 'desc')
+      .join('participants', 'milestones.participant_id', 'participants.participant_id')
+      .join('milestonetypes', 'milestones.milestone_type_id', 'milestonetypes.milestone_type_id')
+      .select('milestones.*',
+              'participants.participant_first_name as first_name',
+              'participants.participant_last_name as last_name',
+              'milestonetypes.milestone_title as milestone_name')
+      .orderBy('milestones.milestone_date', 'desc')
       .limit(100);
 
     res.render('milestones/index', {
