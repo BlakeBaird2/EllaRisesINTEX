@@ -16,10 +16,6 @@ npm-debug.log*
 .DS_Store
 Thumbs.db
 
-# AWS
-.elasticbeanstalk/
-.ebextensions/
-
 # Misc
 *.zip
 temp/
