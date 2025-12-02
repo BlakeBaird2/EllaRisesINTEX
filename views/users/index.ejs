@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html><head><title><%= title %></title><link rel="stylesheet" href="/css/style.css"></head>
+<body>
+<%- include('../partials/header') %>
+<main class="container">
+  <h1>User Management <a href="/users/new" class="btn">Add New</a></h1>
+  <table>
+    <thead><tr><th>Username</th><th>Email</th><th>Role</th><th>Active</th><th>Actions</th></tr></thead>
+    <tbody>
+      <% users.forEach(u => { %>
+      <tr>
+        <td><%= u.username %></td>
+        <td><%= u.email %></td>
+        <td><%= u.role %></td>
+        <td><%= u.is_active ? 'Yes' : 'No' %></td>
+        <td><a href="/users/<%= u.user_id %>/edit">Edit</a></td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</main>
+<%- include('../partials/footer') %>
+</body></html>

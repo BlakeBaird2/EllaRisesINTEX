@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html><head><title><%= title %></title><link rel="stylesheet" href="/css/style.css"></head>
+<body>
+<%- include('../partials/header') %>
+<main class="container">
+  <h1><%= title %></h1>
+  <form method="POST" action="<%= action %>">
+    <input type="email" name="participant_email" value="<%= participant.participant_email || '' %>" placeholder="Email *" required <%= participant.participant_id ? 'readonly' : '' %>>
+    <input type="text" name="first_name" value="<%= participant.first_name || '' %>" placeholder="First Name *" required>
+    <input type="text" name="last_name" value="<%= participant.last_name || '' %>" placeholder="Last Name *" required>
+    <input type="date" name="date_of_birth" value="<%= participant.date_of_birth || '' %>" placeholder="Date of Birth">
+    <input type="text" name="high_school" value="<%= participant.high_school || '' %>" placeholder="High School">
+    <input type="text" name="intended_college" value="<%= participant.intended_college || '' %>" placeholder="Intended College">
+    <input type="text" name="grade_level" value="<%= participant.grade_level || '' %>" placeholder="Grade Level">
+    <input type="text" name="phone" value="<%= participant.phone || '' %>" placeholder="Phone">
+    <button type="submit">Save</button>
+    <a href="/participants" class="btn-secondary">Cancel</a>
+  </form>
+</main>
+<%- include('../partials/footer') %>
+</body></html>

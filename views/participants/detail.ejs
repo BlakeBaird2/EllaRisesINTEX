@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html><head><title><%= title %></title><link rel="stylesheet" href="/css/style.css"></head>
+<body>
+<%- include('../partials/header') %>
+<main class="container">
+  <h1><%= participant.first_name %> <%= participant.last_name %></h1>
+  <div class="details">
+    <p><strong>Email:</strong> <%= participant.participant_email %></p>
+    <p><strong>School:</strong> <%= participant.high_school || 'N/A' %></p>
+    <p><strong>Grade:</strong> <%= participant.grade_level || 'N/A' %></p>
+  </div>
+  <h2>Milestones (<%= milestones.length %>)</h2>
+  <ul>
+    <% milestones.forEach(m => { %>
+    <li><%= m.milestone_name %> - <%= m.date_achieved %></li>
+    <% }); %>
+  </ul>
+  <h2>Events Attended (<%= events.length %>)</h2>
+  <ul>
+    <% events.forEach(e => { %>
+    <li><%= e.event_name %> - <%= e.event_datetime_start %></li>
+    <% }); %>
+  </ul>
+  <% if (isManager) { %>
+  <a href="/participants/<%= participant.participant_id %>/edit" class="btn">Edit</a>
+  <% } %>
+</main>
+<%- include('../partials/footer') %>
+</body></html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html><head><title><%= title %></title><link rel="stylesheet" href="/css/style.css"></head>
+<body>
+<%- include('../partials/header') %>
+<main class="container">
+  <h1>Participants <% if (isManager) { %><a href="/participants/new" class="btn">Add New</a><% } %></h1>
+  <form method="GET" class="search-form">
+    <input type="text" name="search" placeholder="Search..." value="<%= search %>">
+    <button type="submit">Search</button>
+  </form>
+  <table>
+    <thead><tr><th>Name</th><th>Email</th><th>School</th><th>Actions</th></tr></thead>
+    <tbody>
+      <% participants.forEach(p => { %>
+      <tr>
+        <td><%= p.first_name %> <%= p.last_name %></td>
+        <td><%= p.participant_email %></td>
+        <td><%= p.high_school || 'N/A' %></td>
+        <td><a href="/participants/<%= p.participant_id %>">View</a>
+        <% if (isManager) { %>
+          <a href="/participants/<%= p.participant_id %>/edit">Edit</a>
+        <% } %>
+        </td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</main>
+<%- include('../partials/footer') %>
+</body></html>

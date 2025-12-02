@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | Ella Rises</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<%- include('../partials/header') %>
+
+<main>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <h1>Empowering the Rising Generation of Women</h1>
+      <p>Building confidence, competence, and connections in STEAM fields</p>
+      <a href="/donate" class="btn btn-primary">Support Our Mission</a>
+    </div>
+  </section>
+
+  <!-- Mission Section -->
+  <section class="mission">
+    <div class="container">
+      <h2>Our Mission</h2>
+      <p>
+        Ella Rises empowers women to pursue higher education and embrace their heritage through 
+        mentoring, creative workshops, and leadership opportunities. We provide STEAM (Science, 
+        Technology, Engineering, Arts, and Math) programs in partnership with UVU and BYU that 
+        build both technical competence and artistic confidence.
+      </p>
+    </div>
+  </section>
+
+  <!-- Impact Section -->
+  <section style="padding: 4rem 0; background: var(--pink-light);">
+    <div class="container">
+      <h2 style="text-align: center; margin-bottom: 3rem;">Our Impact</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+        <div style="text-align: center; padding: 2rem; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">🎓</div>
+          <h3 style="color: var(--accent); margin-bottom: 0.5rem;">Education</h3>
+          <p>Encouraging higher education pathways in STEAM fields</p>
+        </div>
+        <div style="text-align: center; padding: 2rem; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">💪</div>
+          <h3 style="color: var(--accent); margin-bottom: 0.5rem;">Empowerment</h3>
+          <p>Building confidence through hands-on workshops and mentorship</p>
+        </div>
+        <div style="text-align: center; padding: 2rem; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">🌟</div>
+          <h3 style="color: var(--accent); margin-bottom: 0.5rem;">Leadership</h3>
+          <p>Creating opportunities for women to lead and inspire</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section style="padding: 4rem 0; text-align: center; background: white;">
+    <div class="container">
+      <h2 style="margin-bottom: 1.5rem;">Join Our Mission</h2>
+      <p style="font-size: 1.2rem; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+        Your support helps us provide life-changing STEAM programs to the next generation of women leaders.
+      </p>
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="/donate" class="btn btn-primary" style="font-size: 1.1rem;">Make a Donation</a>
+        <a href="/about" class="btn" style="font-size: 1.1rem;">Learn More</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<%- include('../partials/footer') %>
+<script src="/js/main.js"></script>
+</body>
+</html>

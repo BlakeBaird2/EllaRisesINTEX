@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html><head><title><%= title %></title><link rel="stylesheet" href="/css/style.css"></head>
+<body>
+<%- include('../partials/header') %>
+<main class="container">
+  <h1>Support Ella Rises</h1>
+  <% if (success) { %><div class="alert success"><%= success %></div><% } %>
+  <% if (error) { %><div class="alert error"><%= error %></div><% } %>
+  <form method="POST" action="/donate" class="donation-form">
+    <input type="text" name="donor_name" placeholder="Your Name *" required>
+    <input type="email" name="donor_email" placeholder="Your Email *" required>
+    <input type="tel" name="donor_phone" placeholder="Phone Number">
+    <input type="number" name="amount" placeholder="Donation Amount *" step="0.01" min="1" required>
+    <select name="donation_type">
+      <option value="general">General Fund</option>
+      <option value="scholarship">Scholarship</option>
+      <option value="program">Program Support</option>
+    </select>
+    <button type="submit">Donate Now</button>
+  </form>
+</main>
+<%- include('../partials/footer') %>
+</body></html>

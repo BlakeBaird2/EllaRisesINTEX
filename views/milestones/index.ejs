@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html><head><title><%= title %></title><link rel="stylesheet" href="/css/style.css"></head>
+<body>
+<%- include('../partials/header') %>
+<main class="container">
+  <h1>Participant Milestones</h1>
+  <a href="/milestones/types">View Milestone Types</a>
+  <table>
+    <thead><tr><th>Participant</th><th>Milestone</th><th>Category</th><th>Date</th></tr></thead>
+    <tbody>
+      <% milestones.forEach(m => { %>
+      <tr>
+        <td><%= m.first_name %> <%= m.last_name %></td>
+        <td><%= m.milestone_name %></td>
+        <td><%= m.category %></td>
+        <td><%= m.date_achieved %></td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</main>
+<%- include('../partials/footer') %>
+</body></html>

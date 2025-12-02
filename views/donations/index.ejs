@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html><head><title><%= title %></title><link rel="stylesheet" href="/css/style.css"></head>
+<body>
+<%- include('../partials/header') %>
+<main class="container">
+  <h1>Donations</h1>
+  <table>
+    <thead><tr><th>Donor</th><th>Amount</th><th>Date</th><th>Type</th><th>Actions</th></tr></thead>
+    <tbody>
+      <% donations.forEach(d => { %>
+      <tr>
+        <td><%= d.donor_name %></td>
+        <td>$<%= d.donation_amount.toFixed(2) %></td>
+        <td><%= d.donation_date %></td>
+        <td><%= d.donation_type %></td>
+        <td><a href="/donations/<%= d.donation_id %>">View</a></td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</main>
+<%- include('../partials/footer') %>
+</body></html>

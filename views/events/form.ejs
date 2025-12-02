@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html><head><title><%= title %></title><link rel="stylesheet" href="/css/style.css"></head>
+<body>
+<%- include('../partials/header') %>
+<main class="container">
+  <h1><%= title %></h1>
+  <form method="POST" action="<%= action %>">
+    <input type="text" name="event_name" value="<%= event.event_name || '' %>" placeholder="Event Name *" required <%= event.event_template_id ? 'readonly' : '' %>>
+    <select name="event_type" required>
+      <option value="">Select Type</option>
+      <option value="Workshop" <%= event.event_type === 'Workshop' ? 'selected' : '' %>>Workshop</option>
+      <option value="Seminar" <%= event.event_type === 'Seminar' ? 'selected' : '' %>>Seminar</option>
+      <option value="Conference" <%= event.event_type === 'Conference' ? 'selected' : '' %>>Conference</option>
+      <option value="Mentoring" <%= event.event_type === 'Mentoring' ? 'selected' : '' %>>Mentoring</option>
+    </select>
+    <textarea name="description" placeholder="Description"><%= event.description || '' %></textarea>
+    <input type="number" name="target_age_min" value="<%= event.target_age_min || '' %>" placeholder="Min Age">
+    <input type="number" name="target_age_max" value="<%= event.target_age_max || '' %>" placeholder="Max Age">
+    <button type="submit">Save</button>
+    <a href="/events" class="btn-secondary">Cancel</a>
+  </form>
+</main>
+<%- include('../partials/footer') %>
+</body></html>

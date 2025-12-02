@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html><head><title><%= title %></title><link rel="stylesheet" href="/css/style.css"></head>
+<body>
+<%- include('../partials/header') %>
+<main class="container">
+  <h1>Post-Event Surveys</h1>
+  <table>
+    <thead><tr><th>Participant</th><th>Event</th><th>Date</th><th>Satisfaction</th><th>Actions</th></tr></thead>
+    <tbody>
+      <% surveys.forEach(s => { %>
+      <tr>
+        <td><%= s.first_name %> <%= s.last_name %></td>
+        <td><%= s.event_name %></td>
+        <td><%= s.survey_date %></td>
+        <td><%= s.satisfaction_rating || 'N/A' %>/5</td>
+        <td><a href="/surveys/<%= s.survey_id %>">View</a></td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</main>
+<%- include('../partials/footer') %>
+</body></html>

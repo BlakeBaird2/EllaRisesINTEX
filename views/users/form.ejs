@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html><head><title><%= title %></title><link rel="stylesheet" href="/css/style.css"></head>
+<body>
+<%- include('../partials/header') %>
+<main class="container">
+  <h1><%= title %></h1>
+  <form method="POST" action="<%= action %>">
+    <input type="text" name="username" value="<%= user.username || '' %>" placeholder="Username *" required <%= user.user_id ? 'readonly' : '' %>>
+    <input type="email" name="email" value="<%= user.email || '' %>" placeholder="Email *" required>
+    <input type="password" name="password" placeholder="Password <%= user.user_id ? '(leave blank to keep current)' : '*' %>" <%= user.user_id ? '' : 'required' %>>
+    <input type="text" name="full_name" value="<%= user.full_name || '' %>" placeholder="Full Name *" required>
+    <select name="role" required>
+      <option value="user" <%= user.role === 'user' ? 'selected' : '' %>>Common User</option>
+      <option value="manager" <%= user.role === 'manager' ? 'selected' : '' %>>Manager</option>
+    </select>
+    <select name="is_active">
+      <option value="true" <%= user.is_active ? 'selected' : '' %>>Active</option>
+      <option value="false" <%= !user.is_active && user.user_id ? 'selected' : '' %>>Inactive</option>
+    </select>
+    <button type="submit">Save</button>
+    <a href="/users" class="btn-secondary">Cancel</a>
+  </form>
+</main>
+<%- include('../partials/footer') %>
+</body></html>

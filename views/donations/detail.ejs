@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html><head><title><%= title %></title><link rel="stylesheet" href="/css/style.css"></head>
+<body>
+<%- include('../partials/header') %>
+<main class="container">
+  <h1>Donation Details</h1>
+  <p><strong>Donor:</strong> <%= donation.donor_name %></p>
+  <p><strong>Email:</strong> <%= donation.donor_email %></p>
+  <p><strong>Amount:</strong> $<%= donation.donation_amount.toFixed(2) %></p>
+  <p><strong>Date:</strong> <%= donation.donation_date %></p>
+  <p><strong>Type:</strong> <%= donation.donation_type %></p>
+  <% if (donation.first_name) { %>
+  <p><strong>In Honor of:</strong> <%= donation.first_name %> <%= donation.last_name %></p>
+  <% } %>
+</main>
+<%- include('../partials/footer') %>
+</body></html>

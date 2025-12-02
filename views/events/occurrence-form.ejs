@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html><head><title><%= title %></title><link rel="stylesheet" href="/css/style.css"></head>
+<body>
+<%- include('../partials/header') %>
+<main class="container">
+  <h1><%= title %></h1>
+  <form method="POST" action="<%= action %>">
+    <input type="datetime-local" name="event_datetime_start" required>
+    <input type="datetime-local" name="event_datetime_end">
+    <input type="text" name="location" placeholder="Location">
+    <input type="number" name="capacity" placeholder="Capacity">
+    <button type="submit">Create Occurrence</button>
+    <a href="/events/<%= event.event_template_id %>" class="btn-secondary">Cancel</a>
+  </form>
+</main>
+<%- include('../partials/footer') %>
+</body></html>

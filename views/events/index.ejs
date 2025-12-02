@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html><head><title><%= title %></title><link rel="stylesheet" href="/css/style.css"></head>
+<body>
+<%- include('../partials/header') %>
+<main class="container">
+  <h1>Events <% if (isManager) { %><a href="/events/new" class="btn">Add New</a><% } %></h1>
+  <table>
+    <thead><tr><th>Event Name</th><th>Type</th><th>Actions</th></tr></thead>
+    <tbody>
+      <% events.forEach(e => { %>
+      <tr>
+        <td><%= e.event_name %></td>
+        <td><%= e.event_type %></td>
+        <td><a href="/events/<%= e.event_template_id %>">View</a></td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</main>
+<%- include('../partials/footer') %>
+</body></html>

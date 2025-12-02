@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html><head><title><%= title %></title><link rel="stylesheet" href="/css/style.css"></head>
+<body>
+<%- include('../partials/header') %>
+<main class="container">
+  <h1>Survey Details</h1>
+  <p><strong>Participant:</strong> <%= survey.first_name %> <%= survey.last_name %></p>
+  <p><strong>Event:</strong> <%= survey.event_name %></p>
+  <p><strong>Date:</strong> <%= survey.survey_date %></p>
+  <p><strong>Satisfaction:</strong> <%= survey.satisfaction_rating || 'N/A' %>/5</p>
+  <p><strong>Usefulness:</strong> <%= survey.usefulness_rating || 'N/A' %>/5</p>
+  <p><strong>Recommendation:</strong> <%= survey.recommendation_score || 'N/A' %>/10</p>
+  <p><strong>Comments:</strong> <%= survey.comments || 'None' %></p>
+</main>
+<%- include('../partials/footer') %>
+</body></html>

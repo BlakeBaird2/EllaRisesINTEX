@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html><head><title><%= title %></title><link rel="stylesheet" href="/css/style.css"></head>
+<body>
+<%- include('../partials/header') %>
+<main class="container">
+  <h1>Milestone Types</h1>
+  <table>
+    <thead><tr><th>Name</th><th>Category</th><th>Description</th></tr></thead>
+    <tbody>
+      <% types.forEach(t => { %>
+      <tr>
+        <td><%= t.milestone_name %></td>
+        <td><%= t.category %></td>
+        <td><%= t.description || 'N/A' %></td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</main>
+<%- include('../partials/footer') %>
+</body></html>
