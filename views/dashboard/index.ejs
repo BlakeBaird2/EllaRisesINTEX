@@ -323,10 +323,164 @@
       font-size: 1rem;
       opacity: 0;
       transition: opacity 0.3s;
+      z-index: 10;
     }
 
     .metrics.edit-mode .metric:hover::after {
       opacity: 1;
+    }
+
+    /* Resize Handle Styles */
+    .resize-handle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.8);
+      border: 2px solid #9AB59D;
+      border-radius: 4px;
+      z-index: 20;
+      cursor: nwse-resize;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .metrics.edit-mode .metric:hover .resize-handle {
+      opacity: 1;
+    }
+
+    .resize-handle.se {
+      bottom: 5px;
+      right: 5px;
+      width: 20px;
+      height: 20px;
+      cursor: nwse-resize;
+    }
+
+    .resize-handle.se::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      right: 4px;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 0 0 8px 8px;
+      border-color: transparent transparent #9AB59D transparent;
+    }
+
+    /* Size indicator */
+    .size-indicator {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 10;
+    }
+
+    .metrics.edit-mode .metric:hover .size-indicator {
+      opacity: 1;
+    }
+
+    /* Color picker styles */
+    .color-picker-group {
+      margin-bottom: 1rem;
+    }
+
+    .color-picker-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .color-options {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .color-option {
+      width: 50px;
+      height: 50px;
+      border-radius: 8px;
+      border: 3px solid transparent;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .color-option:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .color-option.selected {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(206, 50, 91, 0.3);
+    }
+
+    .color-option::after {
+      content: '✓';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 1.2rem;
+      font-weight: bold;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .color-option.selected::after {
+      opacity: 1;
+    }
+
+    /* Size selector styles */
+    .size-selector-group {
+      margin-bottom: 1rem;
+    }
+
+    .size-selector-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .size-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+      max-width: 200px;
+    }
+
+    .size-option {
+      padding: 0.75rem;
+      border: 2px solid var(--pink-light);
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: white;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .size-option:hover {
+      border-color: var(--secondary);
+      background: var(--pink-light);
+    }
+
+    .size-option.selected {
+      border-color: var(--secondary);
+      background: var(--secondary);
+      color: white;
     }
 
     /* Modal Styles */
@@ -516,47 +670,60 @@
       <h1>Dashboard</h1>
       <p>Overview of Ella Rises program metrics and analytics</p>
     </div>
-    <button id="editDashboardBtn" class="btn btn-edit-dashboard" style="margin-top: 0;">
+    <!-- Edit Dashboard button temporarily hidden -->
+    <!-- <button id="editDashboardBtn" class="btn btn-edit-dashboard" style="margin-top: 0;">
       <i class="fas fa-edit"></i> Edit Dashboard
-    </button>
+    </button> -->
   </div>
 
   <div class="metrics" id="metricsContainer">
-    <div class="metric" data-metric="participants" data-table="participants" data-type="count">
-      <h3><%= metrics.participants.toLocaleString() %></h3>
-      <p>Participants</p>
+    <% 
+      // Default tile configuration - will be replaced by localStorage if available
+      const defaultTiles = [
+        { table: 'participants', type: 'count', column: null, name: 'Participants', width: 1, height: 1, color: '#9AB59D', value: metrics.participants },
+        { table: 'events', type: 'count', column: null, name: 'Events', width: 1, height: 1, color: '#9AB59D', value: metrics.events },
+        { table: 'surveys', type: 'count', column: null, name: 'Surveys', width: 1, height: 1, color: '#9AB59D', value: metrics.surveys },
+        { table: 'registrations', type: 'count', column: null, name: 'Registrations', width: 1, height: 1, color: '#9AB59D', value: metrics.registrations || 0 },
+        { table: 'donations', type: 'sum', column: 'donation_amount', name: 'Total Donations', width: 2, height: 1, color: '#9AB59D', value: metrics.totalDonations },
+        { table: 'milestones', type: 'count', column: null, name: 'Milestones', width: 1, height: 1, color: '#9AB59D', value: metrics.milestones }
+      ];
+      
+      // Store default tiles in a script tag for JavaScript to use
+      const tiles = (typeof tileConfig !== 'undefined' && tileConfig && tileConfig.length > 0) ? tileConfig : defaultTiles;
+      
+      tiles.forEach((tile, index) => {
+        const displayValue = tile.type === 'sum' && tile.table === 'donations' 
+          ? '$' + Math.round(parseFloat(tile.value || 0)).toLocaleString('en-US')
+          : (tile.value || 0).toLocaleString();
+    %>
+    <div class="metric" 
+         data-index="<%= index %>"
+         data-table="<%= tile.table %>" 
+         data-type="<%= tile.type %>" 
+         data-column="<%= tile.column || '' %>"
+         data-width="<%= tile.width || 1 %>"
+         data-height="<%= tile.height || 1 %>"
+         data-color="<%= tile.color || '#9AB59D' %>"
+         style="grid-column: span <%= tile.width || 1 %>; grid-row: span <%= tile.height || 1 %>; background: linear-gradient(135deg, <%= tile.color || '#9AB59D' %> 0%, <%= tile.color || '#9AB59D' %>dd 100%);">
+      <!-- Edit mode indicators temporarily hidden -->
+      <!-- <span class="size-indicator"><%= tile.width || 1 %>x<%= tile.height || 1 %></span>
+      <div class="resize-handle se"></div> -->
+      <h3><%= displayValue %></h3>
+      <p><%= tile.name %></p>
     </div>
-    <div class="metric" data-metric="events" data-table="events" data-type="count">
-      <h3><%= metrics.events.toLocaleString() %></h3>
-      <p>Events</p>
-    </div>
-    <div class="metric" data-metric="surveys" data-table="surveys" data-type="count">
-      <h3><%= metrics.surveys.toLocaleString() %></h3>
-      <p>Surveys</p>
-    </div>
-    <div class="metric" data-metric="registrations" data-table="registrations" data-type="count">
-      <h3><%= (metrics.registrations || 0).toLocaleString() %></h3>
-      <p>Registrations</p>
-    </div>
-    <div class="metric donation-metric" data-metric="totalDonations" data-table="donations" data-type="sum" data-column="donation_amount">
-      <h3>$<%= Math.round(parseFloat(metrics.totalDonations)).toLocaleString('en-US') %></h3>
-      <p>Total Donations</p>
-    </div>
-    <div class="metric" data-metric="milestones" data-table="milestones" data-type="count">
-      <h3><%= metrics.milestones.toLocaleString() %></h3>
-      <p>Milestones</p>
-    </div>
-    <div class="metric metric-add" id="addMetricTile" style="cursor: pointer; background: transparent;">
+    <% }); %>
+    <!-- Add More tile temporarily hidden -->
+    <!-- <div class="metric metric-add" id="addMetricTile" style="cursor: pointer; background: transparent;">
       <div style="font-size: 3rem; color: #9AB59D; margin-bottom: 0.75rem; font-weight: 700; font-family: 'Montserrat', sans-serif; line-height: 1.2;">⋯</div>
       <p style="color: #9AB59D; font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Add More</p>
-    </div>
+    </div> -->
   </div>
 
   <div class="tableau-embed">
     <h2>Program Impact & Effectiveness</h2>
-    <div class='tableauPlaceholder' id='viz1764639749574' style='position: relative'><noscript><a href='#'><img alt='Ella Rises: Program Impact &amp; Effectiveness ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Et&#47;EthanJohnBlakeTaylorINTEX&#47;Dashboard2&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='EthanJohnBlakeTaylorINTEX&#47;Dashboard2' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Et&#47;EthanJohnBlakeTaylorINTEX&#47;Dashboard2&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-US' /><param name='filter' value='publish=yes' /></object></div>
+    <div class='tableauPlaceholder' id='viz1764782639637' style='position: relative'><noscript><a href='#'><img alt='Ella Rises: Program Impact &amp; Effectiveness ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Et&#47;EthanJohnBlakeTaylorINTEX2&#47;Dashboard2&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='EthanJohnBlakeTaylorINTEX2&#47;Dashboard2' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Et&#47;EthanJohnBlakeTaylorINTEX2&#47;Dashboard2&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-US' /><param name='filter' value='publish=yes' /></object></div>
     <script type='text/javascript'>
-      var divElement = document.getElementById('viz1764639749574');
+      var divElement = document.getElementById('viz1764782639637');
       var vizElement = divElement.getElementsByTagName('object')[0];
       if ( divElement.offsetWidth > 800 ) { 
         vizElement.style.width='100%';
@@ -566,7 +733,7 @@
         vizElement.style.height=(divElement.offsetWidth*0.75)+'px';
       } else { 
         vizElement.style.width='100%';
-        vizElement.style.height='1377px';
+        vizElement.style.height='1327px';
       }
       var scriptElement = document.createElement('script');
       scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
@@ -604,6 +771,28 @@
       <label>Display Name:</label>
       <input type="text" id="nameInput" name="name" required placeholder="e.g., Total Participants">
       
+      <div class="color-picker-group">
+        <label>Tile Color:</label>
+        <div class="color-options">
+          <div class="color-option" data-color="#FFD8D1" style="background: #FFD8D1;"></div>
+          <div class="color-option" data-color="#9AB59D" style="background: #9AB59D;"></div>
+          <div class="color-option" data-color="#F4B092" style="background: #F4B092;"></div>
+        </div>
+        <input type="hidden" id="colorInput" name="color" value="#9AB59D">
+      </div>
+      
+      <div class="size-selector-group">
+        <label>Tile Size:</label>
+        <div class="size-grid">
+          <div class="size-option" data-width="1" data-height="1">1x1</div>
+          <div class="size-option" data-width="2" data-height="1">2x1</div>
+          <div class="size-option" data-width="1" data-height="2">1x2</div>
+          <div class="size-option" data-width="2" data-height="2">2x2</div>
+        </div>
+        <input type="hidden" id="widthInput" name="width" value="1">
+        <input type="hidden" id="heightInput" name="height" value="1">
+      </div>
+      
       <input type="hidden" id="metricIndex" name="index">
       
       <div class="metric-modal-actions">
@@ -619,37 +808,165 @@
 <script>
   let editMode = false;
   let currentEditingIndex = null;
+  let isResizing = false;
+  let resizeStartX = 0;
+  let resizeStartY = 0;
+  let resizeStartWidth = 1;
+  let resizeStartHeight = 1;
+  let currentResizeTile = null;
 
-  // Toggle edit mode
-  document.getElementById('editDashboardBtn').addEventListener('click', function() {
-    editMode = !editMode;
-    const container = document.getElementById('metricsContainer');
-    if (editMode) {
-      container.classList.add('edit-mode');
-      this.innerHTML = '<i class="fas fa-check"></i> Done Editing';
-    } else {
-      container.classList.remove('edit-mode');
-      this.innerHTML = '<i class="fas fa-edit"></i> Edit Dashboard';
+  // Load dashboard layout from localStorage on page load
+  function loadLayoutFromStorage() {
+    try {
+      const saved = localStorage.getItem('dashboardTileConfig');
+      if (saved) {
+        const tileConfig = JSON.parse(saved);
+        if (Array.isArray(tileConfig) && tileConfig.length > 0) {
+          // Update existing tiles with saved config
+          const tiles = document.querySelectorAll('.metric:not(#addMetricTile)');
+          tileConfig.forEach((config, index) => {
+            if (tiles[index]) {
+              const tile = tiles[index];
+              tile.dataset.width = config.width || 1;
+              tile.dataset.height = config.height || 1;
+              tile.dataset.color = config.color || '#9AB59D';
+              tile.style.gridColumn = `span ${config.width || 1}`;
+              tile.style.gridRow = `span ${config.height || 1}`;
+              tile.style.background = `linear-gradient(135deg, ${config.color || '#9AB59D'} 0%, ${config.color || '#9AB59D'}dd 100%)`;
+              const sizeIndicator = tile.querySelector('.size-indicator');
+              if (sizeIndicator) {
+                sizeIndicator.textContent = `${config.width || 1}x${config.height || 1}`;
+              }
+            }
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Error loading layout from localStorage:', error);
     }
+  }
+
+  // Load layout when page loads
+  window.addEventListener('DOMContentLoaded', loadLayoutFromStorage);
+
+  // Toggle edit mode - DISABLED TEMPORARILY
+  // const editBtn = document.getElementById('editDashboardBtn');
+  // if (editBtn) {
+  //   editBtn.addEventListener('click', async function() {
+  //     editMode = !editMode;
+  //     const container = document.getElementById('metricsContainer');
+  //     if (editMode) {
+  //       container.classList.add('edit-mode');
+  //       this.innerHTML = '<i class="fas fa-check"></i> Done Editing';
+  //     } else {
+  //       container.classList.remove('edit-mode');
+  //       this.innerHTML = '<i class="fas fa-edit"></i> Edit Dashboard';
+  //       // Save layout when exiting edit mode
+  //       await saveLayout();
+  //     }
+  //   });
+  // }
+
+  // Color picker handlers
+  document.querySelectorAll('.color-option').forEach(option => {
+    option.addEventListener('click', function() {
+      document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
+      this.classList.add('selected');
+      document.getElementById('colorInput').value = this.dataset.color;
+    });
   });
 
-  // Handle metric clicks in edit mode
-  document.getElementById('metricsContainer').addEventListener('click', function(e) {
+  // Size selector handlers
+  document.querySelectorAll('.size-option').forEach(option => {
+    option.addEventListener('click', function() {
+      document.querySelectorAll('.size-option').forEach(opt => opt.classList.remove('selected'));
+      this.classList.add('selected');
+      document.getElementById('widthInput').value = this.dataset.width;
+      document.getElementById('heightInput').value = this.dataset.height;
+    });
+  });
+
+  // Resize handle mouse down
+  document.addEventListener('mousedown', function(e) {
     if (!editMode) return;
+    const handle = e.target.closest('.resize-handle');
+    if (!handle) return;
     
-    const metric = e.target.closest('.metric');
-    if (!metric || metric.id === 'addMetricTile') return;
+    e.preventDefault();
+    isResizing = true;
+    currentResizeTile = handle.closest('.metric');
+    resizeStartX = e.clientX;
+    resizeStartY = e.clientY;
+    resizeStartWidth = parseInt(currentResizeTile.dataset.width) || 1;
+    resizeStartHeight = parseInt(currentResizeTile.dataset.height) || 1;
     
-    openMetricModal(metric);
+    document.body.style.cursor = 'nwse-resize';
+    document.body.style.userSelect = 'none';
   });
 
-  // Handle add metric tile click
-  document.getElementById('addMetricTile').addEventListener('click', function() {
-    if (!editMode) {
-      document.getElementById('editDashboardBtn').click();
-    }
-    openMetricModal(null);
+  // Resize handle mouse move
+  document.addEventListener('mousemove', function(e) {
+    if (!isResizing || !currentResizeTile) return;
+    
+    const container = document.getElementById('metricsContainer');
+    const containerRect = container.getBoundingClientRect();
+    const tileRect = currentResizeTile.getBoundingClientRect();
+    
+    // Calculate relative position
+    const relativeX = e.clientX - tileRect.left;
+    const relativeY = e.clientY - tileRect.top;
+    
+    // Calculate grid cell size (container width / 4 columns)
+    const gridCellWidth = containerRect.width / 4;
+    const gridCellHeight = 150; // Approximate cell height
+    
+    // Calculate new dimensions based on mouse position
+    let newWidth = Math.max(1, Math.min(2, Math.ceil(relativeX / gridCellWidth)));
+    let newHeight = Math.max(1, Math.min(2, Math.ceil(relativeY / gridCellHeight)));
+    
+    // Update tile
+    currentResizeTile.dataset.width = newWidth;
+    currentResizeTile.dataset.height = newHeight;
+    currentResizeTile.style.gridColumn = `span ${newWidth}`;
+    currentResizeTile.style.gridRow = `span ${newHeight}`;
+    currentResizeTile.querySelector('.size-indicator').textContent = `${newWidth}x${newHeight}`;
   });
+
+  // Resize handle mouse up
+  document.addEventListener('mouseup', function() {
+    if (isResizing) {
+      isResizing = false;
+      currentResizeTile = null;
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    }
+  });
+
+  // Handle metric clicks in edit mode - DISABLED TEMPORARILY
+  // document.getElementById('metricsContainer').addEventListener('click', function(e) {
+  //   if (!editMode) return;
+  //   if (isResizing) return;
+  //   
+  //   // Don't open modal if clicking resize handle
+  //   if (e.target.closest('.resize-handle')) return;
+  //   
+  //   const metric = e.target.closest('.metric');
+  //   if (!metric || metric.id === 'addMetricTile') return;
+  //   
+  //   openMetricModal(metric);
+  // });
+
+  // Handle add metric tile click - DISABLED TEMPORARILY
+  // const addTile = document.getElementById('addMetricTile');
+  // if (addTile) {
+  //   addTile.addEventListener('click', function() {
+  //     if (!editMode) {
+  //       const editBtn = document.getElementById('editDashboardBtn');
+  //       if (editBtn) editBtn.click();
+  //     }
+  //     openMetricModal(null);
+  //   });
+  // }
 
   // Type select change handler
   document.getElementById('typeSelect').addEventListener('change', function() {
@@ -676,13 +993,35 @@
       const type = metric.dataset.type;
       const column = metric.dataset.column || '';
       const name = metric.querySelector('p').textContent;
-      const index = Array.from(metric.parentNode.children).indexOf(metric);
+      const index = metric.dataset.index;
+      const width = parseInt(metric.dataset.width) || 1;
+      const height = parseInt(metric.dataset.height) || 1;
+      const color = metric.dataset.color || '#9AB59D';
       
       document.getElementById('tableSelect').value = table;
       document.getElementById('typeSelect').value = type;
       document.getElementById('columnInput').value = column;
       document.getElementById('nameInput').value = name;
       document.getElementById('metricIndex').value = index;
+      document.getElementById('widthInput').value = width;
+      document.getElementById('heightInput').value = height;
+      document.getElementById('colorInput').value = color;
+      
+      // Set selected color
+      document.querySelectorAll('.color-option').forEach(opt => {
+        opt.classList.remove('selected');
+        if (opt.dataset.color === color) {
+          opt.classList.add('selected');
+        }
+      });
+      
+      // Set selected size
+      document.querySelectorAll('.size-option').forEach(opt => {
+        opt.classList.remove('selected');
+        if (parseInt(opt.dataset.width) === width && parseInt(opt.dataset.height) === height) {
+          opt.classList.add('selected');
+        }
+      });
       
       if (type === 'sum') {
         document.getElementById('columnLabel').style.display = 'block';
@@ -694,6 +1033,16 @@
       // Adding new metric
       form.reset();
       document.getElementById('metricIndex').value = '';
+      document.getElementById('widthInput').value = '1';
+      document.getElementById('heightInput').value = '1';
+      document.getElementById('colorInput').value = '#9AB59D';
+      
+      // Reset color and size selections
+      document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
+      document.querySelector('.color-option[data-color="#9AB59D"]').classList.add('selected');
+      document.querySelectorAll('.size-option').forEach(opt => opt.classList.remove('selected'));
+      document.querySelector('.size-option[data-width="1"][data-height="1"]').classList.add('selected');
+      
       currentEditingIndex = null;
     }
     
@@ -706,37 +1055,68 @@
     currentEditingIndex = null;
   }
 
+  // Save layout to localStorage (no database needed!)
+  async function saveLayout() {
+    const tiles = Array.from(document.querySelectorAll('.metric:not(#addMetricTile)'));
+    const tileConfig = tiles.map(tile => ({
+      table: tile.dataset.table,
+      type: tile.dataset.type,
+      column: tile.dataset.column || null,
+      name: tile.querySelector('p').textContent,
+      width: parseInt(tile.dataset.width) || 1,
+      height: parseInt(tile.dataset.height) || 1,
+      color: tile.dataset.color || '#9AB59D'
+    }));
+
+    try {
+      // Save to browser localStorage - works immediately, no database needed!
+      localStorage.setItem('dashboardTileConfig', JSON.stringify(tileConfig));
+      console.log('Dashboard layout saved to browser storage');
+    } catch (error) {
+      console.error('Error saving layout to localStorage:', error);
+    }
+  }
+
   // Handle form submission
   document.getElementById('metricForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
     const formData = new FormData(this);
-    const data = {
-      table: formData.get('table'),
-      type: formData.get('type'),
-      column: formData.get('column') || null,
-      name: formData.get('name'),
-      index: formData.get('index') || null
-    };
+    const index = formData.get('index');
+    const width = parseInt(formData.get('width')) || 1;
+    const height = parseInt(formData.get('height')) || 1;
+    const color = formData.get('color') || '#9AB59D';
     
-    try {
-      const response = await fetch('/dashboard/update-metric', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      });
-      
-      if (response.ok) {
+    // If editing existing tile, update it
+    if (index !== null && index !== '' && index !== undefined) {
+      const tile = document.querySelector(`.metric[data-index="${index}"]`);
+      if (tile) {
+        tile.dataset.table = formData.get('table');
+        tile.dataset.type = formData.get('type');
+        tile.dataset.column = formData.get('column') || '';
+        tile.dataset.width = width;
+        tile.dataset.height = height;
+        tile.dataset.color = color;
+        tile.style.gridColumn = `span ${width}`;
+        tile.style.gridRow = `span ${height}`;
+        tile.style.background = `linear-gradient(135deg, ${color} 0%, ${color}dd 100%)`;
+        tile.querySelector('p').textContent = formData.get('name');
+        const sizeIndicator = tile.querySelector('.size-indicator');
+        if (sizeIndicator) {
+          sizeIndicator.textContent = `${width}x${height}`;
+        }
+        
+        // Reload page to get updated metric value
+        await saveLayout();
         location.reload();
-      } else {
-        alert('Error updating metric. Please try again.');
+        return;
       }
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Error updating metric. Please try again.');
     }
+    
+    // For new tiles, we'll need to reload to add them properly
+    // This is a simplified approach - in a full implementation, you'd add the tile dynamically
+    await saveLayout();
+    location.reload();
   });
 
   // Close modal on outside click

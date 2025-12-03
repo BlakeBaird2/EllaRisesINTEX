@@ -10,6 +10,9 @@ router.get('/', async (req, res) => {
   const offset = (page - 1) * limit;
   
   try {
+    // Trim search query to handle leading/trailing spaces
+    const trimmedSearch = search ? search.trim() : '';
+
     let query = db('milestones')
       .join('participants', 'milestones.participant_id', 'participants.participant_id')
       .join('milestonetypes', 'milestones.milestone_type_id', 'milestonetypes.milestone_type_id')
@@ -18,12 +21,13 @@ router.get('/', async (req, res) => {
               'participants.participant_last_name as last_name',
               'milestonetypes.milestone_title as milestone_name');
 
-    // Search functionality
-    if (search) {
+    // Search functionality - supports searching by participant first name, last name, full name, or milestone type
+    if (trimmedSearch) {
       query = query.where(function() {
-        this.where('participants.participant_first_name', 'ilike', `%${search}%`)
-          .orWhere('participants.participant_last_name', 'ilike', `%${search}%`)
-          .orWhere('milestonetypes.milestone_title', 'ilike', `%${search}%`);
+        this.where('participants.participant_first_name', 'ilike', `%${trimmedSearch}%`)
+          .orWhere('participants.participant_last_name', 'ilike', `%${trimmedSearch}%`)
+          .orWhere('milestonetypes.milestone_title', 'ilike', `%${trimmedSearch}%`)
+          .orWhereRaw(`COALESCE(participants.participant_first_name, '') || ' ' || COALESCE(participants.participant_last_name, '') ILIKE ?`, [`%${trimmedSearch}%`]);
       });
     }
 
@@ -36,11 +40,12 @@ router.get('/', async (req, res) => {
     let countQuery = db('milestones')
       .join('participants', 'milestones.participant_id', 'participants.participant_id')
       .join('milestonetypes', 'milestones.milestone_type_id', 'milestonetypes.milestone_type_id');
-    if (search) {
+    if (trimmedSearch) {
       countQuery = countQuery.where(function() {
-        this.where('participants.participant_first_name', 'ilike', `%${search}%`)
-          .orWhere('participants.participant_last_name', 'ilike', `%${search}%`)
-          .orWhere('milestonetypes.milestone_title', 'ilike', `%${search}%`);
+        this.where('participants.participant_first_name', 'ilike', `%${trimmedSearch}%`)
+          .orWhere('participants.participant_last_name', 'ilike', `%${trimmedSearch}%`)
+          .orWhere('milestonetypes.milestone_title', 'ilike', `%${trimmedSearch}%`)
+          .orWhereRaw(`COALESCE(participants.participant_first_name, '') || ' ' || COALESCE(participants.participant_last_name, '') ILIKE ?`, [`%${trimmedSearch}%`]);
       });
     }
     if (type) {
@@ -83,7 +88,7 @@ router.get('/', async (req, res) => {
       title: 'Participant Milestones',
       milestones: milestones || [],
       milestoneTypes: milestoneTypes || [],
-      search: search || '',
+      search: trimmedSearch || '',
       selectedType: type || '',
       dateSort: sortDirection,
       currentPage: parseInt(page),
@@ -163,17 +168,17 @@ router.get('/new', async (req, res) => {
 // Add milestone to participant (Manager only)
 router.post('/', async (req, res) => {
   if (req.session.user.role !== 'manager' && req.session.user.role !== 'admin') return res.status(403).send('Access denied');
-  
+
   try {
     await db('milestones').insert({
       participant_id: req.body.participant_id,
       milestone_type_id: req.body.milestone_type_id,
-      milestone_date: req.body.milestone_date || new Date(),
-      notes: req.body.notes || null
+      milestone_date: req.body.milestone_date || new Date()
     });
     res.redirect('/milestones?success=Milestone added');
   } catch (error) {
-    console.error('Error:', error);
+    console.error('Error adding milestone:', error);
+    console.error('Error details:', error.message);
     res.status(500).render('error', { title: 'Error', message: 'Unable to add milestone', error });
   }
 });

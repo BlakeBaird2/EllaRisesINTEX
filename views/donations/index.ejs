@@ -113,6 +113,35 @@
       line-height: 1.5;
     }
 
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .search-container {
+        flex-wrap: wrap !important;
+        flex-direction: row !important;
+        gap: 0.75rem !important;
+      }
+
+      .search-container input[type="text"] {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        min-width: 0 !important;
+      }
+
+      .search-container select {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+      }
+
+      .search-container button[type="submit"] {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        height: 48px !important;
+        margin: 0 !important;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -123,15 +152,18 @@
   </div>
 
   <div class="search-container">
-    <input type="text" name="search" placeholder="Search donations..." value="<%= search %>" form="search-form">
-    <select name="amountFilter" form="search-form">
-      <option value="">All Amounts</option>
-      <option value="under50" <%= selectedAmountFilter === 'under50' ? 'selected' : '' %>>Under $50</option>
-      <option value="50-100" <%= selectedAmountFilter === '50-100' ? 'selected' : '' %>>$50 - $100</option>
-      <option value="100-500" <%= selectedAmountFilter === '100-500' ? 'selected' : '' %>>$100 - $500</option>
-      <option value="over500" <%= selectedAmountFilter === 'over500' ? 'selected' : '' %>>Over $500</option>
-    </select>
     <form method="GET" id="search-form" style="display: contents; margin: 0; padding: 0; border: none; background: transparent; box-shadow: none; outline: none;">
+      <input type="text" name="search" placeholder="Search by first or last name..." value="<%= typeof search !== 'undefined' ? search : '' %>" style="flex: 1; min-width: 150px; padding: 0.75rem; border: 2px solid var(--pink-light); border-radius: 8px; font-size: 1rem; box-sizing: border-box; height: 48px;">
+      <select name="amountFilter">
+        <option value="">All Amounts</option>
+        <option value="under25" <%= selectedAmountFilter === 'under25' ? 'selected' : '' %>>Under $25</option>
+        <option value="25-50" <%= selectedAmountFilter === '25-50' ? 'selected' : '' %>>$25 - $50</option>
+        <option value="50-100" <%= selectedAmountFilter === '50-100' ? 'selected' : '' %>>$50 - $100</option>
+        <option value="100-250" <%= selectedAmountFilter === '100-250' ? 'selected' : '' %>>$100 - $250</option>
+        <option value="250-500" <%= selectedAmountFilter === '250-500' ? 'selected' : '' %>>$250 - $500</option>
+        <option value="500-1000" <%= selectedAmountFilter === '500-1000' ? 'selected' : '' %>>$500 - $1,000</option>
+        <option value="over1000" <%= selectedAmountFilter === 'over1000' ? 'selected' : '' %>>Over $1,000</option>
+      </select>
       <input type="hidden" name="dateSort" value="<%= dateSort %>" id="dateSortInput">
       <button type="submit">Search</button>
     </form>
@@ -142,7 +174,7 @@
       <thead>
         <tr>
           <th>
-            <a href="?dateSort=<%= dateSort === 'desc' ? 'asc' : 'desc' %><%= search ? '&search=' + encodeURIComponent(search) : '' %><%= selectedAmountFilter ? '&amountFilter=' + encodeURIComponent(selectedAmountFilter) : '' %>" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
+            <a href="?dateSort=<%= dateSort === 'desc' ? 'asc' : 'desc' %><%= (typeof search !== 'undefined' && search) ? '&search=' + encodeURIComponent(search) : '' %><%= selectedAmountFilter ? '&amountFilter=' + encodeURIComponent(selectedAmountFilter) : '' %>" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
               Date
               <span style="font-size: 0.9rem;">
                 <% if (dateSort === 'desc') { %>
@@ -153,21 +185,30 @@
               </span>
             </a>
           </th>
-          <th>Donor</th>
+          <th>Participant</th>
           <th>Amount</th>
-          <th>Payment Method</th>
         </tr>
       </thead>
       <tbody>
-        <% if (donations.length === 0) { %>
-          <tr><td colspan="4" style="text-align: center;">No donations found</td></tr>
+        <% if (!donations || donations.length === 0) { %>
+          <tr><td colspan="3" style="text-align: center;">No donations found</td></tr>
         <% } else { %>
           <% donations.forEach(donation => { %>
             <tr>
-              <td><%= donation.donation_date ? new Date(donation.donation_date).toLocaleDateString() : 'N/A' %></td>
+              <td><%
+                if (donation.donation_date && donation.donation_date !== 'UNKNOWN_DATE') {
+                  const date = new Date(donation.donation_date);
+                  if (!isNaN(date.getTime())) {
+                    %><%- date.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }) %><%
+                  } else {
+                    %>N/A<%
+                  }
+                } else {
+                  %>N/A<%
+                }
+              %></td>
               <td><%= donation.first_name && donation.last_name ? donation.first_name + ' ' + donation.last_name : 'Anonymous' %></td>
               <td>$<%= donation.donation_amount ? parseFloat(donation.donation_amount).toFixed(2) : '0.00' %></td>
-              <td><%= donation.payment_method || 'N/A' %></td>
             </tr>
           <% }) %>
         <% } %>
@@ -178,11 +219,11 @@
   <% if (typeof totalPages !== 'undefined' && totalPages > 1) { %>
   <div class="pagination">
     <% if (currentPage > 1) { %>
-      <a href="?page=<%= currentPage - 1 %><%= search ? '&search=' + encodeURIComponent(search) : '' %><%= selectedAmountFilter ? '&amountFilter=' + encodeURIComponent(selectedAmountFilter) : '' %><%= dateSort ? '&dateSort=' + encodeURIComponent(dateSort) : '' %>">Previous</a>
+      <a href="?page=<%= currentPage - 1 %><%= (typeof search !== 'undefined' && search) ? '&search=' + encodeURIComponent(search) : '' %><%= selectedAmountFilter ? '&amountFilter=' + encodeURIComponent(selectedAmountFilter) : '' %><%= dateSort ? '&dateSort=' + encodeURIComponent(dateSort) : '' %>">Previous</a>
     <% } %>
     <span>Page <%= currentPage %> of <%= totalPages %></span>
     <% if (currentPage < totalPages) { %>
-      <a href="?page=<%= currentPage + 1 %><%= search ? '&search=' + encodeURIComponent(search) : '' %><%= selectedAmountFilter ? '&amountFilter=' + encodeURIComponent(selectedAmountFilter) : '' %><%= dateSort ? '&dateSort=' + encodeURIComponent(dateSort) : '' %>">Next</a>
+      <a href="?page=<%= currentPage + 1 %><%= (typeof search !== 'undefined' && search) ? '&search=' + encodeURIComponent(search) : '' %><%= selectedAmountFilter ? '&amountFilter=' + encodeURIComponent(selectedAmountFilter) : '' %><%= dateSort ? '&dateSort=' + encodeURIComponent(dateSort) : '' %>">Next</a>
     <% } %>
   </div>
   <% } %>

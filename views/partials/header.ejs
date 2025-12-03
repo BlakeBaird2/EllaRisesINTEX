@@ -16,15 +16,17 @@
           <div class="dropdown-menu">
             <% if (isManager) { %>
               <a href="/dashboard">Dashboard Overview</a>
-        <a href="/participants">Participants</a>
+              <a href="/participants">Participants</a>
             <% } %>
-        <a href="/events">Events</a>
+            <a href="/events">Events</a>
+            <% if (isManager) { %>
+              <a href="/users">Users</a>
+            <% } %>
             <a href="/milestones">Milestones</a>
             <% if (isManager) { %>
-        <a href="/surveys">Surveys</a>
-        <a href="/donations">Donations</a>
-          <a href="/users">Users</a>
-        <% } %>
+              <a href="/surveys">Surveys</a>
+              <a href="/donations">Donations</a>
+            <% } %>
           </div>
         </div>
         <a href="/profile">Profile</a>
@@ -51,15 +53,17 @@
         <div class="dropdown-menu-mobile">
           <% if (isManager) { %>
             <a href="/dashboard">Dashboard Overview</a>
-      <a href="/participants">Participants</a>
+            <a href="/participants">Participants</a>
           <% } %>
-      <a href="/events">Events</a>
+          <a href="/events">Events</a>
+          <% if (isManager) { %>
+            <a href="/users">Users</a>
+          <% } %>
           <a href="/milestones">Milestones</a>
           <% if (isManager) { %>
-      <a href="/surveys">Surveys</a>
-      <a href="/donations">Donations</a>
-        <a href="/users">Users</a>
-      <% } %>
+            <a href="/surveys">Surveys</a>
+            <a href="/donations">Donations</a>
+          <% } %>
         </div>
       </div>
       <a href="/profile">Profile</a>

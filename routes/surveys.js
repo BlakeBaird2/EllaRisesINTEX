@@ -12,11 +12,14 @@ const db = require('../config/database');
 // GET /surveys - List all surveys
 // ========================================================================
 router.get('/', async (req, res) => {
-  const { search, dateSort = 'desc', page = 1 } = req.query;
+  const { search, dateSort = 'desc', satisfactionSort = '', page = 1 } = req.query;
   const limit = 15;
   const offset = (page - 1) * limit;
 
   try {
+    // Trim search query to handle leading/trailing spaces
+    const trimmedSearch = search ? search.trim() : '';
+
     let query = db('surveys')
       .leftJoin('registrations', 'surveys.registration_id', 'registrations.registration_id')
       .leftJoin('participants', 'registrations.participant_id', 'participants.participant_id')
@@ -27,44 +30,62 @@ router.get('/', async (req, res) => {
               'participants.participant_last_name as last_name',
               'events.event_name');
 
-    // Search functionality
-    if (search) {
+    // Search functionality - supports searching by participant first name, last name, full name, or event name
+    if (trimmedSearch) {
       query = query.where(function() {
-        this.where('participants.participant_first_name', 'ilike', `%${search}%`)
-          .orWhere('participants.participant_last_name', 'ilike', `%${search}%`)
-          .orWhere('events.event_name', 'ilike', `%${search}%`);
+        this.where('participants.participant_first_name', 'ilike', `%${trimmedSearch}%`)
+          .orWhere('participants.participant_last_name', 'ilike', `%${trimmedSearch}%`)
+          .orWhere('events.event_name', 'ilike', `%${trimmedSearch}%`)
+          .orWhereRaw(`COALESCE(participants.participant_first_name, '') || ' ' || COALESCE(participants.participant_last_name, '') ILIKE ?`, [`%${trimmedSearch}%`]);
       });
     }
 
     // Get total count
-    let countQuery = db('surveys');
-    if (search) {
-      countQuery = countQuery
-        .leftJoin('registrations', 'surveys.registration_id', 'registrations.registration_id')
-        .leftJoin('participants', 'registrations.participant_id', 'participants.participant_id')
-        .leftJoin('eventoccurrences', 'registrations.event_occurrence_id', 'eventoccurrences.event_occurrence_id')
-        .leftJoin('events', 'eventoccurrences.event_template_id', 'events.event_template_id')
-        .where(function() {
-          this.where('participants.participant_first_name', 'ilike', `%${search}%`)
-            .orWhere('participants.participant_last_name', 'ilike', `%${search}%`)
-            .orWhere('events.event_name', 'ilike', `%${search}%`);
-        });
+    let countQuery = db('surveys')
+      .leftJoin('registrations', 'surveys.registration_id', 'registrations.registration_id')
+      .leftJoin('participants', 'registrations.participant_id', 'participants.participant_id')
+      .leftJoin('eventoccurrences', 'registrations.event_occurrence_id', 'eventoccurrences.event_occurrence_id')
+      .leftJoin('events', 'eventoccurrences.event_template_id', 'events.event_template_id');
+    
+    if (trimmedSearch) {
+      countQuery = countQuery.where(function() {
+        this.where('participants.participant_first_name', 'ilike', `%${trimmedSearch}%`)
+          .orWhere('participants.participant_last_name', 'ilike', `%${trimmedSearch}%`)
+          .orWhere('events.event_name', 'ilike', `%${trimmedSearch}%`)
+          .orWhereRaw(`COALESCE(participants.participant_first_name, '') || ' ' || COALESCE(participants.participant_last_name, '') ILIKE ?`, [`%${trimmedSearch}%`]);
+      });
     }
+    
+    if (satisfactionSort && ['1', '2', '3', '4', '5'].includes(satisfactionSort)) {
+      countQuery = countQuery.where('surveys.survey_satisfaction_score', parseInt(satisfactionSort));
+    }
+    
     const [{ count }] = await countQuery.count('surveys.survey_id as count');
     const totalPages = Math.ceil(count / limit);
 
-    // Sort by date
+    // Filter by satisfaction score (1-5) or sort by date
     const sortDirection = dateSort === 'asc' ? 'asc' : 'desc';
-    const surveys = await query
-      .orderBy('surveys.survey_submission_date', sortDirection)
-      .limit(limit)
-      .offset(offset);
+    let surveys;
+    if (satisfactionSort && ['1', '2', '3', '4', '5'].includes(satisfactionSort)) {
+      // Filter by specific satisfaction score
+      query = query.where('surveys.survey_satisfaction_score', parseInt(satisfactionSort));
+      surveys = await query
+        .orderBy('surveys.survey_submission_date', sortDirection)
+        .limit(limit)
+        .offset(offset);
+    } else {
+      surveys = await query
+        .orderBy('surveys.survey_submission_date', sortDirection)
+        .limit(limit)
+        .offset(offset);
+    }
 
     res.render('surveys/index', {
       title: 'Post-Event Surveys',
       surveys,
-      search: search || '',
+      search: trimmedSearch || '',
       dateSort: sortDirection,
+      selectedSatisfactionSort: satisfactionSort || '',
       currentPage: parseInt(page),
       totalPages,
       isManager: req.session.user.role === 'manager' || req.session.user.role === 'admin'

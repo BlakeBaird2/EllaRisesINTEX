@@ -14,13 +14,17 @@ router.get('/', async (req, res) => {
     let query = db('websiteusers')
       .select('user_id', 'username', 'email', 'first_name', 'last_name', 'user_role', 'account_status', 'created_at', 'last_login');
 
-    // Search functionality
-    if (search && search.trim() !== '') {
+    // Trim search query to handle leading/trailing spaces
+    const trimmedSearch = search ? search.trim() : '';
+
+    // Search functionality - supports searching by username, email, first name, last name, or full name
+    if (trimmedSearch) {
       query = query.where(function() {
-        this.where('username', 'ilike', `%${search}%`)
-          .orWhere('email', 'ilike', `%${search}%`)
-          .orWhere('first_name', 'ilike', `%${search}%`)
-          .orWhere('last_name', 'ilike', `%${search}%`);
+        this.where('username', 'ilike', `%${trimmedSearch}%`)
+          .orWhere('email', 'ilike', `%${trimmedSearch}%`)
+          .orWhere('first_name', 'ilike', `%${trimmedSearch}%`)
+          .orWhere('last_name', 'ilike', `%${trimmedSearch}%`)
+          .orWhereRaw(`COALESCE(first_name, '') || ' ' || COALESCE(last_name, '') ILIKE ?`, [`%${trimmedSearch}%`]);
       });
     }
 
@@ -31,12 +35,13 @@ router.get('/', async (req, res) => {
 
     // Get total count for pagination
     let countQuery = db('websiteusers');
-    if (search && search.trim() !== '') {
+    if (trimmedSearch) {
       countQuery = countQuery.where(function() {
-        this.where('username', 'ilike', `%${search}%`)
-          .orWhere('email', 'ilike', `%${search}%`)
-          .orWhere('first_name', 'ilike', `%${search}%`)
-          .orWhere('last_name', 'ilike', `%${search}%`);
+        this.where('username', 'ilike', `%${trimmedSearch}%`)
+          .orWhere('email', 'ilike', `%${trimmedSearch}%`)
+          .orWhere('first_name', 'ilike', `%${trimmedSearch}%`)
+          .orWhere('last_name', 'ilike', `%${trimmedSearch}%`)
+          .orWhereRaw(`COALESCE(first_name, '') || ' ' || COALESCE(last_name, '') ILIKE ?`, [`%${trimmedSearch}%`]);
       });
     }
     if (role && role !== '') {
@@ -62,7 +67,7 @@ router.get('/', async (req, res) => {
     res.render('users/index', {
       title: 'User Management',
       users,
-      search: typeof search !== 'undefined' ? search : '',
+      search: trimmedSearch || '',
       selectedRole: typeof role !== 'undefined' ? role : '',
       dateSort: sortDirection,
       currentPage: parseInt(page),

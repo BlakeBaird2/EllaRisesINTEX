@@ -14,6 +14,9 @@ router.get('/', async (req, res) => {
     const [donationSum] = await db('donations').sum('donation_amount as total');
     const [registrationCount] = await db('registrations').count('* as count');
 
+    // Note: Dashboard tile preferences are now stored in browser localStorage
+    // This eliminates the need for a database table - works immediately!
+    
     res.render('dashboard/index', {
       title: 'Dashboard',
       metrics: {
@@ -34,13 +37,14 @@ router.get('/', async (req, res) => {
 });
 
 // Update dashboard metric
+// Note: This endpoint is kept for compatibility, but actual saving is done via localStorage on the client
 router.post('/update-metric', async (req, res) => {
   if (!req.session.user) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
   try {
-    const { table, type, column, name, index } = req.body;
+    const { table, type, column, name, index, width, height, color } = req.body;
     
     // Validate inputs
     if (!table || !type || !name) {
@@ -51,14 +55,33 @@ router.post('/update-metric', async (req, res) => {
       return res.status(400).json({ error: 'Column required for sum type' });
     }
 
-    // For now, we'll just return success
-    // In a full implementation, you'd save this to a user_preferences table
-    // and load it when rendering the dashboard
-    
+    // Return success - actual saving is handled by localStorage on the client
     res.json({ success: true, message: 'Metric updated successfully' });
   } catch (error) {
     console.error('Error updating metric:', error);
     res.status(500).json({ error: 'Unable to update metric' });
+  }
+});
+
+// Save dashboard layout (tile positions and sizes)
+// Note: This endpoint is kept for compatibility, but actual saving is done via localStorage on the client
+router.post('/save-layout', async (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  try {
+    const { tileConfig } = req.body;
+    
+    if (!Array.isArray(tileConfig)) {
+      return res.status(400).json({ error: 'Invalid tile configuration' });
+    }
+
+    // Return success - actual saving is handled by localStorage on the client
+    res.json({ success: true, message: 'Layout saved successfully' });
+  } catch (error) {
+    console.error('Error saving layout:', error);
+    res.status(500).json({ error: 'Unable to save layout' });
   }
 });
 

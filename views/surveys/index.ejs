@@ -129,7 +129,15 @@
   </div>
 
   <div class="search-container">
-    <input type="text" name="search" placeholder="Search by participant or event..." value="<%= search %>" form="search-form">
+    <input type="text" name="search" placeholder="Search by first or last name..." value="<%= search %>" form="search-form">
+    <select name="satisfactionSort" form="search-form" style="padding: 0.75rem; border: 2px solid var(--pink-light); border-radius: 8px; font-size: 1rem; box-sizing: border-box; height: 48px; flex: 1; min-width: 150px;">
+      <option value="">All Scores</option>
+      <option value="5" <%= (typeof selectedSatisfactionSort !== 'undefined' && selectedSatisfactionSort === '5') ? 'selected' : '' %>>5</option>
+      <option value="4" <%= (typeof selectedSatisfactionSort !== 'undefined' && selectedSatisfactionSort === '4') ? 'selected' : '' %>>4</option>
+      <option value="3" <%= (typeof selectedSatisfactionSort !== 'undefined' && selectedSatisfactionSort === '3') ? 'selected' : '' %>>3</option>
+      <option value="2" <%= (typeof selectedSatisfactionSort !== 'undefined' && selectedSatisfactionSort === '2') ? 'selected' : '' %>>2</option>
+      <option value="1" <%= (typeof selectedSatisfactionSort !== 'undefined' && selectedSatisfactionSort === '1') ? 'selected' : '' %>>1</option>
+    </select>
     <form method="GET" id="search-form" style="display: contents; margin: 0; padding: 0; border: none; background: transparent; box-shadow: none; outline: none;">
       <input type="hidden" name="dateSort" value="<%= dateSort %>">
       <button type="submit">Search</button>
@@ -141,7 +149,7 @@
       <thead>
         <tr>
           <th>
-            <a href="?dateSort=<%= dateSort === 'desc' ? 'asc' : 'desc' %><%= search ? '&search=' + encodeURIComponent(search) : '' %>" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
+            <a href="?dateSort=<%= dateSort === 'desc' ? 'asc' : 'desc' %><%= search ? '&search=' + encodeURIComponent(search) : '' %><%= (typeof selectedSatisfactionSort !== 'undefined' && selectedSatisfactionSort) ? '&satisfactionSort=' + encodeURIComponent(selectedSatisfactionSort) : '' %>" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
               Date
               <span style="font-size: 0.9rem;">
                 <% if (dateSort === 'desc') { %>
@@ -177,16 +185,25 @@
   <% if (totalPages > 1) { %>
   <div class="pagination" style="margin-top: 2rem; text-align: center;">
     <% if (currentPage > 1) { %>
-      <a href="?page=<%= currentPage - 1 %><%= search ? '&search=' + encodeURIComponent(search) : '' %><%= dateSort ? '&dateSort=' + encodeURIComponent(dateSort) : '' %>">Previous</a>
+      <a href="?page=<%= currentPage - 1 %><%= search ? '&search=' + encodeURIComponent(search) : '' %><%= dateSort ? '&dateSort=' + encodeURIComponent(dateSort) : '' %><%= (typeof selectedSatisfactionSort !== 'undefined' && selectedSatisfactionSort) ? '&satisfactionSort=' + encodeURIComponent(selectedSatisfactionSort) : '' %>">Previous</a>
     <% } %>
     <span>Page <%= currentPage %> of <%= totalPages %></span>
     <% if (currentPage < totalPages) { %>
-      <a href="?page=<%= currentPage + 1 %><%= search ? '&search=' + encodeURIComponent(search) : '' %><%= dateSort ? '&dateSort=' + encodeURIComponent(dateSort) : '' %>">Next</a>
+      <a href="?page=<%= currentPage + 1 %><%= search ? '&search=' + encodeURIComponent(search) : '' %><%= dateSort ? '&dateSort=' + encodeURIComponent(dateSort) : '' %><%= (typeof selectedSatisfactionSort !== 'undefined' && selectedSatisfactionSort) ? '&satisfactionSort=' + encodeURIComponent(selectedSatisfactionSort) : '' %>">Next</a>
     <% } %>
   </div>
   <% } %>
 </main>
 <%- include('../partials/footer') %>
 <script src="/js/main.js"></script>
+<script>
+  // Trim search input before form submission
+  document.getElementById('search-form')?.addEventListener('submit', function(e) {
+    const searchInput = document.querySelector('input[name="search"]');
+    if (searchInput) {
+      searchInput.value = searchInput.value.trim();
+    }
+  });
+</script>
 </body>
 </html>

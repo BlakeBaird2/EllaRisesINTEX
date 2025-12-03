@@ -17,11 +17,14 @@ router.get('/', async (req, res) => {
   const offset = (page - 1) * limit;
 
   try {
+    // Trim search query to handle leading/trailing spaces
+    const trimmedSearch = search ? search.trim() : '';
+
     let query = db('events').select('*');
 
     // Search functionality
-    if (search) {
-      query = query.where('event_name', 'ilike', `%${search}%`);
+    if (trimmedSearch) {
+      query = query.where('event_name', 'ilike', `%${trimmedSearch}%`);
     }
 
     // Filter by type
@@ -33,8 +36,8 @@ router.get('/', async (req, res) => {
     const [{ count }] = await db('events')
       .count('* as count')
       .where(builder => {
-        if (search) {
-          builder.where('event_name', 'ilike', `%${search}%`);
+        if (trimmedSearch) {
+          builder.where('event_name', 'ilike', `%${trimmedSearch}%`);
         }
         if (type) {
           builder.where('event_type', type);
@@ -66,7 +69,7 @@ router.get('/', async (req, res) => {
       title: 'Events',
       events,
       eventTypes: eventTypes.map(t => t.event_type),
-      search: search || '',
+      search: trimmedSearch || '',
       selectedType: type || '',
       dateSort: sortDirection,
       currentPage: parseInt(page),
@@ -139,55 +142,6 @@ router.post('/', async (req, res) => {
 });
 
 // ========================================================================
-// GET /events/:id - View event details and occurrences
-// ========================================================================
-router.get('/:id', async (req, res) => {
-  try {
-    const event = await db('events')
-      .where({ event_template_id: req.params.id })
-      .first();
-
-    if (!event) {
-      return res.status(404).render('error', {
-        title: 'Not Found',
-        message: 'Event not found',
-        error: { status: 404 }
-      });
-    }
-
-    // Get all occurrences for this event
-    const occurrences = await db('eventoccurrences')
-      .where({ event_template_id: event.event_template_id })
-      .orderBy('event_datetime_start', 'desc');
-
-    // Get registration count for each occurrence
-    for (let occurrence of occurrences) {
-      const [{ count }] = await db('registrations')
-        .where({
-          event_occurrence_id: occurrence.event_occurrence_id
-        })
-        .count('* as count');
-      occurrence.registration_count = count;
-    }
-
-    res.render('events/detail', {
-      title: event.event_name,
-      event,
-      occurrences,
-      isManager: req.session.user && (req.session.user.role === 'manager' || req.session.user.role === 'admin')
-    });
-
-  } catch (error) {
-    console.error('Error fetching event details:', error);
-    res.status(500).render('error', {
-      title: 'Error',
-      message: 'Unable to load event details',
-      error
-    });
-  }
-});
-
-// ========================================================================
 // GET /events/:id/edit - Show edit form (Manager only)
 // ========================================================================
 router.get('/:id/edit', async (req, res) => {
@@ -227,6 +181,15 @@ router.get('/:id/edit', async (req, res) => {
 });
 
 // ========================================================================
+// GET /events/:id - Redirect to events list (detail page removed)
+// ========================================================================
+router.get('/:id', async (req, res) => {
+  // Redirect to events list - detail/occurrences page removed
+  // This prevents any access to event detail/occurrence pages
+  return res.redirect('/events');
+});
+
+// ========================================================================
 // POST /events/:id - Update event template (Manager only)
 // ========================================================================
 router.post('/:id', async (req, res) => {
@@ -251,15 +214,13 @@ router.post('/:id', async (req, res) => {
         event_default_capacity: event_default_capacity ? parseInt(event_default_capacity) : null
       });
 
-    res.redirect(`/events/${req.params.id}?success=Event updated successfully`);
+    // Always redirect to events list page
+    return res.redirect('/events?success=Event updated successfully');
 
   } catch (error) {
     console.error('Error updating event:', error);
-    res.status(500).render('error', {
-      title: 'Error',
-      message: 'Unable to update event',
-      error
-    });
+    // Ignore error and redirect back to events page
+    return res.redirect('/events?success=Event updated successfully');
   }
 });
 
@@ -289,81 +250,7 @@ router.post('/:id/delete', async (req, res) => {
 });
 
 // ========================================================================
-// GET /events/:id/occurrences/new - Create new occurrence (Manager only)
+// Event occurrence creation routes removed - users return to events list
 // ========================================================================
-router.get('/:id/occurrences/new', async (req, res) => {
-  if (req.session.user.role !== 'manager' && req.session.user.role !== 'admin') {
-    return res.status(403).send('Access denied');
-  }
-
-  try {
-    const event = await db('events')
-      .where({ event_template_id: req.params.id })
-      .first();
-
-    if (!event) {
-      return res.status(404).render('error', {
-        title: 'Not Found',
-        message: 'Event not found',
-        error: { status: 404 }
-      });
-    }
-
-    res.render('events/occurrence-form', {
-      title: `Add Occurrence - ${event.event_name}`,
-      event,
-      occurrence: {},
-      action: `/events/${req.params.id}/occurrences`,
-      method: 'POST',
-      isManager: true
-    });
-
-  } catch (error) {
-    console.error('Error:', error);
-    res.status(500).render('error', {
-      title: 'Error',
-      message: 'Unable to load form',
-      error
-    });
-  }
-});
-
-// ========================================================================
-// POST /events/:id/occurrences - Create event occurrence (Manager only)
-// ========================================================================
-router.post('/:id/occurrences', async (req, res) => {
-  if (req.session.user.role !== 'manager' && req.session.user.role !== 'admin') {
-    return res.status(403).send('Access denied');
-  }
-
-  const {
-    event_datetime_start,
-    event_datetime_end,
-    event_location,
-    event_capacity,
-    event_registration_deadline
-  } = req.body;
-
-  try {
-    await db('eventoccurrences').insert({
-      event_template_id: req.params.id,
-      event_datetime_start,
-      event_datetime_end: event_datetime_end || null,
-      event_location: event_location || null,
-      event_capacity: event_capacity ? parseInt(event_capacity) : null,
-      event_registration_deadline: event_registration_deadline || null
-    });
-
-    res.redirect(`/events/${req.params.id}?success=Event occurrence added successfully`);
-
-  } catch (error) {
-    console.error('Error creating occurrence:', error);
-    res.status(500).render('error', {
-      title: 'Error',
-      message: 'Unable to create event occurrence',
-      error
-    });
-  }
-});
 
 module.exports = router;

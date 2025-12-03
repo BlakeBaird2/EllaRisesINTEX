@@ -29,6 +29,10 @@
         font-size: 1rem;
       }
 
+      .hero-description {
+        display: none !important;
+      }
+
       .mission, section {
         padding: 2rem 1rem;
       }
@@ -89,6 +93,132 @@
       box-shadow: 0 12px 35px rgba(0,0,0,0.15) !important;
       border-color: rgba(154, 181, 157, 0.3) !important;
     }
+
+
+    /* Slideshow Styles */
+    .slideshow-section {
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      display: flex;
+      align-items: center;
+      height: fit-content;
+    }
+
+    .slideshow-wrapper {
+      position: relative;
+    }
+
+    .slideshow-wrapper:active {
+      cursor: grabbing;
+    }
+
+    /* Desktop: disable grab cursor, use default */
+    @media (min-width: 769px) {
+      .slideshow-wrapper {
+        cursor: default;
+      }
+      .slideshow-wrapper:active {
+        cursor: default;
+      }
+    }
+
+    .slideshow-control-left:hover,
+    .slideshow-control-right:hover {
+      background: rgba(255, 255, 255, 1) !important;
+      transform: translateY(-50%) scale(1.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25) !important;
+    }
+
+    .slideshow-control-left:active,
+    .slideshow-control-right:active {
+      transform: translateY(-50%) scale(0.95);
+    }
+
+    /* Hide arrows on mobile */
+    @media (max-width: 768px) {
+      .slideshow-control-left,
+      .slideshow-control-right {
+        display: none !important;
+      }
+    }
+
+    /* Slide item styling */
+    .slide-item {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      width: 400px;
+      aspect-ratio: 4 / 3;
+      flex-shrink: 0;
+    }
+
+    .slide-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Mobile slideshow */
+    @media (max-width: 768px) {
+      .slideshow-section {
+        min-height: 300px;
+      }
+
+      .slide-item {
+        min-height: 300px !important;
+        width: 250px !important;
+      }
+
+      .slideshow-control-left,
+      .slideshow-control-right {
+        display: none;
+      }
+
+      .slideshow-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+      }
+
+      .slide-item {
+        scroll-snap-align: start;
+      }
+
+      /* Hide side photos on mobile */
+      .hero-side-photos {
+        display: none !important;
+      }
+
+      /* Restore pink background on mobile - only for logo area */
+      .hero {
+        background: white !important;
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+      }
+
+      /* Add pink background behind logo container on mobile */
+      .hero > .container > div[style*="display: flex"] {
+        background: linear-gradient(135deg, var(--pink-light) 0%, var(--pink-light) 60%, rgba(244, 176, 146, 0.3) 100%);
+        padding: 1.5rem 1rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+      }
+
+      /* Hide pink circle on mobile */
+      .hero-logo-circle {
+        display: none !important;
+      }
+
+      /* Make logo bigger on mobile */
+      .hero img[src*="EllaRisesTextLogo"] {
+        max-width: 350px !important;
+        width: 100% !important;
+        transform: translate(5px, 0) !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -96,16 +226,96 @@
 
 <main style="padding-top: 0.4rem;">
   <!-- Hero Section -->
-  <section class="hero" style="padding-top: 3rem; padding-bottom: 3rem; background: linear-gradient(135deg, var(--pink-light) 0%, var(--pink-light) 60%, rgba(244, 176, 146, 0.3) 100%);">
-    <div class="container" style="text-align: center;">
-      <img src="/images/EllaRisesTextLogo.png" alt="Ella Rises" style="max-width: 400px; width: 100%; margin-bottom: -1.5rem; margin-left: auto; margin-right: auto; display: block; transform: translateX(5px);">
-      <h1 style="margin-top: 0; margin-bottom: 1rem;">Empowering the Rising Generation of Women</h1>
-      <p style="margin-top: 0; font-size: 1.3rem; color: var(--primary); font-weight: 500; letter-spacing: 0.3px; line-height: 1.6; max-width: 700px; margin-left: auto; margin-right: auto;">Building confidence, competence, and connections in STEAM fields</p>
+  <section class="hero" style="padding-top: 4rem; padding-bottom: 4rem; background: white; position: relative;">
+    <div class="container" style="text-align: center; position: relative; z-index: 1;">
+      <div style="display: flex; align-items: center; justify-content: center; gap: 2rem; margin-bottom: 1rem; margin-top: 3rem; flex-wrap: wrap;">
+        <!-- Left side photos -->
+        <div class="hero-side-photos" style="display: flex; flex-direction: row; gap: 1rem; align-items: center;">
+          <div style="width: 155px; height: 155px; border-radius: 50%; overflow: hidden; border: 3px solid var(--pink-light); box-shadow: 0 4px 20px rgba(255, 216, 209, 0.4);">
+            <img src="/images/ER Animation Workshop Feb 2021_029.jpg" alt="Workshop" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+          </div>
+          <div style="width: 180px; height: 180px; border-radius: 50%; overflow: hidden; border: 3px solid var(--pink-light); box-shadow: 0 4px 20px rgba(255, 216, 209, 0.4);">
+            <img src="/images/ER STEM Workshop Aug 2022-31.jpg" alt="STEM Workshop" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+          </div>
+        </div>
+        
+        <!-- Center logo with circle -->
+        <div style="position: relative; display: inline-block;">
+          <!-- Pink circle behind logo -->
+          <div class="hero-logo-circle" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 340px; height: 340px; background: var(--pink-light); border-radius: 50%; border: 2px solid rgba(255, 255, 255, 0.3); z-index: 0; box-shadow: 0 4px 20px rgba(255, 216, 209, 0.4);"></div>
+          <img src="/images/EllaRisesTextLogo.png" alt="Ella Rises" style="max-width: 180px; width: 100%; margin-left: auto; margin-right: auto; display: block; transform: translate(5px, -5px); position: relative; z-index: 1;">
+        </div>
+        
+        <!-- Right side photos -->
+        <div class="hero-side-photos" style="display: flex; flex-direction: row; gap: 1rem; align-items: center;">
+          <div style="width: 180px; height: 180px; border-radius: 50%; overflow: hidden; border: 3px solid var(--pink-light); box-shadow: 0 4px 20px rgba(255, 216, 209, 0.4);">
+            <img src="/images/ER Summer Summit 2022-068.jpg" alt="Summer Summit" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+          </div>
+          <div style="width: 155px; height: 155px; border-radius: 50%; overflow: hidden; border: 3px solid var(--pink-light); box-shadow: 0 4px 20px rgba(255, 216, 209, 0.4);">
+            <img src="/images/girl_drawing.jpg" alt="Girl Drawing" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+          </div>
+        </div>
+      </div>
+      <h1 style="margin-top: 2rem; margin-bottom: 1.5rem;">Empowering the Rising Generation of Women</h1>
+      <p class="hero-description" style="margin-top: -0.5rem; font-size: 1.3rem; color: var(--primary); font-weight: 500; letter-spacing: 0.3px; line-height: 1.6; max-width: 700px; margin-left: auto; margin-right: auto;">Building confidence, competence, and connections in <span style="white-space: nowrap;">STEAM fields</span></p>
+    </div>
+  </section>
+
+  <!-- Image Slideshow -->
+  <section class="slideshow-section" style="padding: 0.6rem 0 0 0; background: white; position: relative; overflow: hidden;">
+    <div class="slideshow-container" style="position: relative; max-width: 100%; margin: 0 auto; width: 100%;">
+      <div class="slideshow-wrapper" style="display: flex; overflow-x: hidden; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; touch-action: pan-x; cursor: grab; position: relative;">
+        <div class="slideshow-track" style="display: flex; gap: 0.75rem; padding: 0; will-change: transform; align-items: center; position: relative;">
+          <div class="slide-item" style="overflow: hidden; position: relative;">
+            <img src="/images/ER Animation Workshop Feb 2021_029.jpg" alt="Workshop" loading="lazy" style="display: block;">
+          </div>
+          <div class="slide-item" style="overflow: hidden; position: relative;">
+            <img src="/images/ER Animation Workshop Feb 2021_043.jpg" alt="Workshop" loading="lazy" style="display: block;">
+          </div>
+          <div class="slide-item" style="overflow: hidden; position: relative;">
+            <img src="/images/ER Animation Workshop Feb 2021_053.jpg" alt="Workshop" loading="lazy" style="display: block;">
+          </div>
+          <div class="slide-item" style="overflow: hidden; position: relative;">
+            <img src="/images/ER STEM Workshop Aug 2022-31.jpg" alt="STEM Workshop" loading="lazy" style="display: block;">
+          </div>
+          <div class="slide-item" style="overflow: hidden; position: relative;">
+            <img src="/images/ER STEM Workshop Aug 2022-42.jpg" alt="STEM Workshop" loading="lazy" style="display: block;">
+          </div>
+          <div class="slide-item" style="overflow: hidden; position: relative;">
+            <img src="/images/ER STEM Workshop Aug 2022-52.jpg" alt="STEM Workshop" loading="lazy" style="display: block;">
+          </div>
+          <div class="slide-item" style="overflow: hidden; position: relative;">
+            <img src="/images/ER Summer Summit 2022-068.jpg" alt="Summer Summit" loading="lazy" style="display: block;">
+          </div>
+          <div class="slide-item" style="overflow: hidden; position: relative;">
+            <img src="/images/ER Summer Summit 2022-165.jpg" alt="Summer Summit" loading="lazy" style="display: block;">
+          </div>
+          <div class="slide-item" style="overflow: hidden; position: relative;">
+            <img src="/images/girl_drawing.jpg" alt="Girl Drawing" loading="lazy" style="display: block;">
+          </div>
+          <div class="slide-item" style="overflow: hidden; position: relative;">
+            <img src="/images/arts_crafts.jpg" alt="Arts and Crafts" loading="lazy" style="display: block;">
+          </div>
+          <div class="slide-item" style="overflow: hidden; position: relative;">
+            <img src="/images/music_class.jpeg" alt="Music Class" loading="lazy" style="display: block;">
+          </div>
+          <div class="slide-item" style="overflow: hidden; position: relative;">
+            <img src="/images/makerspace.jpeg" alt="Makerspace" loading="lazy" style="display: block;">
+          </div>
+        </div>
+      </div>
+      <!-- Arrow controls -->
+      <button class="slideshow-control-left" aria-label="Previous image" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); width: 50px; height: 50px; background: rgba(255, 255, 255, 0.9); border: 2px solid var(--pink-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: all 0.3s; opacity: 1; pointer-events: auto;">
+        <i class="fa-solid fa-chevron-left" style="color: var(--primary); font-size: 1.2rem;"></i>
+      </button>
+      <button class="slideshow-control-right" aria-label="Next image" style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); width: 50px; height: 50px; background: rgba(255, 255, 255, 0.9); border: 2px solid var(--pink-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: all 0.3s; opacity: 1; pointer-events: auto;">
+        <i class="fa-solid fa-chevron-right" style="color: var(--primary); font-size: 1.2rem;"></i>
+      </button>
     </div>
   </section>
 
   <!-- Mission Section -->
-  <section class="mission" style="padding: 5rem 0; background: linear-gradient(135deg, #f9f9f9 0%, white 100%); position: relative; overflow: hidden;">
+  <section class="mission" style="padding: 1rem 0 5rem 0; background: linear-gradient(135deg, #f9f9f9 0%, white 100%); position: relative; overflow: hidden;">
     <div class="container" style="max-width: 900px; text-align: center; position: relative; z-index: 1;">
       <h2 style="font-size: 2.8rem; margin-bottom: 1.5rem; color: var(--primary); font-family: 'DM Serif Display', serif;">Our Mission</h2>
       <div style="width: 80px; height: 4px; background: linear-gradient(90deg, #9AB59D 0%, #3A3F3B 100%); margin: 0 auto 2rem; border-radius: 2px;"></div>
@@ -164,5 +374,169 @@
 
 <%- include('../partials/footer') %>
 <script src="/js/main.js"></script>
+<script>
+  // Slideshow functionality
+  (function() {
+    const slideshowWrapper = document.querySelector('.slideshow-wrapper');
+    const slideshowTrack = document.querySelector('.slideshow-track');
+    const controlLeft = document.querySelector('.slideshow-control-left');
+    const controlRight = document.querySelector('.slideshow-control-right');
+    
+    if (!slideshowWrapper || !slideshowTrack) return;
+
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+    let autoScrollInterval;
+    let isHovering = false;
+
+    // Auto-scroll functionality
+    function startAutoScroll() {
+      if (isHovering || window.innerWidth <= 768) return;
+      
+      autoScrollInterval = setInterval(() => {
+        const currentScroll = slideshowWrapper.scrollLeft;
+        const maxScroll = slideshowWrapper.scrollWidth - slideshowWrapper.clientWidth;
+        const scrollAmount = 1;
+        
+        if (currentScroll >= maxScroll - 10) {
+          slideshowWrapper.scrollLeft = 0;
+        } else {
+          slideshowWrapper.scrollLeft += scrollAmount;
+        }
+      }, 30);
+    }
+
+    function stopAutoScroll() {
+      if (autoScrollInterval) {
+        clearInterval(autoScrollInterval);
+        autoScrollInterval = null;
+      }
+    }
+
+    // Hover controls
+    slideshowWrapper.addEventListener('mouseenter', () => {
+      isHovering = true;
+      stopAutoScroll();
+    });
+
+    slideshowWrapper.addEventListener('mouseleave', () => {
+      isHovering = false;
+      startAutoScroll();
+    });
+
+    // Left control
+    if (controlLeft) {
+      controlLeft.addEventListener('click', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        const scrollAmount = 420; // 400px image width + 1rem gap
+        slideshowWrapper.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        stopAutoScroll();
+        // Resume auto-scroll after a delay
+        setTimeout(() => {
+          if (window.innerWidth > 768 && !isHovering) {
+            startAutoScroll();
+          }
+        }, 3000);
+      });
+    }
+
+    // Right control
+    if (controlRight) {
+      controlRight.addEventListener('click', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        const scrollAmount = 420; // 400px image width + 1rem gap
+        slideshowWrapper.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        stopAutoScroll();
+        // Resume auto-scroll after a delay
+        setTimeout(() => {
+          if (window.innerWidth > 768 && !isHovering) {
+            startAutoScroll();
+          }
+        }, 3000);
+      });
+    }
+
+    // Touch/swipe support for mobile
+    slideshowWrapper.addEventListener('touchstart', (e) => {
+      isDown = true;
+      startX = e.touches[0].pageX - slideshowWrapper.offsetLeft;
+      scrollLeft = slideshowWrapper.scrollLeft;
+      slideshowWrapper.style.cursor = 'grabbing';
+      stopAutoScroll();
+    }, { passive: true });
+
+    slideshowWrapper.addEventListener('touchmove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.touches[0].pageX - slideshowWrapper.offsetLeft;
+      const walk = (x - startX) * 2;
+      slideshowWrapper.scrollLeft = scrollLeft - walk;
+    }, { passive: false });
+
+    slideshowWrapper.addEventListener('touchend', () => {
+      isDown = false;
+      slideshowWrapper.style.cursor = 'grab';
+      if (window.innerWidth > 768 && !isHovering) {
+        startAutoScroll();
+      }
+    });
+
+    // Mouse drag support (mobile only - disabled on desktop)
+    slideshowWrapper.addEventListener('mousedown', (e) => {
+      // Only allow drag on mobile
+      if (window.innerWidth > 768) {
+        return;
+      }
+      isDown = true;
+      startX = e.pageX - slideshowWrapper.offsetLeft;
+      scrollLeft = slideshowWrapper.scrollLeft;
+      slideshowWrapper.style.cursor = 'grabbing';
+      stopAutoScroll();
+    });
+
+    slideshowWrapper.addEventListener('mouseleave', () => {
+      isDown = false;
+      slideshowWrapper.style.cursor = 'grab';
+    });
+
+    slideshowWrapper.addEventListener('mouseup', () => {
+      isDown = false;
+      slideshowWrapper.style.cursor = 'grab';
+      if (window.innerWidth > 768 && !isHovering) {
+        startAutoScroll();
+      }
+    });
+
+    slideshowWrapper.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      // Only allow drag on mobile
+      if (window.innerWidth > 768) {
+        isDown = false;
+        return;
+      }
+      e.preventDefault();
+      const x = e.pageX - slideshowWrapper.offsetLeft;
+      const walk = (x - startX) * 2;
+      slideshowWrapper.scrollLeft = scrollLeft - walk;
+    });
+
+    // Start auto-scroll on load (desktop only)
+    if (window.innerWidth > 768) {
+      startAutoScroll();
+    }
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      if (window.innerWidth <= 768) {
+        stopAutoScroll();
+      } else if (!isHovering) {
+        startAutoScroll();
+      }
+    });
+  })();
+</script>
 </body>
 </html>

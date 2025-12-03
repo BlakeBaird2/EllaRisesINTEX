@@ -16,6 +16,79 @@
         padding-top: 1rem !important;
       }
     }
+
+    @media (max-width: 768px) {
+      .about-section-content {
+        flex-direction: column !important;
+        text-align: center !important;
+      }
+
+      .about-section-content img {
+        margin: 0 auto !important;
+      }
+
+      .about-section-content p {
+        text-align: center !important;
+      }
+    }
+
+    /* Photo Gallery Styles */
+    .photo-gallery {
+      contain: layout style paint;
+      border: none !important;
+      outline: none !important;
+    }
+
+    .photo-gallery::after {
+      display: none !important;
+    }
+
+    .photo-gallery .gallery-item {
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      will-change: transform;
+      contain: layout style paint;
+    }
+
+    .photo-gallery .gallery-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .photo-gallery .gallery-item img {
+      will-change: transform;
+      backface-visibility: hidden;
+      transform: translateZ(0);
+    }
+
+    .photo-gallery .gallery-item:hover img {
+      transform: scale(1.05) translateZ(0);
+    }
+
+    .photo-gallery .gallery-item:last-child,
+    .photo-gallery .gallery-item:nth-last-child(-n+4) {
+      border-bottom: none !important;
+      margin-bottom: 0 !important;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .photo-gallery {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important;
+        gap: 1rem !important;
+      }
+
+      h2 {
+        font-size: 2rem !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .photo-gallery {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.75rem !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -26,10 +99,71 @@
 
     <section style="background: var(--pink-light); padding: 3rem 2rem; border-radius: 12px; margin-bottom: 2rem; margin-left: 1rem; margin-right: 1rem;">
       <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-        <img src="/images/EllaRisesProfileClear.png" alt="Ella Rises Profile" style="max-width: 450px; width: 100%; margin-bottom: 2rem;">
-        <p style="font-family: 'DM Serif Display', serif; font-size: 1.3rem; line-height: 1.8; color: var(--text);">
+        <img src="/images/EllaRisesProfileClear.png" alt="Ella Rises Profile" style="max-width: 450px; width: 100%; margin-bottom: 1rem;">
+        <p style="font-family: 'DM Serif Display', serif; font-size: 1.3rem; line-height: 1.8; color: var(--text); font-weight: 500;">
           Ella Rises partners with UVU and BYU to provide STEAM programs that encourage women to pursue their interests in science, technology, engineering, arts, and mathematics.
         </p>
+      </div>
+    </section>
+
+    <!-- Photo Gallery -->
+    <section style="padding: 3rem 1rem; margin-bottom: 2rem; border: none; outline: none;">
+      <h2 style="text-align: left; font-family: 'DM Serif Display', serif; font-size: 2.5rem; color: var(--primary); margin-bottom: 2rem; margin-left: 1rem;">Our Community in Action</h2>
+      <div class="photo-gallery" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; max-width: 1200px; margin: 0 auto; padding: 0 1rem; border: none; outline: none;">
+        <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); background: white; aspect-ratio: 4/3;">
+          <img src="/images/ER Animation Workshop Feb 2021_029.jpg" alt="Animation Workshop" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
+        </div>
+        <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); background: white; aspect-ratio: 4/3;">
+          <img src="/images/ER Animation Workshop Feb 2021_043.jpg" alt="Animation Workshop" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
+        </div>
+        <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); background: white; aspect-ratio: 4/3;">
+          <img src="/images/ER Animation Workshop Feb 2021_053.jpg" alt="Animation Workshop" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
+        </div>
+        <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); background: white; aspect-ratio: 4/3;">
+          <img src="/images/ER BYU Tour 2022-042.jpg" alt="BYU Tour" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
+        </div>
+        <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); background: white; aspect-ratio: 4/3;">
+          <img src="/images/ER STEM Workshop Aug 2022-31.jpg" alt="STEM Workshop" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
+        </div>
+        <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); background: white; aspect-ratio: 4/3;">
+          <img src="/images/ER STEM Workshop Aug 2022-42.jpg" alt="STEM Workshop" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
+        </div>
+        <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); background: white; aspect-ratio: 4/3;">
+          <img src="/images/ER STEM Workshop Aug 2022-52.jpg" alt="STEM Workshop" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
+        </div>
+        <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); background: white; aspect-ratio: 4/3;">
+          <img src="/images/ER Summer Summit 2022-068.jpg" alt="Summer Summit" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
+        </div>
+        <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); background: white; aspect-ratio: 4/3;">
+          <img src="/images/ER Summer Summit 2022-165.jpg" alt="Summer Summit" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
+        </div>
+        <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); background: white; aspect-ratio: 4/3;">
+          <img src="/images/ER_Mural_049.jpg" alt="Mural Project" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
+        </div>
+        <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); background: white; aspect-ratio: 4/3;">
+          <img src="/images/arts_crafts.jpg" alt="Arts and Crafts" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
+        </div>
+        <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); background: white; aspect-ratio: 4/3;">
+          <img src="/images/band_performance.jpeg" alt="Band Performance" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
+        </div>
+        <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); background: white; aspect-ratio: 4/3;">
+          <img src="/images/cancer_research_center.jpeg" alt="Cancer Research Center" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
+        </div>
+        <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); background: white; aspect-ratio: 4/3;">
+          <img src="/images/girl_drawing.jpg" alt="Girl Drawing" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
+        </div>
+        <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); background: white; aspect-ratio: 4/3;">
+          <img src="/images/makerspace.jpeg" alt="Makerspace" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
+        </div>
+        <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); background: white; aspect-ratio: 4/3;">
+          <img src="/images/music_class.jpeg" alt="Music Class" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
+        </div>
+        <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); background: white; aspect-ratio: 4/3;">
+          <img src="/images/robot.JPG" alt="Robot Project" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
+        </div>
+        <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); background: white; aspect-ratio: 4/3;">
+          <img src="/images/STEM.jpg" alt="STEM Activity" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
+        </div>
       </div>
     </section>
   </div>
