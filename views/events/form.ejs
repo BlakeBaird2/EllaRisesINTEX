@@ -143,13 +143,21 @@
     <h1><%= title %></h1>
   </div>
   <form method="POST" action="<%= action %>">
-    <input type="text" name="event_name" value="<%= event.event_name || '' %>" placeholder="Event Name *" required <%= event.event_template_id ? 'readonly' : '' %>>
+    <input type="text" name="event_name" value="<%= event.event_name || '' %>" placeholder="Event Name *" required>
     <select name="event_type" required>
       <option value="">Select Type *</option>
-      <option value="Workshop" <%= event.event_type === 'Workshop' ? 'selected' : '' %>>Workshop</option>
-      <option value="Seminar" <%= event.event_type === 'Seminar' ? 'selected' : '' %>>Seminar</option>
-      <option value="Conference" <%= event.event_type === 'Conference' ? 'selected' : '' %>>Conference</option>
-      <option value="Mentoring" <%= event.event_type === 'Mentoring' ? 'selected' : '' %>>Mentoring</option>
+      <% if (typeof eventTypes !== 'undefined' && eventTypes && eventTypes.length > 0) { %>
+        <% eventTypes.forEach(type => { %>
+          <option value="<%= type %>" <%= event.event_type === type ? 'selected' : '' %>><%= type %></option>
+        <% }) %>
+      <% } else { %>
+        <!-- Fallback options matching database event types -->
+        <option value="Annual Conference" <%= event.event_type === 'Annual Conference' ? 'selected' : '' %>>Annual Conference</option>
+        <option value="Arts" <%= event.event_type === 'Arts' ? 'selected' : '' %>>Arts</option>
+        <option value="Leadership" <%= event.event_type === 'Leadership' ? 'selected' : '' %>>Leadership</option>
+        <option value="STEM" <%= event.event_type === 'STEM' ? 'selected' : '' %>>STEM</option>
+        <option value="Workshop" <%= event.event_type === 'Workshop' ? 'selected' : '' %>>Workshop</option>
+      <% } %>
     </select>
     <textarea name="event_description" placeholder="Description"><%= event.description || event.event_description || '' %></textarea>
     <input type="text" name="event_recurrence_pattern" value="<%= event.event_recurrence_pattern || '' %>" placeholder="Recurrence Pattern (e.g., Weekly, Monthly)">

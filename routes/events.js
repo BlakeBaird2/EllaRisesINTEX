@@ -95,13 +95,33 @@ router.get('/new', async (req, res) => {
     return res.status(403).send('Access denied');
   }
 
-  res.render('events/form', {
-    title: 'Add New Event',
-    event: {},
-    action: '/events',
-    method: 'POST',
-    isManager: true
-  });
+  try {
+    // Get distinct event types for dropdown (same as filter)
+    const eventTypes = await db('events')
+      .distinct('event_type')
+      .whereNotNull('event_type')
+      .orderBy('event_type');
+
+    res.render('events/form', {
+      title: 'Add New Event',
+      event: {},
+      eventTypes: eventTypes.map(t => t.event_type),
+      action: '/events',
+      method: 'POST',
+      isManager: true
+    });
+  } catch (error) {
+    console.error('Error loading event form:', error);
+    // Fallback with empty array if query fails
+    res.render('events/form', {
+      title: 'Add New Event',
+      event: {},
+      eventTypes: [],
+      action: '/events',
+      method: 'POST',
+      isManager: true
+    });
+  }
 });
 
 // ========================================================================
@@ -162,9 +182,16 @@ router.get('/:id/edit', async (req, res) => {
       });
     }
 
+    // Get distinct event types for dropdown (same as filter)
+    const eventTypes = await db('events')
+      .distinct('event_type')
+      .whereNotNull('event_type')
+      .orderBy('event_type');
+
     res.render('events/form', {
       title: 'Edit Event',
       event,
+      eventTypes: eventTypes.map(t => t.event_type),
       action: `/events/${req.params.id}`,
       method: 'POST',
       isManager: true
@@ -172,6 +199,7 @@ router.get('/:id/edit', async (req, res) => {
 
   } catch (error) {
     console.error('Error fetching event for edit:', error);
+    // Render error page instead of form when there's an issue
     res.status(500).render('error', {
       title: 'Error',
       message: 'Unable to load event',
@@ -198,6 +226,7 @@ router.post('/:id', async (req, res) => {
   }
 
   const {
+    event_name,
     event_type,
     event_description,
     event_recurrence_pattern,
@@ -208,6 +237,7 @@ router.post('/:id', async (req, res) => {
     const updated = await db('events')
       .where({ event_template_id: req.params.id })
       .update({
+        event_name,
         event_type,
         event_description: event_description || null,
         event_recurrence_pattern: event_recurrence_pattern || null,

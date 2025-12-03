@@ -228,36 +228,36 @@
   <!-- Hero Section -->
   <section class="hero" style="padding-top: 4rem; padding-bottom: 4rem; background: white; position: relative;">
     <div class="container" style="text-align: center; position: relative; z-index: 1;">
-      <div style="display: flex; align-items: center; justify-content: center; gap: 2rem; margin-bottom: 1rem; margin-top: 3rem; flex-wrap: wrap;">
+      <div style="display: flex; align-items: center; justify-content: center; gap: 3rem; margin-bottom: 1rem; margin-top: 3rem; flex-wrap: wrap;">
         <!-- Left side photos -->
         <div class="hero-side-photos" style="display: flex; flex-direction: row; gap: 1rem; align-items: center;">
-          <div style="width: 155px; height: 155px; border-radius: 50%; overflow: hidden; border: 3px solid var(--pink-light); box-shadow: 0 4px 20px rgba(255, 216, 209, 0.4);">
+          <div style="width: 165px; height: 165px; border-radius: 50%; overflow: hidden; border: 3px solid var(--pink-light); box-shadow: 0 4px 20px rgba(255, 216, 209, 0.4);">
             <img src="/images/ER Animation Workshop Feb 2021_029.jpg" alt="Workshop" style="width: 100%; height: 100%; object-fit: cover; display: block;">
           </div>
-          <div style="width: 180px; height: 180px; border-radius: 50%; overflow: hidden; border: 3px solid var(--pink-light); box-shadow: 0 4px 20px rgba(255, 216, 209, 0.4);">
+          <div style="width: 190px; height: 190px; border-radius: 50%; overflow: hidden; border: 3px solid var(--pink-light); box-shadow: 0 4px 20px rgba(255, 216, 209, 0.4);">
             <img src="/images/ER STEM Workshop Aug 2022-31.jpg" alt="STEM Workshop" style="width: 100%; height: 100%; object-fit: cover; display: block;">
           </div>
         </div>
-        
+
         <!-- Center logo with circle -->
         <div style="position: relative; display: inline-block;">
           <!-- Pink circle behind logo -->
-          <div class="hero-logo-circle" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 340px; height: 340px; background: var(--pink-light); border-radius: 50%; border: 2px solid rgba(255, 255, 255, 0.3); z-index: 0; box-shadow: 0 4px 20px rgba(255, 216, 209, 0.4);"></div>
-          <img src="/images/EllaRisesTextLogo.png" alt="Ella Rises" style="max-width: 180px; width: 100%; margin-left: auto; margin-right: auto; display: block; transform: translate(5px, -5px); position: relative; z-index: 1;">
+          <div class="hero-logo-circle" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px; height: 300px; background: var(--pink-light); border-radius: 50%; border: 2px solid rgba(255, 255, 255, 0.3); z-index: 0; box-shadow: 0 4px 20px rgba(255, 216, 209, 0.4);"></div>
+          <img src="/images/EllaRisesTextLogo.png" alt="Ella Rises" style="max-width: 260px; width: 100%; margin-left: auto; margin-right: auto; display: block; transform: translate(5px, 5px); position: relative; z-index: 1;">
         </div>
-        
+
         <!-- Right side photos -->
         <div class="hero-side-photos" style="display: flex; flex-direction: row; gap: 1rem; align-items: center;">
-          <div style="width: 180px; height: 180px; border-radius: 50%; overflow: hidden; border: 3px solid var(--pink-light); box-shadow: 0 4px 20px rgba(255, 216, 209, 0.4);">
+          <div style="width: 190px; height: 190px; border-radius: 50%; overflow: hidden; border: 3px solid var(--pink-light); box-shadow: 0 4px 20px rgba(255, 216, 209, 0.4);">
             <img src="/images/ER Summer Summit 2022-068.jpg" alt="Summer Summit" style="width: 100%; height: 100%; object-fit: cover; display: block;">
           </div>
-          <div style="width: 155px; height: 155px; border-radius: 50%; overflow: hidden; border: 3px solid var(--pink-light); box-shadow: 0 4px 20px rgba(255, 216, 209, 0.4);">
+          <div style="width: 165px; height: 165px; border-radius: 50%; overflow: hidden; border: 3px solid var(--pink-light); box-shadow: 0 4px 20px rgba(255, 216, 209, 0.4);">
             <img src="/images/girl_drawing.jpg" alt="Girl Drawing" style="width: 100%; height: 100%; object-fit: cover; display: block;">
           </div>
         </div>
       </div>
-      <h1 style="margin-top: 2rem; margin-bottom: 1.5rem;">Empowering the Rising Generation of Women</h1>
-      <p class="hero-description" style="margin-top: -0.5rem; font-size: 1.3rem; color: var(--primary); font-weight: 500; letter-spacing: 0.3px; line-height: 1.6; max-width: 700px; margin-left: auto; margin-right: auto;">Building confidence, competence, and connections in <span style="white-space: nowrap;">STEAM fields</span></p>
+      <h1 style="margin-top: 2rem; margin-bottom: 1.5rem; font-size: 2.5rem;">Empowering the Rising Generation of Women</h1>
+      <p class="hero-description" style="margin-top: -0.5rem; font-size: 1rem; color: var(--primary); font-weight: 500; letter-spacing: 0.3px; line-height: 1.6; max-width: 700px; margin-left: auto; margin-right: auto;">Building confidence, competence, and connections in <span style="white-space: nowrap;">STEAM fields</span></p>
     </div>
   </section>
 
@@ -387,75 +387,35 @@
     let isDown = false;
     let startX;
     let scrollLeft;
-    let autoScrollInterval;
-    let isHovering = false;
 
-    // Auto-scroll functionality
-    function startAutoScroll() {
-      if (isHovering || window.innerWidth <= 768) return;
-      
-      autoScrollInterval = setInterval(() => {
-        const currentScroll = slideshowWrapper.scrollLeft;
-        const maxScroll = slideshowWrapper.scrollWidth - slideshowWrapper.clientWidth;
-        const scrollAmount = 1;
-        
-        if (currentScroll >= maxScroll - 10) {
-          slideshowWrapper.scrollLeft = 0;
-        } else {
-          slideshowWrapper.scrollLeft += scrollAmount;
-        }
-      }, 30);
-    }
-
-    function stopAutoScroll() {
-      if (autoScrollInterval) {
-        clearInterval(autoScrollInterval);
-        autoScrollInterval = null;
-      }
-    }
-
-    // Hover controls
-    slideshowWrapper.addEventListener('mouseenter', () => {
-      isHovering = true;
-      stopAutoScroll();
-    });
-
-    slideshowWrapper.addEventListener('mouseleave', () => {
-      isHovering = false;
-      startAutoScroll();
-    });
-
-    // Left control
+    // Left control - stop at beginning
     if (controlLeft) {
       controlLeft.addEventListener('click', (e) => {
         e.stopPropagation();
         e.preventDefault();
         const scrollAmount = 420; // 400px image width + 1rem gap
-        slideshowWrapper.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-        stopAutoScroll();
-        // Resume auto-scroll after a delay
-        setTimeout(() => {
-          if (window.innerWidth > 768 && !isHovering) {
-            startAutoScroll();
-          }
-        }, 3000);
+        const currentScroll = slideshowWrapper.scrollLeft;
+
+        // Only scroll if not at the beginning
+        if (currentScroll > 10) {
+          slideshowWrapper.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        }
       });
     }
 
-    // Right control
+    // Right control - stop at end
     if (controlRight) {
       controlRight.addEventListener('click', (e) => {
         e.stopPropagation();
         e.preventDefault();
         const scrollAmount = 420; // 400px image width + 1rem gap
-        slideshowWrapper.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-        stopAutoScroll();
-        // Resume auto-scroll after a delay
-        setTimeout(() => {
-          if (window.innerWidth > 768 && !isHovering) {
-            startAutoScroll();
-          }
-        }, 3000);
+        const currentScroll = slideshowWrapper.scrollLeft;
+        const maxScroll = slideshowWrapper.scrollWidth - slideshowWrapper.clientWidth;
+
+        // Only scroll if not at the end
+        if (currentScroll < maxScroll - 10) {
+          slideshowWrapper.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        }
       });
     }
 
@@ -479,9 +439,6 @@
     slideshowWrapper.addEventListener('touchend', () => {
       isDown = false;
       slideshowWrapper.style.cursor = 'grab';
-      if (window.innerWidth > 768 && !isHovering) {
-        startAutoScroll();
-      }
     });
 
     // Mouse drag support (mobile only - disabled on desktop)
@@ -494,7 +451,6 @@
       startX = e.pageX - slideshowWrapper.offsetLeft;
       scrollLeft = slideshowWrapper.scrollLeft;
       slideshowWrapper.style.cursor = 'grabbing';
-      stopAutoScroll();
     });
 
     slideshowWrapper.addEventListener('mouseleave', () => {
@@ -505,9 +461,6 @@
     slideshowWrapper.addEventListener('mouseup', () => {
       isDown = false;
       slideshowWrapper.style.cursor = 'grab';
-      if (window.innerWidth > 768 && !isHovering) {
-        startAutoScroll();
-      }
     });
 
     slideshowWrapper.addEventListener('mousemove', (e) => {
@@ -521,20 +474,6 @@
       const x = e.pageX - slideshowWrapper.offsetLeft;
       const walk = (x - startX) * 2;
       slideshowWrapper.scrollLeft = scrollLeft - walk;
-    });
-
-    // Start auto-scroll on load (desktop only)
-    if (window.innerWidth > 768) {
-      startAutoScroll();
-    }
-
-    // Handle window resize
-    window.addEventListener('resize', () => {
-      if (window.innerWidth <= 768) {
-        stopAutoScroll();
-      } else if (!isHovering) {
-        startAutoScroll();
-      }
     });
   })();
 </script>

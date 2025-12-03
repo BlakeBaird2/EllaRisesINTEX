@@ -9,7 +9,8 @@
       "Bash(node:*)",
       "Bash(timeout:*)",
       "Bash(dir /b:*)",
-      "Bash(powershell -Command:*)"
+      "Bash(powershell -Command:*)",
+      "Bash(git checkout:*)"
     ],
     "deny": [],
     "ask": []

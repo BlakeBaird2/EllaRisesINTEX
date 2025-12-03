@@ -1240,47 +1240,60 @@ footer a:hover {
   }
 }
 
-/* Laptop/Tablet screens - shift hero content up */
-@media (min-width: 769px) and (max-width: 1440px) {
+/* Tablet screens (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
   header {
-    padding: 0.1rem 0;
+    padding: 0.2rem 0;
+  }
+
+  .logo img {
+    height: 50px;
+  }
+
+  .container {
+    max-width: 960px;
+  }
+}
+
+/* Medium desktop screens (1025px - 1440px) */
+@media (min-width: 1025px) and (max-width: 1440px) {
+  header {
+    padding: 0.3rem 0;
   }
 
   .logo img {
     height: 55px;
   }
 
-  .hero {
-    padding-top: 0.25rem !important;
-    padding-bottom: 4rem !important;
-  }
-
-  .hero h1 {
-    font-size: 2.8rem;
-  }
-
-  .hero p {
-    font-size: 1.2rem;
-    margin-bottom: 0.75rem;
-  }
-
-  .hero img {
-    margin-bottom: -2.75rem !important;
-    max-width: 350px !important;
-  }
-
-  .hero .btn {
-    font-size: 1rem !important;
-    padding: 0.9rem 2rem !important;
+  .container {
+    max-width: 1200px;
   }
 }
 
-/* Large desktop screens - extend hero section height */
-@media (min-width: 1441px) {
-  .hero {
-    padding-top: 4rem !important;
-    padding-bottom: 6rem !important;
-    min-height: 85vh;
+/* Large desktop screens (1441px - 1920px) */
+@media (min-width: 1441px) and (max-width: 1920px) {
+  .container {
+    max-width: 1400px;
+  }
+}
+
+/* Extra large screens (1920px+) */
+@media (min-width: 1921px) {
+  .container {
+    max-width: 1600px;
+  }
+
+  header {
+    padding: 0.5rem 0;
+  }
+
+  .logo img {
+    height: 70px;
+  }
+
+  header nav a {
+    font-size: 1.1rem;
+    padding: 0.6rem 1rem;
   }
 }
 
