@@ -134,6 +134,63 @@
         width: 100%;
       }
     }
+    .search-select-container {
+      position: relative;
+    }
+
+    .search-select-container input[type="text"] {
+      display: block;
+    }
+
+    .search-select-container select {
+      display: none;
+    }
+
+    .search-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      max-height: 250px;
+      overflow-y: auto;
+      background: white;
+      border: 2px solid var(--pink-light);
+      border-top: none;
+      border-radius: 0 0 8px 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      z-index: 1000;
+      display: none;
+    }
+
+    .search-dropdown.active {
+      display: block;
+    }
+
+    .search-dropdown-item {
+      padding: 0.75rem;
+      cursor: pointer;
+      border-bottom: 1px solid var(--pink-light);
+      transition: background 0.2s ease;
+    }
+
+    .search-dropdown-item:last-child {
+      border-bottom: none;
+    }
+
+    .search-dropdown-item:hover {
+      background: var(--pink-light);
+    }
+
+    .search-dropdown-item.selected {
+      background: var(--secondary);
+      color: white;
+    }
+
+    .no-results {
+      padding: 0.75rem;
+      color: #666;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -143,16 +200,20 @@
     <h1><%= title %></h1>
   </div>
   <form method="POST" action="<%= action %>">
-    <select name="participant_id" required>
-      <option value="">Select Participant *</option>
-      <% if (participants && participants.length > 0) { %>
-        <% participants.forEach(participant => { %>
-          <option value="<%= participant.participant_id %>" <%= (milestone.participant_id == participant.participant_id) ? 'selected' : '' %>>
-            <%= participant.participant_first_name %> <%= participant.participant_last_name %> (<%= participant.participant_email %>)
-          </option>
-        <% }) %>
-      <% } %>
-    </select>
+    <div class="search-select-container">
+      <input type="text" id="participant-search" placeholder="Search and select participant *" autocomplete="off">
+      <div class="search-dropdown" id="participant-dropdown"></div>
+      <select name="participant_id" id="participant-select" required>
+        <option value="">Select Participant *</option>
+        <% if (participants && participants.length > 0) { %>
+          <% participants.forEach(participant => { %>
+            <option value="<%= participant.participant_id %>" <%= (milestone.participant_id == participant.participant_id) ? 'selected' : '' %>>
+              <%= participant.participant_first_name %> <%= participant.participant_last_name %> (<%= participant.participant_email %>)
+            </option>
+          <% }) %>
+        <% } %>
+      </select>
+    </div>
     <select name="milestone_type_id" required>
       <option value="">Select Milestone Type *</option>
       <% if (milestoneTypes && milestoneTypes.length > 0) { %>
@@ -164,7 +225,6 @@
       <% } %>
     </select>
     <input type="date" name="milestone_date" value="<%= milestone.milestone_date || milestone.date_achieved || '' %>" placeholder="Date Achieved *" required>
-    <textarea name="notes" placeholder="Notes"><%= milestone.notes || '' %></textarea>
     <div class="btn-group">
       <button type="submit">Save</button>
       <a href="/milestones" class="btn-secondary">Cancel</a>
@@ -173,5 +233,92 @@
 </main>
 <%- include('../partials/footer') %>
 <script src="/js/main.js"></script>
+<script>
+  // Searchable participant dropdown
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('participant-search');
+    const dropdown = document.getElementById('participant-dropdown');
+    const hiddenSelect = document.getElementById('participant-select');
+
+    // Get all participants from the hidden select
+    const participants = Array.from(hiddenSelect.options)
+      .filter(option => option.value !== '')
+      .map(option => ({
+        id: option.value,
+        text: option.textContent.trim()
+      }));
+
+    // Set initial value if editing
+    const selectedOption = hiddenSelect.options[hiddenSelect.selectedIndex];
+    if (selectedOption && selectedOption.value) {
+      searchInput.value = selectedOption.textContent.trim();
+    }
+
+    // Filter and display participants
+    function filterParticipants(searchTerm) {
+      const filtered = participants.filter(p =>
+        p.text.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
+      if (filtered.length === 0) {
+        dropdown.innerHTML = '<div class="no-results">No participants found</div>';
+      } else {
+        dropdown.innerHTML = filtered.map(p =>
+          `<div class="search-dropdown-item" data-id="${p.id}">${p.text}</div>`
+        ).join('');
+      }
+
+      dropdown.classList.add('active');
+    }
+
+    // Show all participants when focused
+    searchInput.addEventListener('focus', () => {
+      filterParticipants(searchInput.value);
+    });
+
+    // Filter as user types
+    searchInput.addEventListener('input', (e) => {
+      filterParticipants(e.target.value);
+    });
+
+    // Select participant from dropdown
+    dropdown.addEventListener('click', (e) => {
+      const item = e.target.closest('.search-dropdown-item');
+      if (item) {
+        const participantId = item.dataset.id;
+        const participantText = item.textContent;
+
+        // Update hidden select
+        hiddenSelect.value = participantId;
+
+        // Update search input
+        searchInput.value = participantText;
+
+        // Hide dropdown
+        dropdown.classList.remove('active');
+      }
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!searchInput.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.classList.remove('active');
+      }
+    });
+
+    // Clear search input before submit to avoid confusion
+    const form = document.querySelector('form');
+    form.addEventListener('submit', (e) => {
+      if (!hiddenSelect.value) {
+        e.preventDefault();
+        searchInput.focus();
+        alert('Please select a participant from the list');
+        return false;
+      }
+      // Form is valid, allow submission
+      console.log('Submitting with participant_id:', hiddenSelect.value);
+    });
+  });
+</script>
 </body>
 </html>

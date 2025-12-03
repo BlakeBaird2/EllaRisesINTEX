@@ -8,6 +8,15 @@ function showConfirmModal(message, onConfirm, onCancel) {
     existingModal.remove();
   }
 
+  // Escape HTML to prevent XSS attacks
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  const escapedMessage = escapeHtml(message);
+
   // Create modal HTML
   const modalHTML = `
     <div class="confirm-modal-overlay">
@@ -16,7 +25,7 @@ function showConfirmModal(message, onConfirm, onCancel) {
           <h3>Confirm Action</h3>
         </div>
         <div class="confirm-modal-body">
-          <p>${message}</p>
+          <p>${escapedMessage}</p>
         </div>
         <div class="confirm-modal-footer">
           <button class="confirm-modal-cancel">Cancel</button>

@@ -6,7 +6,10 @@
       "Bash(taskkill:*)",
       "Bash(netstat:*)",
       "Bash(findstr:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(timeout:*)",
+      "Bash(dir /b:*)",
+      "Bash(powershell -Command:*)"
     ],
     "deny": [],
     "ask": []

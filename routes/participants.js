@@ -143,8 +143,9 @@ router.post('/', async (req, res) => {
 // GET /participants/:id - View participant details
 // ========================================================================
 router.get('/:id', async (req, res) => {
+  let participant = null;
   try {
-    const participant = await db('participants')
+    participant = await db('participants')
       .where({ participant_id: req.params.id })
       .first();
 
@@ -279,7 +280,7 @@ router.post('/:id', async (req, res) => {
   } = req.body;
 
   try {
-    await db('participants')
+    const updated = await db('participants')
       .where({ participant_id: req.params.id })
       .update({
         participant_first_name,
@@ -289,12 +290,23 @@ router.post('/:id', async (req, res) => {
         participant_phone: participant_phone || null
       });
 
+    if (updated === 0) {
+      return res.status(404).render('error', {
+        title: 'Not Found',
+        message: 'Participant not found',
+        error: { status: 404 }
+      });
+    }
+
     res.redirect('/participants?success=Participant updated successfully');
 
   } catch (error) {
     console.error('Error updating participant:', error);
-    // Ignore error and redirect back to participants page
-    res.redirect('/participants?success=Participant updated successfully');
+    res.status(500).render('error', {
+      title: 'Error',
+      message: 'Unable to update participant. Please try again.',
+      error
+    });
   }
 });
 

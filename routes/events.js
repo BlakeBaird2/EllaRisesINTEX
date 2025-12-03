@@ -205,7 +205,7 @@ router.post('/:id', async (req, res) => {
   } = req.body;
 
   try {
-    await db('events')
+    const updated = await db('events')
       .where({ event_template_id: req.params.id })
       .update({
         event_type,
@@ -214,13 +214,24 @@ router.post('/:id', async (req, res) => {
         event_default_capacity: event_default_capacity ? parseInt(event_default_capacity) : null
       });
 
+    if (updated === 0) {
+      return res.status(404).render('error', {
+        title: 'Not Found',
+        message: 'Event not found',
+        error: { status: 404 }
+      });
+    }
+
     // Always redirect to events list page
     return res.redirect('/events?success=Event updated successfully');
 
   } catch (error) {
     console.error('Error updating event:', error);
-    // Ignore error and redirect back to events page
-    return res.redirect('/events?success=Event updated successfully');
+    res.status(500).render('error', {
+      title: 'Error',
+      message: 'Unable to update event. Please try again.',
+      error
+    });
   }
 });
 
