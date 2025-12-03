@@ -15,6 +15,8 @@
       .hero {
         border-top-left-radius: 0 !important;
         border-top-right-radius: 0 !important;
+        border-bottom-left-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
         padding: 2rem 1rem !important;
       }
 
@@ -45,6 +47,16 @@
         gap: 1.5rem;
       }
 
+      /* Mission and Impact sections mobile */
+      section[style*="padding: 5rem"] {
+        padding: 3rem 1rem !important;
+      }
+
+      /* Remove rounded corners on pink backgrounds for mobile */
+      section[style*="var(--pink-light)"] {
+        border-radius: 0 !important;
+      }
+
       /* Support section */
       .container[style*="max-width: 700px"] {
         padding: 0 1rem;
@@ -70,6 +82,13 @@
     .hero .btn-primary:hover {
       background: #89a48b !important;
     }
+
+    /* Impact card hover effects */
+    section[style*="grid"] > div:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 35px rgba(0,0,0,0.15) !important;
+      border-color: rgba(154, 181, 157, 0.3) !important;
+    }
   </style>
 </head>
 <body>
@@ -86,10 +105,11 @@
   </section>
 
   <!-- Mission Section -->
-  <section class="mission" style="padding: 4rem 0; background: white;">
-    <div class="container" style="max-width: 800px; text-align: center;">
-      <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem; color: var(--primary);">Our Mission</h2>
-      <p style="font-size: 1.1rem; line-height: 1.8; color: #555;">
+  <section class="mission" style="padding: 5rem 0; background: linear-gradient(135deg, #f9f9f9 0%, white 100%); position: relative; overflow: hidden;">
+    <div class="container" style="max-width: 900px; text-align: center; position: relative; z-index: 1;">
+      <h2 style="font-size: 2.8rem; margin-bottom: 1.5rem; color: var(--primary); font-family: 'DM Serif Display', serif;">Our Mission</h2>
+      <div style="width: 80px; height: 4px; background: linear-gradient(90deg, #9AB59D 0%, #3A3F3B 100%); margin: 0 auto 2rem; border-radius: 2px;"></div>
+      <p style="font-size: 1.15rem; line-height: 1.9; color: #555; max-width: 750px; margin: 0 auto;">
         Ella Rises empowers women to pursue higher education and embrace their heritage through
         mentoring, creative workshops, and leadership opportunities. We provide STEAM (Science,
         Technology, Engineering, Arts, and Math) programs in partnership with UVU and BYU that
@@ -99,21 +119,27 @@
   </section>
 
   <!-- Impact Section -->
-  <section style="padding: 4rem 0; background: var(--pink-light);">
-    <div class="container">
-      <h2 style="text-align: center; margin-bottom: 3rem; font-size: 2.5rem; color: var(--primary);">Our Impact</h2>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; max-width: 1000px; margin: 0 auto;">
-        <div style="text-align: center; padding: 2.5rem 2rem; background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); transition: transform 0.3s ease;">
-          <h3 style="color: var(--accent); margin-bottom: 1rem; font-size: 1.5rem;">Education</h3>
-          <p style="color: #666; line-height: 1.6;">Encouraging higher education pathways in STEAM fields</p>
+  <section style="padding: 5rem 0; background: linear-gradient(135deg, var(--pink-light) 0%, rgba(244, 176, 146, 0.4) 100%); position: relative;">
+    <div class="container" style="max-width: 1100px;">
+      <div style="text-align: center; margin-bottom: 3.5rem;">
+        <h2 style="font-size: 2.8rem; color: var(--primary); font-family: 'DM Serif Display', serif; margin-bottom: 1rem;">Our Impact</h2>
+        <div style="width: 80px; height: 4px; background: linear-gradient(90deg, #9AB59D 0%, #3A3F3B 100%); margin: 0 auto; border-radius: 2px;"></div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin: 0 auto;">
+        <div style="text-align: center; padding: 3rem 2rem; background: white; border-radius: 20px; box-shadow: 0 6px 25px rgba(0,0,0,0.1); border: 2px solid rgba(154, 181, 157, 0.15); transition: all 0.3s ease; position: relative; overflow: hidden;">
+          <div style="position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #9AB59D 0%, #3A3F3B 100%);"></div>
+          <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.6rem; font-family: 'DM Serif Display', serif; margin-top: 0.5rem;">Education</h3>
+          <p style="color: #666; line-height: 1.7; font-size: 1.05rem;">Encouraging higher education pathways in STEAM fields</p>
         </div>
-        <div style="text-align: center; padding: 2.5rem 2rem; background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); transition: transform 0.3s ease;">
-          <h3 style="color: var(--accent); margin-bottom: 1rem; font-size: 1.5rem;">Empowerment</h3>
-          <p style="color: #666; line-height: 1.6;">Building confidence through hands-on workshops and mentorship</p>
+        <div style="text-align: center; padding: 3rem 2rem; background: white; border-radius: 20px; box-shadow: 0 6px 25px rgba(0,0,0,0.1); border: 2px solid rgba(154, 181, 157, 0.15); transition: all 0.3s ease; position: relative; overflow: hidden;">
+          <div style="position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #9AB59D 0%, #3A3F3B 100%);"></div>
+          <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.6rem; font-family: 'DM Serif Display', serif; margin-top: 0.5rem;">Empowerment</h3>
+          <p style="color: #666; line-height: 1.7; font-size: 1.05rem;">Building confidence through hands-on workshops and mentorship</p>
         </div>
-        <div style="text-align: center; padding: 2.5rem 2rem; background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); transition: transform 0.3s ease;">
-          <h3 style="color: var(--accent); margin-bottom: 1rem; font-size: 1.5rem;">Leadership</h3>
-          <p style="color: #666; line-height: 1.6;">Creating opportunities for women to lead and inspire</p>
+        <div style="text-align: center; padding: 3rem 2rem; background: white; border-radius: 20px; box-shadow: 0 6px 25px rgba(0,0,0,0.1); border: 2px solid rgba(154, 181, 157, 0.15); transition: all 0.3s ease; position: relative; overflow: hidden;">
+          <div style="position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #9AB59D 0%, #3A3F3B 100%);"></div>
+          <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.6rem; font-family: 'DM Serif Display', serif; margin-top: 0.5rem;">Leadership</h3>
+          <p style="color: #666; line-height: 1.7; font-size: 1.05rem;">Creating opportunities for women to lead and inspire</p>
         </div>
       </div>
     </div>

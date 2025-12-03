@@ -1116,9 +1116,9 @@ footer a:hover {
   }
 
   header nav.header-nav-mobile a.btn-logout:hover {
-    background: white !important;
+    background: rgba(255,255,255,0.2) !important;
     transform: none;
-    color: var(--primary);
+    color: white;
   }
 
   .menu-toggle {
