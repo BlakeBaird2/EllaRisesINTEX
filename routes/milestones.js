@@ -5,20 +5,64 @@ const db = require('../config/database');
 
 // List all milestones with participant info
 router.get('/', async (req, res) => {
+  const { search, type } = req.query;
+  
   try {
-    const milestones = await db('milestones')
+    let query = db('milestones')
       .join('participants', 'milestones.participant_id', 'participants.participant_id')
       .join('milestonetypes', 'milestones.milestone_type_id', 'milestonetypes.milestone_type_id')
       .select('milestones.*',
               'participants.participant_first_name as first_name',
               'participants.participant_last_name as last_name',
-              'milestonetypes.milestone_title as milestone_name')
+              'milestonetypes.milestone_title as milestone_name');
+
+    // Search functionality
+    if (search) {
+      query = query.where(function() {
+        this.where('participants.participant_first_name', 'ilike', `%${search}%`)
+          .orWhere('participants.participant_last_name', 'ilike', `%${search}%`)
+          .orWhere('milestonetypes.milestone_title', 'ilike', `%${search}%`);
+      });
+    }
+
+    // Filter by milestone type
+    if (type) {
+      query = query.where('milestonetypes.milestone_title', type);
+    }
+
+    const milestones = await query
       .orderBy('milestones.milestone_date', 'desc')
       .limit(100);
 
+    // Get distinct milestone types for filter
+    let milestoneTypes = [];
+    try {
+      // Try the table name used in the join first
+      const types = await db('milestonetypes')
+        .distinct('milestone_title')
+        .whereNotNull('milestone_title')
+        .orderBy('milestone_title');
+      milestoneTypes = types.map(t => t.milestone_title || t.milestone_name || t);
+    } catch (err) {
+      // Fallback if table name is different
+      try {
+        const types = await db('milestone_types')
+          .distinct('milestone_name')
+          .whereNotNull('milestone_name')
+          .orderBy('milestone_name');
+        milestoneTypes = types.map(t => t.milestone_name || t.milestone_title || t);
+      } catch (err2) {
+        console.error('Error fetching milestone types:', err2);
+        milestoneTypes = [];
+      }
+    }
+
     res.render('milestones/index', {
       title: 'Participant Milestones',
-      milestones,
+      milestones: milestones || [],
+      milestoneTypes: milestoneTypes || [],
+      search: search || '',
+      selectedType: type || '',
       isManager: req.session.user.role === 'manager' || req.session.user.role === 'admin'
     });
   } catch (error) {

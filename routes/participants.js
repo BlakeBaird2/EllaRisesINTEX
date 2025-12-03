@@ -45,6 +45,7 @@ router.get('/', async (req, res) => {
     // Get paginated results
     const participants = await query
       .orderBy('participant_last_name', 'asc')
+      .orderBy('participant_first_name', 'asc')
       .limit(limit)
       .offset(offset);
 

@@ -6,9 +6,28 @@ const db = require('../config/database');
 
 // List all users
 router.get('/', async (req, res) => {
+  const { search, role } = req.query;
+  
   try {
-    const users = await db('websiteusers')
-      .select('user_id', 'username', 'email', 'first_name', 'last_name', 'user_role', 'account_status', 'created_at', 'last_login')
+    let query = db('websiteusers')
+      .select('user_id', 'username', 'email', 'first_name', 'last_name', 'user_role', 'account_status', 'created_at', 'last_login');
+
+    // Search functionality
+    if (search && search.trim() !== '') {
+      query = query.where(function() {
+        this.where('username', 'ilike', `%${search}%`)
+          .orWhere('email', 'ilike', `%${search}%`)
+          .orWhere('first_name', 'ilike', `%${search}%`)
+          .orWhere('last_name', 'ilike', `%${search}%`);
+      });
+    }
+
+    // Filter by role
+    if (role && role !== '') {
+      query = query.where('user_role', role);
+    }
+
+    const users = await query
       .orderBy('username')
       .then(users => users.map(user => ({
         ...user,
@@ -20,6 +39,8 @@ router.get('/', async (req, res) => {
     res.render('users/index', {
       title: 'User Management',
       users,
+      search: typeof search !== 'undefined' ? search : '',
+      selectedRole: typeof role !== 'undefined' ? role : '',
       isManager: true
     });
   } catch (error) {

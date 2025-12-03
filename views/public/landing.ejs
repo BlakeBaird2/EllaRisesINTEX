@@ -7,21 +7,33 @@
   <link rel="icon" type="image/png" href="/images/EllaRisesHeart.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Montserrat:wght@300;400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="/css/style.css">
+  <style>
+    @media (max-width: 768px) {
+      .hero {
+        border-top-left-radius: 0 !important;
+        border-top-right-radius: 0 !important;
+      }
+    }
+    .hero .btn-primary:hover {
+      background: #89a48b !important;
+    }
+  </style>
 </head>
 <body>
 <%- include('../partials/header') %>
 
-<main style="padding-top: 0.5rem;">
+<main style="padding-top: 0.4rem;">
   <!-- Hero Section -->
-  <section class="hero" style="padding-top: 3rem; padding-bottom: 4rem; background: linear-gradient(135deg, var(--pink-light) 0%, var(--pink-light) 60%, rgba(244, 176, 146, 0.3) 100%);">
+  <section class="hero" style="padding-top: 2.5rem; padding-bottom: 4rem; background: linear-gradient(135deg, var(--pink-light) 0%, var(--pink-light) 60%, rgba(244, 176, 146, 0.3) 100%); border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;">
     <div class="container" style="text-align: center;">
-      <img src="/images/EllaRisesTextLogo.png" alt="Ella Rises" style="max-width: 400px; width: 100%; margin-bottom: -2rem; margin-left: auto; margin-right: auto; display: block;">
+      <img src="/images/EllaRisesTextLogo.png" alt="Ella Rises" style="max-width: 400px; width: 100%; margin-bottom: -2rem; margin-left: auto; margin-right: auto; display: block; transform: translateX(5px);">
       <h1 style="margin-top: 0;">Empowering the Rising Generation of Women</h1>
-      <p>Building confidence, competence, and connections in STEAM fields</p>
-      <div style="text-align: center; margin-left: auto; margin-right: auto;">
-        <a href="https://docs.google.com/forms/d/1hUJeUu-q9w7ajSUU9jjgYsF8XjGPO7_ElktBYiMt-uU/viewform?edit_requested=true" class="btn btn-primary" target="_blank" rel="noopener noreferrer" style="font-size: 1.2rem; padding: 1.2rem 2.5rem; border-radius: 12px; font-weight: 700; letter-spacing: 0.5px; transition: all 0.3s ease;">Click Here to Enroll</a>
+      <p style="margin-top: 0.1rem; margin-bottom: 2rem; font-size: 1.2rem;">Building confidence, competence, and connections in STEAM fields</p>
+      <div style="text-align: center; margin-left: auto; margin-right: auto; max-width: 55%;">
+        <a href="https://docs.google.com/forms/d/1hUJeUu-q9w7ajSUU9jjgYsF8XjGPO7_ElktBYiMt-uU/viewform?edit_requested=true" class="btn btn-primary" target="_blank" rel="noopener noreferrer" style="font-size: 1.1rem; padding: 0.85rem 1.6rem; border-radius: 12px; font-weight: 700; letter-spacing: 0.5px; transition: all 0.3s ease; border: none; display: inline-block; background: #9AB59D;">Click Here to Enroll</a>
       </div>
     </div>
   </section>
@@ -42,7 +54,7 @@
   <!-- Impact Section -->
   <section style="padding: 4rem 0; background: var(--pink-light);">
     <div class="container">
-      <h2 style="text-align: center; margin-bottom: 3rem;">Our Impact</h2>
+      <h2 style="text-align: center; margin-bottom: 3rem; font-size: 2.5rem; color: var(--primary);">Our Impact</h2>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
         <div style="text-align: center; padding: 2rem; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
           <h3 style="color: var(--accent); margin-bottom: 0.5rem;">Education</h3>

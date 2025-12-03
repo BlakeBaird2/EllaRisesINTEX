@@ -17,9 +17,17 @@ document.addEventListener('DOMContentLoaded', () => {
       menuToggle.setAttribute('aria-expanded', menuToggle.classList.contains('active'));
     });
 
-    // Close menu when a link is clicked
+    // Close menu when a link is clicked (but not dropdown toggles)
     navLinks.forEach(link => {
-      link.addEventListener('click', () => {
+      link.addEventListener('click', (e) => {
+        // Don't close menu if clicking on dropdown toggle
+        if (link.classList.contains('dropdown-toggle-mobile')) {
+          return;
+        }
+        // Don't close menu if clicking inside dropdown menu
+        if (link.closest('.dropdown-menu-mobile')) {
+          return;
+        }
         menuToggle.classList.remove('active');
         mobileNav.classList.remove('active');
         header.classList.remove('menu-open');
@@ -54,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
   dropdownToggles.forEach(toggle => {
     toggle.addEventListener('click', (e) => {
       e.preventDefault();
+      e.stopPropagation(); // Prevent event from bubbling up
       const dropdown = toggle.closest('.dropdown, .dropdown-mobile');
       const isActive = dropdown.classList.contains('active');
       
@@ -65,6 +74,8 @@ document.addEventListener('DOMContentLoaded', () => {
       // Toggle current dropdown
       if (!isActive) {
         dropdown.classList.add('active');
+      } else {
+        dropdown.classList.remove('active');
       }
     });
   });
