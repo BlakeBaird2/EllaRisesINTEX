@@ -142,6 +142,11 @@
   <div class="page-header">
     <h1><%= title %></h1>
   </div>
+  <% if (typeof error !== 'undefined' && error) { %>
+    <div style="background: #fee; border: 2px solid #c33; color: #c33; padding: 1rem; border-radius: 8px; margin: 0 1rem 1rem 1rem;">
+      <%= error %>
+    </div>
+  <% } %>
   <form method="POST" action="<%= action %>">
     <input type="text" name="event_name" value="<%= event.event_name || '' %>" placeholder="Event Name *" required>
     <select name="event_type" required>

@@ -257,6 +257,39 @@ router.post('/:id', async (req, res) => {
 
   } catch (error) {
     console.error('Error updating event:', error);
+
+    // Check if it's a duplicate key error
+    if (error.code === '23505' && error.constraint === 'events_event_name_key') {
+      // Get event types for the form
+      try {
+        const eventTypes = await db('events')
+          .distinct('event_type')
+          .whereNotNull('event_type')
+          .orderBy('event_type');
+
+        return res.status(400).render('events/form', {
+          title: 'Edit Event',
+          event: { event_template_id: req.params.id, ...req.body },
+          eventTypes: eventTypes.map(t => t.event_type),
+          action: `/events/${req.params.id}`,
+          method: 'POST',
+          isManager: true,
+          error: 'An event with this name already exists. Please choose a different name.'
+        });
+      } catch (dbError) {
+        // If we can't get event types, use fallback
+        return res.status(400).render('events/form', {
+          title: 'Edit Event',
+          event: { event_template_id: req.params.id, ...req.body },
+          eventTypes: [],
+          action: `/events/${req.params.id}`,
+          method: 'POST',
+          isManager: true,
+          error: 'An event with this name already exists. Please choose a different name.'
+        });
+      }
+    }
+
     res.status(500).render('error', {
       title: 'Error',
       message: 'Unable to update event. Please try again.',
