@@ -12,8 +12,8 @@ const db = require('../config/database');
 // GET /surveys - List all surveys
 // ========================================================================
 router.get('/', async (req, res) => {
-  const { search, page = 1 } = req.query;
-  const limit = 20;
+  const { search, dateSort = 'desc', page = 1 } = req.query;
+  const limit = 15;
   const offset = (page - 1) * limit;
 
   try {
@@ -53,9 +53,10 @@ router.get('/', async (req, res) => {
     const [{ count }] = await countQuery.count('surveys.survey_id as count');
     const totalPages = Math.ceil(count / limit);
 
-    // Get paginated results
+    // Sort by date
+    const sortDirection = dateSort === 'asc' ? 'asc' : 'desc';
     const surveys = await query
-      .orderBy('surveys.survey_submission_date', 'desc')
+      .orderBy('surveys.survey_submission_date', sortDirection)
       .limit(limit)
       .offset(offset);
 
@@ -63,6 +64,7 @@ router.get('/', async (req, res) => {
       title: 'Post-Event Surveys',
       surveys,
       search: search || '',
+      dateSort: sortDirection,
       currentPage: parseInt(page),
       totalPages,
       isManager: req.session.user.role === 'manager' || req.session.user.role === 'admin'

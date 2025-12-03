@@ -1,34 +1,161 @@
 <!DOCTYPE html>
-<html><head><title><%= title %></title><link rel="stylesheet" href="/css/style.css"></head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | Ella Rises</title>
+  <link rel="icon" type="image/png" href="/images/EllaRisesHeart.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      margin-left: 1rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .page-header h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin: 0;
+    }
+
+    main.container {
+      padding-top: 2rem;
+    }
+
+    form {
+      max-width: 600px;
+      margin: 0 1rem;
+    }
+
+    form input,
+    form select,
+    form textarea {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: 2px solid var(--pink-light);
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: inherit;
+      box-sizing: border-box;
+    }
+
+    form input:focus,
+    form select:focus,
+    form textarea:focus {
+      outline: none;
+      border-color: var(--secondary);
+    }
+
+    form textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    button[type="submit"],
+    .btn-secondary {
+      padding: 0.75rem 2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: inherit;
+      line-height: 1.5;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+    }
+
+    button[type="submit"] {
+      background: linear-gradient(135deg, #9AB59D 0%, #8BA68E 100%);
+      color: white;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    button[type="submit"]:hover {
+      background: #89a48b;
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--primary);
+      border: 2px solid var(--pink-light);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .btn-secondary:hover {
+      background: var(--pink-light);
+      border-color: var(--pink-medium);
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+
+    @media (max-width: 768px) {
+      .page-header {
+        margin-left: 0.5rem;
+      }
+
+      .page-header h1 {
+        font-size: 2rem;
+      }
+
+      form {
+        margin: 0 0.5rem;
+      }
+
+      .btn-group {
+        flex-direction: column;
+      }
+
+      button[type="submit"],
+      .btn-secondary {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
 <body>
 <%- include('../partials/header') %>
 <main class="container">
-  <h1><%= title %></h1>
+  <div class="page-header">
+    <h1><%= title %></h1>
+  </div>
   <form method="POST" action="<%= action %>">
     <input type="email" name="participant_email" value="<%= participant.participant_email || '' %>" placeholder="Email *" required <%= participant.participant_id ? 'readonly' : '' %>>
-    <input type="text" name="first_name" value="<%= participant.first_name || participant.participant_first_name || '' %>" placeholder="First Name *" required>
-    <input type="text" name="last_name" value="<%= participant.last_name || participant.participant_last_name || '' %>" placeholder="Last Name *" required>
-    <input type="date" name="date_of_birth" value="<%= participant.date_of_birth || '' %>" placeholder="Date of Birth *" required>
-    <select name="gender" required>
-      <option value="">Select Gender</option>
-      <option value="Female" <%= (participant.gender === 'Female') ? 'selected' : '' %>>Female</option>
-      <option value="Male" <%= (participant.gender === 'Male') ? 'selected' : '' %>>Male</option>
-      <option value="Non-binary" <%= (participant.gender === 'Non-binary') ? 'selected' : '' %>>Non-binary</option>
-      <option value="Prefer not to say" <%= (participant.gender === 'Prefer not to say') ? 'selected' : '' %>>Prefer not to say</option>
-      <option value="Other" <%= (participant.gender === 'Other') ? 'selected' : '' %>>Other</option>
-    </select>
-    <input type="text" name="race_ethnicity" value="<%= participant.race_ethnicity || '' %>" placeholder="Race/Ethnicity *" required>
-    <input type="text" name="high_school" value="<%= participant.high_school || '' %>" placeholder="High School *" required>
-    <input type="text" name="intended_college" value="<%= participant.intended_college || '' %>" placeholder="Intended College *" required>
-    <input type="text" name="grade_level" value="<%= participant.grade_level || '' %>" placeholder="Grade Level *" required>
-    <input type="text" name="address_street" value="<%= participant.address_street || '' %>" placeholder="Street Address *" required>
-    <input type="text" name="address_city" value="<%= participant.address_city || '' %>" placeholder="City *" required>
-    <input type="text" name="address_state" value="<%= participant.address_state || '' %>" placeholder="State *" required>
-    <input type="text" name="address_zip" value="<%= participant.address_zip || '' %>" placeholder="ZIP Code *" required>
-    <input type="tel" name="phone" value="<%= participant.phone || '' %>" placeholder="Phone *" required>
-    <button type="submit">Save</button>
-    <a href="/participants" class="btn-secondary">Cancel</a>
+    <input type="text" name="participant_first_name" value="<%= participant.participant_first_name || '' %>" placeholder="First Name *" required>
+    <input type="text" name="participant_last_name" value="<%= participant.participant_last_name || '' %>" placeholder="Last Name *" required>
+    <input type="text" name="participant_role" value="<%= participant.participant_role || '' %>" placeholder="Role">
+    <input type="text" name="participant_school_or_employer" value="<%= participant.participant_school_or_employer || '' %>" placeholder="School/Employer">
+    <input type="tel" name="participant_phone" value="<%= participant.participant_phone || '' %>" placeholder="Phone">
+    <div class="btn-group">
+      <button type="submit">Save</button>
+      <a href="/participants" class="btn-secondary">Cancel</a>
+    </div>
   </form>
 </main>
 <%- include('../partials/footer') %>
-</body></html>
+<script src="/js/main.js"></script>
+</body>
+</html>

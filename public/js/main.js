@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('.dropdown, .dropdown-mobile').forEach(d => {
         d.classList.remove('active');
       });
-      
+
       // Toggle current dropdown
       if (!isActive) {
         dropdown.classList.add('active');

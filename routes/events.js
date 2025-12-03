@@ -12,8 +12,8 @@ const db = require('../config/database');
 // GET /events - List all event templates
 // ========================================================================
 router.get('/', async (req, res) => {
-  const { search, type, page = 1 } = req.query;
-  const limit = 20;
+  const { search, type, dateSort = 'desc', page = 1 } = req.query;
+  const limit = 15;
   const offset = (page - 1) * limit;
 
   try {
@@ -42,11 +42,19 @@ router.get('/', async (req, res) => {
       });
     const totalPages = Math.ceil(count / limit);
 
-    // Get paginated results
+    // Sort by event name (date column may not exist)
+    const sortDirection = dateSort === 'asc' ? 'asc' : 'desc';
     const events = await query
       .orderBy('event_name', 'asc')
       .limit(limit)
       .offset(offset);
+
+    // Add created_at field as null if it doesn't exist in database
+    events.forEach(e => {
+      if (!e.hasOwnProperty('created_at')) {
+        e.created_at = null;
+      }
+    });
 
     // Get distinct event types for filter
     const eventTypes = await db('events')
@@ -60,9 +68,10 @@ router.get('/', async (req, res) => {
       eventTypes: eventTypes.map(t => t.event_type),
       search: search || '',
       selectedType: type || '',
+      dateSort: sortDirection,
       currentPage: parseInt(page),
       totalPages,
-      isManager: req.session.user.role === 'manager' || req.session.user.role === 'admin'
+      isManager: req.session.user && (req.session.user.role === 'manager' || req.session.user.role === 'admin')
     });
 
   } catch (error) {
@@ -103,18 +112,18 @@ router.post('/', async (req, res) => {
   const {
     event_name,
     event_type,
-    description,
-    target_age_min,
-    target_age_max
+    event_description,
+    event_recurrence_pattern,
+    event_default_capacity
   } = req.body;
 
   try {
-    await db('event_templates').insert({
+    await db('events').insert({
       event_name,
       event_type,
-      description: description || null,
-      target_age_min: target_age_min ? parseInt(target_age_min) : null,
-      target_age_max: target_age_max ? parseInt(target_age_max) : null
+      event_description: event_description || null,
+      event_recurrence_pattern: event_recurrence_pattern || null,
+      event_default_capacity: event_default_capacity ? parseInt(event_default_capacity) : null
     });
 
     res.redirect('/events?success=Event created successfully');
@@ -134,7 +143,7 @@ router.post('/', async (req, res) => {
 // ========================================================================
 router.get('/:id', async (req, res) => {
   try {
-    const event = await db('event_templates')
+    const event = await db('events')
       .where({ event_template_id: req.params.id })
       .first();
 
@@ -147,16 +156,15 @@ router.get('/:id', async (req, res) => {
     }
 
     // Get all occurrences for this event
-    const occurrences = await db('event_occurrences')
-      .where({ event_name: event.event_name })
+    const occurrences = await db('eventoccurrences')
+      .where({ event_template_id: event.event_template_id })
       .orderBy('event_datetime_start', 'desc');
 
     // Get registration count for each occurrence
     for (let occurrence of occurrences) {
       const [{ count }] = await db('registrations')
         .where({
-          event_name: occurrence.event_name,
-          event_datetime_start: occurrence.event_datetime_start
+          event_occurrence_id: occurrence.event_occurrence_id
         })
         .count('* as count');
       occurrence.registration_count = count;
@@ -166,7 +174,7 @@ router.get('/:id', async (req, res) => {
       title: event.event_name,
       event,
       occurrences,
-      isManager: req.session.user.role === 'manager' || req.session.user.role === 'admin'
+      isManager: req.session.user && (req.session.user.role === 'manager' || req.session.user.role === 'admin')
     });
 
   } catch (error) {
@@ -188,7 +196,7 @@ router.get('/:id/edit', async (req, res) => {
   }
 
   try {
-    const event = await db('event_templates')
+    const event = await db('events')
       .where({ event_template_id: req.params.id })
       .first();
 
@@ -228,19 +236,19 @@ router.post('/:id', async (req, res) => {
 
   const {
     event_type,
-    description,
-    target_age_min,
-    target_age_max
+    event_description,
+    event_recurrence_pattern,
+    event_default_capacity
   } = req.body;
 
   try {
-    await db('event_templates')
+    await db('events')
       .where({ event_template_id: req.params.id })
       .update({
         event_type,
-        description: description || null,
-        target_age_min: target_age_min ? parseInt(target_age_min) : null,
-        target_age_max: target_age_max ? parseInt(target_age_max) : null
+        event_description: event_description || null,
+        event_recurrence_pattern: event_recurrence_pattern || null,
+        event_default_capacity: event_default_capacity ? parseInt(event_default_capacity) : null
       });
 
     res.redirect(`/events/${req.params.id}?success=Event updated successfully`);
@@ -264,7 +272,7 @@ router.post('/:id/delete', async (req, res) => {
   }
 
   try {
-    await db('event_templates')
+    await db('events')
       .where({ event_template_id: req.params.id })
       .del();
 
@@ -289,7 +297,7 @@ router.get('/:id/occurrences/new', async (req, res) => {
   }
 
   try {
-    const event = await db('event_templates')
+    const event = await db('events')
       .where({ event_template_id: req.params.id })
       .first();
 
@@ -331,21 +339,19 @@ router.post('/:id/occurrences', async (req, res) => {
   const {
     event_datetime_start,
     event_datetime_end,
-    location,
-    capacity
+    event_location,
+    event_capacity,
+    event_registration_deadline
   } = req.body;
 
   try {
-    const event = await db('event_templates')
-      .where({ event_template_id: req.params.id })
-      .first();
-
-    await db('event_occurrences').insert({
-      event_name: event.event_name,
+    await db('eventoccurrences').insert({
+      event_template_id: req.params.id,
       event_datetime_start,
       event_datetime_end: event_datetime_end || null,
-      location: location || null,
-      capacity: capacity ? parseInt(capacity) : null
+      event_location: event_location || null,
+      event_capacity: event_capacity ? parseInt(event_capacity) : null,
+      event_registration_deadline: event_registration_deadline || null
     });
 
     res.redirect(`/events/${req.params.id}?success=Event occurrence added successfully`);

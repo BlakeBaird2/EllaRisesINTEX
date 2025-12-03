@@ -12,8 +12,8 @@ const db = require('../config/database');
 // GET /participants - List all participants
 // ========================================================================
 router.get('/', async (req, res) => {
-  const { search, page = 1 } = req.query;
-  const limit = 20;
+  const { search, dateSort = 'desc', page = 1 } = req.query;
+  const limit = 15;
   const offset = (page - 1) * limit;
 
   try {
@@ -42,21 +42,31 @@ router.get('/', async (req, res) => {
       });
     const totalPages = Math.ceil(count / limit);
 
-    // Get paginated results
+    // Sort by name (date column may not exist)
+    const sortDirection = dateSort === 'asc' ? 'asc' : 'desc';
     const participants = await query
       .orderBy('participant_last_name', 'asc')
       .orderBy('participant_first_name', 'asc')
       .limit(limit)
       .offset(offset);
+    
+    // Add created_at field as null if it doesn't exist in database
+    participants.forEach(p => {
+      if (!p.hasOwnProperty('created_at')) {
+        p.created_at = null;
+      }
+    });
 
     res.render('participants/index', {
       title: 'Participants',
       participants,
       search: search || '',
+      dateSort: sortDirection,
       currentPage: parseInt(page),
       totalPages,
-      isManager: req.session.user.role === 'manager' || req.session.user.role === 'admin'
+      isManager: req.session.user && (req.session.user.role === 'manager' || req.session.user.role === 'admin')
     });
+
 
   } catch (error) {
     console.error('Error fetching participants:', error);
@@ -95,37 +105,21 @@ router.post('/', async (req, res) => {
 
   const {
     participant_email,
-    first_name,
-    last_name,
-    date_of_birth,
-    gender,
-    race_ethnicity,
-    high_school,
-    intended_college,
-    grade_level,
-    address_street,
-    address_city,
-    address_state,
-    address_zip,
-    phone
+    participant_first_name,
+    participant_last_name,
+    participant_role,
+    participant_school_or_employer,
+    participant_phone
   } = req.body;
 
   try {
     await db('participants').insert({
       participant_email,
-      first_name,
-      last_name,
-      date_of_birth: date_of_birth || null,
-      gender: gender || null,
-      race_ethnicity: race_ethnicity || null,
-      high_school: high_school || null,
-      intended_college: intended_college || null,
-      grade_level: grade_level || null,
-      address_street: address_street || null,
-      address_city: address_city || null,
-      address_state: address_state || null,
-      address_zip: address_zip || null,
-      phone: phone || null
+      participant_first_name,
+      participant_last_name,
+      participant_role: participant_role || null,
+      participant_school_or_employer: participant_school_or_employer || null,
+      participant_phone: participant_phone || null
     });
 
     res.redirect('/participants?success=Participant added successfully');
@@ -175,11 +169,11 @@ router.get('/:id', async (req, res) => {
               'event_templates.event_type', 'registrations.attendance_status');
 
     res.render('participants/detail', {
-      title: `${participant.first_name} ${participant.last_name}`,
+      title: `${participant.participant_first_name} ${participant.participant_last_name}`,
       participant,
       milestones,
       events,
-      isManager: req.session.user.role === 'manager' || req.session.user.role === 'admin'
+      isManager: req.session.user && (req.session.user.role === 'manager' || req.session.user.role === 'admin')
     });
 
   } catch (error) {
@@ -240,38 +234,22 @@ router.post('/:id', async (req, res) => {
   }
 
   const {
-    first_name,
-    last_name,
-    date_of_birth,
-    gender,
-    race_ethnicity,
-    high_school,
-    intended_college,
-    grade_level,
-    address_street,
-    address_city,
-    address_state,
-    address_zip,
-    phone
+    participant_first_name,
+    participant_last_name,
+    participant_role,
+    participant_school_or_employer,
+    participant_phone
   } = req.body;
 
   try {
     await db('participants')
       .where({ participant_id: req.params.id })
       .update({
-        first_name,
-        last_name,
-        date_of_birth: date_of_birth || null,
-        gender: gender || null,
-        race_ethnicity: race_ethnicity || null,
-        high_school: high_school || null,
-        intended_college: intended_college || null,
-        grade_level: grade_level || null,
-        address_street: address_street || null,
-        address_city: address_city || null,
-        address_state: address_state || null,
-        address_zip: address_zip || null,
-        phone: phone || null
+        participant_first_name,
+        participant_last_name,
+        participant_role: participant_role || null,
+        participant_school_or_employer: participant_school_or_employer || null,
+        participant_phone: participant_phone || null
       });
 
     res.redirect(`/participants/${req.params.id}?success=Participant updated successfully`);

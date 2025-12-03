@@ -74,13 +74,21 @@
       align-items: center;
       justify-content: center;
       height: 48px;
-      border: none !important;
-      border-radius: 8px;
+      border: 2px solid rgba(255, 255, 255, 0.3) !important;
+      border-radius: 12px;
       line-height: 1;
       outline: none !important;
-      box-shadow: none !important;
-      background: var(--secondary) !important;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+      background: linear-gradient(135deg, #9AB59D 0%, #8BA68E 100%) !important;
       color: white !important;
+      transition: filter 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      will-change: transform, box-shadow;
+    }
+
+    .search-container button[type="submit"]:hover {
+      filter: brightness(0.95);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(154, 181, 157, 0.3) !important;
     }
 
     .action-buttons .btn-small {
@@ -123,6 +131,7 @@
   <div class="search-container">
     <input type="text" name="search" placeholder="Search by participant or event..." value="<%= search %>" form="search-form">
     <form method="GET" id="search-form" style="display: contents; margin: 0; padding: 0; border: none; background: transparent; box-shadow: none; outline: none;">
+      <input type="hidden" name="dateSort" value="<%= dateSort %>">
       <button type="submit">Search</button>
     </form>
   </div>
@@ -131,18 +140,26 @@
     <table>
       <thead>
         <tr>
-          <th>Date</th>
+          <th>
+            <a href="?dateSort=<%= dateSort === 'desc' ? 'asc' : 'desc' %><%= search ? '&search=' + encodeURIComponent(search) : '' %>" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
+              Date
+              <span style="font-size: 0.9rem;">
+                <% if (dateSort === 'desc') { %>
+                  <i class="fas fa-arrow-down"></i>
+                <% } else { %>
+                  <i class="fas fa-arrow-up"></i>
+                <% } %>
+              </span>
+            </a>
+          </th>
           <th>Participant</th>
           <th>Event</th>
           <th>Satisfaction</th>
-          <% if (isManager) { %>
-            <th>Actions</th>
-          <% } %>
         </tr>
       </thead>
       <tbody>
         <% if (surveys.length === 0) { %>
-          <tr><td colspan="<%= isManager ? 5 : 4 %>" style="text-align: center;">No surveys found</td></tr>
+          <tr><td colspan="4" style="text-align: center;">No surveys found</td></tr>
         <% } else { %>
           <% surveys.forEach(survey => { %>
             <tr>
@@ -150,16 +167,6 @@
               <td><%= survey.first_name && survey.last_name ? survey.first_name + ' ' + survey.last_name : 'N/A' %></td>
               <td class="truncate"><%= survey.event_name || 'N/A' %></td>
               <td><%= survey.survey_satisfaction_score || 'N/A' %></td>
-              <% if (isManager) { %>
-                <td>
-                  <div class="action-buttons">
-                    <a href="/surveys/<%= survey.survey_id %>" class="btn-small btn-edit">Edit</a>
-                    <form action="/surveys/<%= survey.survey_id %>/delete" method="POST" style="display: inline; margin: 0; padding: 0;" onsubmit="return confirm('Are you sure you want to delete this survey?')">
-                      <button type="submit" class="btn-small btn-delete">Delete</button>
-                    </form>
-                  </div>
-                </td>
-              <% } %>
             </tr>
           <% }) %>
         <% } %>
@@ -170,11 +177,11 @@
   <% if (totalPages > 1) { %>
   <div class="pagination" style="margin-top: 2rem; text-align: center;">
     <% if (currentPage > 1) { %>
-      <a href="?page=<%= currentPage - 1 %><%= search ? '&search=' + search : '' %>">Previous</a>
+      <a href="?page=<%= currentPage - 1 %><%= search ? '&search=' + encodeURIComponent(search) : '' %><%= dateSort ? '&dateSort=' + encodeURIComponent(dateSort) : '' %>">Previous</a>
     <% } %>
     <span>Page <%= currentPage %> of <%= totalPages %></span>
     <% if (currentPage < totalPages) { %>
-      <a href="?page=<%= currentPage + 1 %><%= search ? '&search=' + search : '' %>">Next</a>
+      <a href="?page=<%= currentPage + 1 %><%= search ? '&search=' + encodeURIComponent(search) : '' %><%= dateSort ? '&dateSort=' + encodeURIComponent(dateSort) : '' %>">Next</a>
     <% } %>
   </div>
   <% } %>

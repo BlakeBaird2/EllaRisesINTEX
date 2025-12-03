@@ -148,6 +148,13 @@
       position: relative;
     }
 
+    /* Custom dashed border for Add More tile */
+    .metric-add {
+      border: 4px dashed #9AB59D;
+      border-radius: 12px;
+      background: transparent;
+    }
+
     .metric-empty::after {
       content: 'Reserved for future content';
       color: rgba(154, 181, 157, 0.5);
@@ -288,38 +295,260 @@
       width: 100% !important;
       border-radius: 8px;
     }
+
+    /* Edit Mode Styles */
+    .metrics.edit-mode .metric {
+      cursor: pointer;
+      position: relative;
+    }
+
+    .metrics.edit-mode .metric:hover {
+      border: 2px solid var(--accent);
+      box-shadow: 0 0 0 4px rgba(206, 50, 91, 0.2);
+    }
+
+    .metrics.edit-mode .metric::after {
+      content: '✎';
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--accent);
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .metrics.edit-mode .metric:hover::after {
+      opacity: 1;
+    }
+
+    /* Modal Styles */
+    .metric-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .metric-modal.active {
+      display: flex;
+    }
+
+    .metric-modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    .metric-modal-content h3 {
+      margin-top: 0;
+      color: var(--primary);
+      font-family: 'DM Serif Display', serif;
+    }
+
+    .metric-modal-content input {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: 2px solid var(--pink-light);
+      border-radius: 8px;
+      font-size: 1rem;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .metric-modal-content select {
+      width: 100%;
+      padding: 0.75rem 2.5rem 0.75rem 0.75rem;
+      margin-bottom: 1rem;
+      border: 2px solid var(--pink-light);
+      border-radius: 8px;
+      font-size: 1rem;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239AB59D' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      cursor: pointer;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .metric-modal-content select:hover {
+      border-color: var(--secondary);
+      box-shadow: 0 2px 10px rgba(154, 181, 157, 0.15);
+    }
+
+    .metric-modal-content select:focus,
+    .metric-modal-content input:focus {
+      outline: none;
+      border-color: var(--secondary);
+      box-shadow: 0 4px 12px rgba(154, 181, 157, 0.2);
+    }
+
+    .metric-modal-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+    }
+
+    /* Edit Dashboard Button Styling */
+    .btn-edit-dashboard {
+      background: #FFD8D1;
+      color: var(--text);
+      border: 2px solid #F9AFB1;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+      font-weight: 600;
+    }
+
+    .btn-edit-dashboard:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+      background: #F9AFB1;
+    }
+
+    /* Mobile Responsive Styles */
+    @media (max-width: 768px) {
+      .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 1rem;
+      }
+
+      .dashboard-header h1 {
+        margin-bottom: 0.5rem;
+      }
+
+      .dashboard-header p {
+        margin-bottom: 0;
+      }
+
+      .btn-edit-dashboard {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .metrics {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem;
+        margin: 2rem 0;
+      }
+
+      .metric {
+        padding: 2rem 1.5rem;
+        min-height: 140px;
+      }
+
+      .metric h3 {
+        font-size: 2.5rem;
+      }
+
+      .metric.donation-metric {
+        grid-column: 1 !important;
+        min-height: 160px;
+      }
+
+      .metric.donation-metric h3 {
+        font-size: 2.5rem;
+      }
+
+      .metric-modal-content {
+        width: 95%;
+        padding: 1.5rem;
+        margin: 1rem;
+      }
+
+      .tableau-embed {
+        margin: 2rem 0;
+        padding: 1rem;
+      }
+
+      .tableau-embed h2 {
+        font-size: 1.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .metric h3 {
+        font-size: 2rem;
+      }
+
+      .metric p {
+        font-size: 0.9rem;
+      }
+
+      .dashboard-header h1 {
+        font-size: 2rem;
+      }
+
+      .dashboard-header p {
+        font-size: 0.9rem;
+      }
+    }
   </style>
 </head>
 <body>
 <%- include('../partials/header') %>
 <main class="container" style="padding-top: 2rem;">
-  <div class="dashboard-header">
-    <h1>Dashboard</h1>
-    <p>Overview of Ella Rises program metrics and analytics</p>
+  <div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+    <div>
+      <h1>Dashboard</h1>
+      <p>Overview of Ella Rises program metrics and analytics</p>
+    </div>
+    <button id="editDashboardBtn" class="btn btn-edit-dashboard" style="margin-top: 0;">
+      <i class="fas fa-edit"></i> Edit Dashboard
+    </button>
   </div>
 
-  <div class="metrics">
-    <div class="metric">
+  <div class="metrics" id="metricsContainer">
+    <div class="metric" data-metric="participants" data-table="participants" data-type="count">
       <h3><%= metrics.participants.toLocaleString() %></h3>
       <p>Participants</p>
     </div>
-    <div class="metric">
+    <div class="metric" data-metric="events" data-table="events" data-type="count">
       <h3><%= metrics.events.toLocaleString() %></h3>
       <p>Events</p>
     </div>
-    <div class="metric">
+    <div class="metric" data-metric="surveys" data-table="surveys" data-type="count">
       <h3><%= metrics.surveys.toLocaleString() %></h3>
       <p>Surveys</p>
     </div>
-    <!-- Empty space reserved for future content -->
-    <div class="metric-empty"></div>
-    <div class="metric donation-metric">
+    <div class="metric" data-metric="registrations" data-table="registrations" data-type="count">
+      <h3><%= (metrics.registrations || 0).toLocaleString() %></h3>
+      <p>Registrations</p>
+    </div>
+    <div class="metric donation-metric" data-metric="totalDonations" data-table="donations" data-type="sum" data-column="donation_amount">
       <h3>$<%= Math.round(parseFloat(metrics.totalDonations)).toLocaleString('en-US') %></h3>
       <p>Total Donations</p>
     </div>
-    <div class="metric">
+    <div class="metric" data-metric="milestones" data-table="milestones" data-type="count">
       <h3><%= metrics.milestones.toLocaleString() %></h3>
       <p>Milestones</p>
+    </div>
+    <div class="metric metric-add" id="addMetricTile" style="cursor: pointer; background: transparent;">
+      <div style="font-size: 3rem; color: #9AB59D; margin-bottom: 0.75rem; font-weight: 700; font-family: 'Montserrat', sans-serif; line-height: 1.2;">⋯</div>
+      <p style="color: #9AB59D; font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Add More</p>
     </div>
   </div>
 
@@ -345,7 +574,177 @@
     </script>
   </div>
 </main>
+
+<!-- Metric Customization Modal -->
+<div class="metric-modal" id="metricModal">
+  <div class="metric-modal-content">
+    <h3>Customize Metric</h3>
+    <form id="metricForm">
+      <label>Table:</label>
+      <select id="tableSelect" name="table" required>
+        <option value="participants">Participants</option>
+        <option value="events">Events</option>
+        <option value="surveys">Surveys</option>
+        <option value="registrations">Registrations</option>
+        <option value="milestones">Milestones</option>
+        <option value="donations">Donations</option>
+        <option value="users">Users</option>
+        <option value="event_occurrences">Event Occurrences</option>
+      </select>
+      
+      <label>Metric Type:</label>
+      <select id="typeSelect" name="type" required>
+        <option value="count">Count (Total Records)</option>
+        <option value="sum">Sum (Total Value)</option>
+      </select>
+      
+      <label id="columnLabel" style="display: none;">Column to Sum:</label>
+      <input type="text" id="columnInput" name="column" style="display: none;" placeholder="e.g., donation_amount">
+      
+      <label>Display Name:</label>
+      <input type="text" id="nameInput" name="name" required placeholder="e.g., Total Participants">
+      
+      <input type="hidden" id="metricIndex" name="index">
+      
+      <div class="metric-modal-actions">
+        <button type="button" class="btn" onclick="closeMetricModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <%- include('../partials/footer') %>
 <script src="/js/main.js"></script>
+<script>
+  let editMode = false;
+  let currentEditingIndex = null;
+
+  // Toggle edit mode
+  document.getElementById('editDashboardBtn').addEventListener('click', function() {
+    editMode = !editMode;
+    const container = document.getElementById('metricsContainer');
+    if (editMode) {
+      container.classList.add('edit-mode');
+      this.innerHTML = '<i class="fas fa-check"></i> Done Editing';
+    } else {
+      container.classList.remove('edit-mode');
+      this.innerHTML = '<i class="fas fa-edit"></i> Edit Dashboard';
+    }
+  });
+
+  // Handle metric clicks in edit mode
+  document.getElementById('metricsContainer').addEventListener('click', function(e) {
+    if (!editMode) return;
+    
+    const metric = e.target.closest('.metric');
+    if (!metric || metric.id === 'addMetricTile') return;
+    
+    openMetricModal(metric);
+  });
+
+  // Handle add metric tile click
+  document.getElementById('addMetricTile').addEventListener('click', function() {
+    if (!editMode) {
+      document.getElementById('editDashboardBtn').click();
+    }
+    openMetricModal(null);
+  });
+
+  // Type select change handler
+  document.getElementById('typeSelect').addEventListener('change', function() {
+    const columnLabel = document.getElementById('columnLabel');
+    const columnInput = document.getElementById('columnInput');
+    if (this.value === 'sum') {
+      columnLabel.style.display = 'block';
+      columnInput.style.display = 'block';
+      columnInput.required = true;
+    } else {
+      columnLabel.style.display = 'none';
+      columnInput.style.display = 'none';
+      columnInput.required = false;
+    }
+  });
+
+  function openMetricModal(metric) {
+    const modal = document.getElementById('metricModal');
+    const form = document.getElementById('metricForm');
+    
+    if (metric) {
+      // Editing existing metric
+      const table = metric.dataset.table;
+      const type = metric.dataset.type;
+      const column = metric.dataset.column || '';
+      const name = metric.querySelector('p').textContent;
+      const index = Array.from(metric.parentNode.children).indexOf(metric);
+      
+      document.getElementById('tableSelect').value = table;
+      document.getElementById('typeSelect').value = type;
+      document.getElementById('columnInput').value = column;
+      document.getElementById('nameInput').value = name;
+      document.getElementById('metricIndex').value = index;
+      
+      if (type === 'sum') {
+        document.getElementById('columnLabel').style.display = 'block';
+        document.getElementById('columnInput').style.display = 'block';
+      }
+      
+      currentEditingIndex = index;
+    } else {
+      // Adding new metric
+      form.reset();
+      document.getElementById('metricIndex').value = '';
+      currentEditingIndex = null;
+    }
+    
+    modal.classList.add('active');
+  }
+
+  function closeMetricModal() {
+    document.getElementById('metricModal').classList.remove('active');
+    document.getElementById('metricForm').reset();
+    currentEditingIndex = null;
+  }
+
+  // Handle form submission
+  document.getElementById('metricForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = {
+      table: formData.get('table'),
+      type: formData.get('type'),
+      column: formData.get('column') || null,
+      name: formData.get('name'),
+      index: formData.get('index') || null
+    };
+    
+    try {
+      const response = await fetch('/dashboard/update-metric', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+      
+      if (response.ok) {
+        location.reload();
+      } else {
+        alert('Error updating metric. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error updating metric. Please try again.');
+    }
+  });
+
+  // Close modal on outside click
+  document.getElementById('metricModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+      closeMetricModal();
+    }
+  });
+</script>
 </body>
 </html>

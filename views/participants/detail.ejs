@@ -3,11 +3,12 @@
 <body>
 <%- include('../partials/header') %>
 <main class="container">
-  <h1><%= participant.first_name %> <%= participant.last_name %></h1>
+  <h1><%= participant.participant_first_name %> <%= participant.participant_last_name %></h1>
   <div class="details">
     <p><strong>Email:</strong> <%= participant.participant_email %></p>
-    <p><strong>School:</strong> <%= participant.high_school || 'N/A' %></p>
-    <p><strong>Grade:</strong> <%= participant.grade_level || 'N/A' %></p>
+    <p><strong>Role:</strong> <%= participant.participant_role || 'N/A' %></p>
+    <p><strong>School/Employer:</strong> <%= participant.participant_school_or_employer || 'N/A' %></p>
+    <p><strong>Phone:</strong> <%= participant.participant_phone || 'N/A' %></p>
   </div>
   <h2>Milestones (<%= milestones.length %>)</h2>
   <ul>

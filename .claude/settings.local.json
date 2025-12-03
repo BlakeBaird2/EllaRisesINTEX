@@ -1,7 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(tasklist:*)"
+      "Bash(tasklist:*)",
+      "Bash(npm start)",
+      "Bash(taskkill:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(node:*)"
     ],
     "deny": [],
     "ask": []

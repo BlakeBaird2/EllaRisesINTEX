@@ -15,6 +15,56 @@
       .hero {
         border-top-left-radius: 0 !important;
         border-top-right-radius: 0 !important;
+        padding: 2rem 1rem !important;
+      }
+
+      .hero h1 {
+        font-size: 1.8rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .hero p {
+        font-size: 1rem;
+      }
+
+      .mission, section {
+        padding: 2rem 1rem;
+      }
+
+      .mission h2, section h2 {
+        font-size: 2rem;
+      }
+
+      .mission p, section p {
+        font-size: 1rem;
+      }
+
+      /* Impact cards */
+      section[style*="grid"] {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem;
+      }
+
+      /* Support section */
+      .container[style*="max-width: 700px"] {
+        padding: 0 1rem;
+      }
+
+      .container[style*="max-width: 700px"] img {
+        width: 100px !important;
+      }
+
+      .container[style*="max-width: 700px"] h2 {
+        font-size: 2rem;
+      }
+
+      .container[style*="max-width: 700px"] p {
+        font-size: 1.1rem;
+      }
+
+      .container[style*="max-width: 700px"] .btn {
+        width: 100%;
+        margin: 0.5rem 0;
       }
     }
     .hero .btn-primary:hover {
@@ -27,22 +77,19 @@
 
 <main style="padding-top: 0.4rem;">
   <!-- Hero Section -->
-  <section class="hero" style="padding-top: 2.5rem; padding-bottom: 4rem; background: linear-gradient(135deg, var(--pink-light) 0%, var(--pink-light) 60%, rgba(244, 176, 146, 0.3) 100%); border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;">
+  <section class="hero" style="padding-top: 3rem; padding-bottom: 3rem; background: linear-gradient(135deg, var(--pink-light) 0%, var(--pink-light) 60%, rgba(244, 176, 146, 0.3) 100%);">
     <div class="container" style="text-align: center;">
-      <img src="/images/EllaRisesTextLogo.png" alt="Ella Rises" style="max-width: 400px; width: 100%; margin-bottom: -2rem; margin-left: auto; margin-right: auto; display: block; transform: translateX(5px);">
-      <h1 style="margin-top: 0;">Empowering the Rising Generation of Women</h1>
-      <p style="margin-top: 0.1rem; margin-bottom: 2rem; font-size: 1.2rem;">Building confidence, competence, and connections in STEAM fields</p>
-      <div style="text-align: center; margin-left: auto; margin-right: auto; max-width: 55%;">
-        <a href="https://docs.google.com/forms/d/1hUJeUu-q9w7ajSUU9jjgYsF8XjGPO7_ElktBYiMt-uU/viewform?edit_requested=true" class="btn btn-primary" target="_blank" rel="noopener noreferrer" style="font-size: 1.1rem; padding: 0.85rem 1.6rem; border-radius: 12px; font-weight: 700; letter-spacing: 0.5px; transition: all 0.3s ease; border: none; display: inline-block; background: #9AB59D;">Click Here to Enroll</a>
-      </div>
+      <img src="/images/EllaRisesTextLogo.png" alt="Ella Rises" style="max-width: 400px; width: 100%; margin-bottom: -1.5rem; margin-left: auto; margin-right: auto; display: block; transform: translateX(5px);">
+      <h1 style="margin-top: 0; margin-bottom: 1rem;">Empowering the Rising Generation of Women</h1>
+      <p style="margin-top: 0; font-size: 1.3rem; color: var(--primary); font-weight: 500; letter-spacing: 0.3px; line-height: 1.6; max-width: 700px; margin-left: auto; margin-right: auto;">Building confidence, competence, and connections in STEAM fields</p>
     </div>
   </section>
 
   <!-- Mission Section -->
-  <section class="mission">
-    <div class="container">
-      <h2>Our Mission</h2>
-      <p>
+  <section class="mission" style="padding: 4rem 0; background: white;">
+    <div class="container" style="max-width: 800px; text-align: center;">
+      <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem; color: var(--primary);">Our Mission</h2>
+      <p style="font-size: 1.1rem; line-height: 1.8; color: #555;">
         Ella Rises empowers women to pursue higher education and embrace their heritage through
         mentoring, creative workshops, and leadership opportunities. We provide STEAM (Science,
         Technology, Engineering, Arts, and Math) programs in partnership with UVU and BYU that
@@ -55,33 +102,35 @@
   <section style="padding: 4rem 0; background: var(--pink-light);">
     <div class="container">
       <h2 style="text-align: center; margin-bottom: 3rem; font-size: 2.5rem; color: var(--primary);">Our Impact</h2>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
-        <div style="text-align: center; padding: 2rem; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
-          <h3 style="color: var(--accent); margin-bottom: 0.5rem;">Education</h3>
-          <p>Encouraging higher education pathways in STEAM fields</p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; max-width: 1000px; margin: 0 auto;">
+        <div style="text-align: center; padding: 2.5rem 2rem; background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); transition: transform 0.3s ease;">
+          <h3 style="color: var(--accent); margin-bottom: 1rem; font-size: 1.5rem;">Education</h3>
+          <p style="color: #666; line-height: 1.6;">Encouraging higher education pathways in STEAM fields</p>
         </div>
-        <div style="text-align: center; padding: 2rem; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
-          <h3 style="color: var(--accent); margin-bottom: 0.5rem;">Empowerment</h3>
-          <p>Building confidence through hands-on workshops and mentorship</p>
+        <div style="text-align: center; padding: 2.5rem 2rem; background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); transition: transform 0.3s ease;">
+          <h3 style="color: var(--accent); margin-bottom: 1rem; font-size: 1.5rem;">Empowerment</h3>
+          <p style="color: #666; line-height: 1.6;">Building confidence through hands-on workshops and mentorship</p>
         </div>
-        <div style="text-align: center; padding: 2rem; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
-          <h3 style="color: var(--accent); margin-bottom: 0.5rem;">Leadership</h3>
-          <p>Creating opportunities for women to lead and inspire</p>
+        <div style="text-align: center; padding: 2.5rem 2rem; background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); transition: transform 0.3s ease;">
+          <h3 style="color: var(--accent); margin-bottom: 1rem; font-size: 1.5rem;">Leadership</h3>
+          <p style="color: #666; line-height: 1.6;">Creating opportunities for women to lead and inspire</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CTA Section -->
-  <section style="padding: 4rem 0; text-align: center; background: white;">
-    <div class="container">
-      <h2 style="margin-bottom: 1.5rem;">Join Our Mission</h2>
-      <p style="font-size: 1.2rem; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+  <!-- Support Section -->
+  <section style="padding: 5rem 0; text-align: center; background: white;">
+    <div class="container" style="max-width: 700px;">
+      <img src="/images/EllaRisesHeart.png" alt="Ella Rises Heart" style="width: 120px; height: auto; margin-bottom: 2rem; display: block; margin-left: auto; margin-right: auto; filter: brightness(0) saturate(100%) invert(15%) sepia(5%) saturate(200%) hue-rotate(60deg) brightness(90%) contrast(85%);">
+      <h2 style="font-size: 2.8rem; margin-bottom: 1.5rem; color: var(--primary); font-family: 'DM Serif Display', serif;">Join Our Mission</h2>
+      <p style="font-size: 1.2rem; line-height: 1.8; margin-bottom: 2.5rem; color: #555; max-width: 600px; margin-left: auto; margin-right: auto;">
         Your support helps us provide life-changing STEAM programs to the next generation of women leaders.
+        We are deeply grateful for every contribution that helps us empower and inspire.
       </p>
-      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-        <a href="https://givebutter.com/EllaRises" class="btn btn-primary" style="font-size: 1.1rem; flex: 1; min-width: 160px; max-width: 200px; text-align: center;" target="_blank" rel="noopener noreferrer">Donation</a>
-        <a href="/about" class="btn" style="font-size: 1.1rem; flex: 1; min-width: 160px; max-width: 200px; text-align: center;">Learn More</a>
+      <div style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
+        <a href="https://givebutter.com/EllaRises" class="btn btn-primary" style="text-align: center; width: 250px; box-sizing: border-box;" target="_blank" rel="noopener noreferrer">Support Our Cause</a>
+        <a href="/about" class="btn" style="background: white; border: 2px solid var(--primary); color: var(--primary); text-align: center; width: 250px; box-sizing: border-box;">Learn More</a>
       </div>
     </div>
   </section>

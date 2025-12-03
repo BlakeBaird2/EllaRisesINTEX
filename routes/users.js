@@ -6,7 +6,9 @@ const db = require('../config/database');
 
 // List all users
 router.get('/', async (req, res) => {
-  const { search, role } = req.query;
+  const { search, role, dateSort = 'desc', page = 1 } = req.query;
+  const limit = 15;
+  const offset = (page - 1) * limit;
   
   try {
     let query = db('websiteusers')
@@ -27,8 +29,29 @@ router.get('/', async (req, res) => {
       query = query.where('user_role', role);
     }
 
+    // Get total count for pagination
+    let countQuery = db('websiteusers');
+    if (search && search.trim() !== '') {
+      countQuery = countQuery.where(function() {
+        this.where('username', 'ilike', `%${search}%`)
+          .orWhere('email', 'ilike', `%${search}%`)
+          .orWhere('first_name', 'ilike', `%${search}%`)
+          .orWhere('last_name', 'ilike', `%${search}%`);
+      });
+    }
+    if (role && role !== '') {
+      countQuery = countQuery.where('user_role', role);
+    }
+    const [{ count }] = await countQuery.count('* as count');
+    const totalPages = Math.ceil(parseInt(count) / limit);
+
+    // Sort by date
+    const sortDirection = dateSort === 'asc' ? 'asc' : 'desc';
     const users = await query
-      .orderBy('username')
+      .orderBy('websiteusers.created_at', sortDirection)
+      .orderBy('username', 'asc')
+      .limit(limit)
+      .offset(offset)
       .then(users => users.map(user => ({
         ...user,
         full_name: `${user.first_name || ''} ${user.last_name || ''}`.trim(),
@@ -41,6 +64,9 @@ router.get('/', async (req, res) => {
       users,
       search: typeof search !== 'undefined' ? search : '',
       selectedRole: typeof role !== 'undefined' ? role : '',
+      dateSort: sortDirection,
+      currentPage: parseInt(page),
+      totalPages,
       isManager: true
     });
   } catch (error) {

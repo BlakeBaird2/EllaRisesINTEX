@@ -75,13 +75,21 @@
       align-items: center;
       justify-content: center;
       height: 48px;
-      border: none !important;
-      border-radius: 8px;
+      border: 2px solid rgba(255, 255, 255, 0.3) !important;
+      border-radius: 12px;
       line-height: 1;
       outline: none !important;
-      box-shadow: none !important;
-      background: var(--secondary) !important;
+      background: linear-gradient(135deg, #9AB59D 0%, #8BA68E 100%) !important;
       color: white !important;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+      transition: filter 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      will-change: transform, box-shadow;
+    }
+
+    .search-container button[type="submit"]:hover {
+      filter: brightness(0.95);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(154, 181, 157, 0.3) !important;
     }
 
     .table-container {
@@ -114,11 +122,37 @@
     <h1>Donations</h1>
   </div>
 
+  <div class="search-container">
+    <input type="text" name="search" placeholder="Search donations..." value="<%= search %>" form="search-form">
+    <select name="amountFilter" form="search-form">
+      <option value="">All Amounts</option>
+      <option value="under50" <%= selectedAmountFilter === 'under50' ? 'selected' : '' %>>Under $50</option>
+      <option value="50-100" <%= selectedAmountFilter === '50-100' ? 'selected' : '' %>>$50 - $100</option>
+      <option value="100-500" <%= selectedAmountFilter === '100-500' ? 'selected' : '' %>>$100 - $500</option>
+      <option value="over500" <%= selectedAmountFilter === 'over500' ? 'selected' : '' %>>Over $500</option>
+    </select>
+    <form method="GET" id="search-form" style="display: contents; margin: 0; padding: 0; border: none; background: transparent; box-shadow: none; outline: none;">
+      <input type="hidden" name="dateSort" value="<%= dateSort %>" id="dateSortInput">
+      <button type="submit">Search</button>
+    </form>
+  </div>
+
   <div class="table-container">
     <table>
       <thead>
         <tr>
-          <th>Date</th>
+          <th>
+            <a href="?dateSort=<%= dateSort === 'desc' ? 'asc' : 'desc' %><%= search ? '&search=' + encodeURIComponent(search) : '' %><%= selectedAmountFilter ? '&amountFilter=' + encodeURIComponent(selectedAmountFilter) : '' %>" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
+              Date
+              <span style="font-size: 0.9rem;">
+                <% if (dateSort === 'desc') { %>
+                  <i class="fas fa-arrow-down"></i>
+                <% } else { %>
+                  <i class="fas fa-arrow-up"></i>
+                <% } %>
+              </span>
+            </a>
+          </th>
           <th>Donor</th>
           <th>Amount</th>
           <th>Payment Method</th>
@@ -140,6 +174,18 @@
       </tbody>
     </table>
   </div>
+
+  <% if (typeof totalPages !== 'undefined' && totalPages > 1) { %>
+  <div class="pagination">
+    <% if (currentPage > 1) { %>
+      <a href="?page=<%= currentPage - 1 %><%= search ? '&search=' + encodeURIComponent(search) : '' %><%= selectedAmountFilter ? '&amountFilter=' + encodeURIComponent(selectedAmountFilter) : '' %><%= dateSort ? '&dateSort=' + encodeURIComponent(dateSort) : '' %>">Previous</a>
+    <% } %>
+    <span>Page <%= currentPage %> of <%= totalPages %></span>
+    <% if (currentPage < totalPages) { %>
+      <a href="?page=<%= currentPage + 1 %><%= search ? '&search=' + encodeURIComponent(search) : '' %><%= selectedAmountFilter ? '&amountFilter=' + encodeURIComponent(selectedAmountFilter) : '' %><%= dateSort ? '&dateSort=' + encodeURIComponent(dateSort) : '' %>">Next</a>
+    <% } %>
+  </div>
+  <% } %>
 </main>
 <%- include('../partials/footer') %>
 <script src="/js/main.js"></script>

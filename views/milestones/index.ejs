@@ -95,13 +95,54 @@
       align-items: center;
       justify-content: center;
       height: 48px;
-      border: none !important;
-      border-radius: 8px;
+      border: 2px solid rgba(255, 255, 255, 0.3) !important;
+      border-radius: 12px;
       line-height: 1;
       outline: none !important;
-      box-shadow: none !important;
-      background: var(--secondary) !important;
+      background: linear-gradient(135deg, #9AB59D 0%, #8BA68E 100%) !important;
       color: white !important;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+      transition: filter 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      will-change: transform, box-shadow;
+    }
+
+    .search-container button[type="submit"]:hover {
+      filter: brightness(0.95);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(154, 181, 157, 0.3) !important;
+    }
+
+    .search-container .btn-add {
+      margin-left: auto;
+      padding: 0 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      white-space: nowrap;
+      margin-top: 0;
+      margin-bottom: 0;
+      margin-right: 0;
+      flex-shrink: 0;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 48px;
+      border: 2px solid rgba(255, 255, 255, 0.3) !important;
+      border-radius: 12px;
+      line-height: 1;
+      outline: none !important;
+      background: linear-gradient(135deg, #9AB59D 0%, #8BA68E 100%) !important;
+      color: white !important;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+      transition: filter 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      will-change: transform, box-shadow;
+    }
+
+    .search-container .btn-add:hover {
+      filter: brightness(0.95);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(154, 181, 157, 0.3) !important;
     }
 
     .table-container table {
@@ -136,15 +177,30 @@
       <% } %>
     </select>
     <form method="GET" id="search-form" style="display: contents; margin: 0; padding: 0; border: none; background: transparent; box-shadow: none; outline: none;">
+      <input type="hidden" name="dateSort" value="<%= dateSort %>">
       <button type="submit">Search</button>
     </form>
+    <% if (isManager) { %>
+      <a href="/milestones/new" class="btn-add">+ Add Milestone</a>
+    <% } %>
   </div>
 
   <div class="table-container">
     <table>
       <thead>
         <tr>
-          <th>Date Achieved</th>
+          <th>
+            <a href="?dateSort=<%= dateSort === 'desc' ? 'asc' : 'desc' %><%= search ? '&search=' + encodeURIComponent(search) : '' %><%= selectedType ? '&type=' + encodeURIComponent(selectedType) : '' %>" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
+              Date Achieved
+              <span style="font-size: 0.9rem;">
+                <% if (dateSort === 'desc') { %>
+                  <i class="fas fa-arrow-down"></i>
+                <% } else { %>
+                  <i class="fas fa-arrow-up"></i>
+                <% } %>
+              </span>
+            </a>
+          </th>
           <th>Participant</th>
           <th>Milestone</th>
           <% if (isManager) { %>
@@ -176,6 +232,18 @@
       </tbody>
     </table>
   </div>
+
+  <% if (typeof totalPages !== 'undefined' && totalPages > 1) { %>
+  <div class="pagination" style="margin-top: 2rem; text-align: center;">
+    <% if (currentPage > 1) { %>
+      <a href="?page=<%= currentPage - 1 %><%= search ? '&search=' + encodeURIComponent(search) : '' %><%= selectedType ? '&type=' + encodeURIComponent(selectedType) : '' %><%= dateSort ? '&dateSort=' + encodeURIComponent(dateSort) : '' %>">Previous</a>
+    <% } %>
+    <span>Page <%= currentPage %> of <%= totalPages %></span>
+    <% if (currentPage < totalPages) { %>
+      <a href="?page=<%= currentPage + 1 %><%= search ? '&search=' + encodeURIComponent(search) : '' %><%= selectedType ? '&type=' + encodeURIComponent(selectedType) : '' %><%= dateSort ? '&dateSort=' + encodeURIComponent(dateSort) : '' %>">Next</a>
+    <% } %>
+  </div>
+  <% } %>
 </main>
 <%- include('../partials/footer') %>
 <script src="/js/main.js"></script>

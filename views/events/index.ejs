@@ -53,7 +53,7 @@
     }
 
     .search-container select {
-      padding: 0.75rem;
+      padding: 0.75rem 2.5rem 0.75rem 0.75rem;
       border: 2px solid var(--pink-light);
       border-radius: 8px;
       min-width: 120px;
@@ -62,6 +62,27 @@
       box-sizing: border-box;
       flex-shrink: 0;
       height: 48px;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239AB59D' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      cursor: pointer;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .search-container select:hover {
+      border-color: var(--secondary);
+      box-shadow: 0 2px 10px rgba(154, 181, 157, 0.15);
+    }
+
+    .search-container select:focus {
+      outline: none;
+      border-color: var(--secondary);
+      box-shadow: 0 4px 12px rgba(154, 181, 157, 0.2);
     }
 
     .search-container form {
@@ -87,13 +108,22 @@
       align-items: center;
       justify-content: center;
       height: 48px;
-      border: none !important;
+      border: 2px solid rgba(255, 255, 255, 0.3) !important;
       border-radius: 8px;
       line-height: 1;
       outline: none !important;
-      box-shadow: none !important;
-      background: var(--secondary) !important;
+      background: linear-gradient(135deg, #9AB59D 0%, #8BA68E 100%) !important;
       color: white !important;
+      box-shadow: 0 6px 20px rgba(154, 181, 157, 0.25) !important;
+      transition: filter 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      will-change: transform, box-shadow;
+    }
+
+    .search-container button[type="submit"]:hover,
+    .search-container .btn-add:hover {
+      filter: brightness(0.95) !important;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(154, 181, 157, 0.3) !important;
     }
 
     .action-buttons .btn-small {
@@ -124,6 +154,69 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-left: 0.5rem;
+      }
+
+      .page-header h1 {
+        font-size: 2rem;
+      }
+
+      .search-container {
+        flex-direction: column;
+        margin: 0 0.5rem 1rem 0.5rem;
+        width: calc(100% - 1rem);
+      }
+
+      .search-container input[type="text"],
+      .search-container select,
+      .search-container button[type="submit"],
+      .search-container .btn-add {
+        width: 100%;
+        min-width: auto;
+        margin: 0;
+      }
+
+      .table-container {
+        margin: 0 0.5rem;
+        width: calc(100% - 1rem);
+      }
+
+      table {
+        font-size: 0.85rem;
+      }
+
+      th, td {
+        padding: 0.5rem 0.25rem;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .btn-small {
+        width: 100%;
+        text-align: center;
+      }
+
+      .pagination {
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 1rem;
+      }
+
+      .pagination a {
+        width: 100%;
+        text-align: center;
+        padding: 0.75rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -144,6 +237,7 @@
       <% } %>
     </select>
     <form method="GET" id="search-form" style="display: contents; margin: 0; padding: 0; border: none; background: transparent; box-shadow: none; outline: none;">
+      <input type="hidden" name="dateSort" value="<%= dateSort %>">
       <button type="submit">Search</button>
     </form>
     <% if (isManager) { %>
@@ -155,10 +249,21 @@
     <table>
       <thead>
         <tr>
+          <th>
+            <a href="?dateSort=<%= dateSort === 'desc' ? 'asc' : 'desc' %><%= search ? '&search=' + encodeURIComponent(search) : '' %><%= selectedType ? '&type=' + encodeURIComponent(selectedType) : '' %>" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
+              Date
+              <span style="font-size: 0.9rem;">
+                <% if (dateSort === 'desc') { %>
+                  <i class="fas fa-arrow-down"></i>
+                <% } else { %>
+                  <i class="fas fa-arrow-up"></i>
+                <% } %>
+              </span>
+            </a>
+          </th>
           <th>Event Name</th>
           <th>Type</th>
           <th>Description</th>
-          <th>Capacity</th>
           <% if (isManager) { %>
             <th>Actions</th>
           <% } %>
@@ -170,10 +275,10 @@
         <% } else { %>
           <% events.forEach(event => { %>
             <tr>
+              <td><%= event.created_at ? new Date(event.created_at).toLocaleDateString() : 'N/A' %></td>
               <td><a href="/events/<%= event.event_template_id %>"><%= event.event_name %></a></td>
               <td><%= event.event_type || 'N/A' %></td>
               <td class="truncate"><%= event.event_description || 'N/A' %></td>
-              <td><%= event.event_default_capacity || 'N/A' %></td>
               <% if (isManager) { %>
                 <td>
                   <div class="action-buttons">
@@ -194,11 +299,11 @@
   <% if (totalPages > 1) { %>
   <div class="pagination" style="margin-top: 2rem; text-align: center;">
     <% if (currentPage > 1) { %>
-      <a href="?page=<%= currentPage - 1 %><%= search ? '&search=' + search : '' %><%= selectedType ? '&type=' + selectedType : '' %>">Previous</a>
+      <a href="?page=<%= currentPage - 1 %><%= search ? '&search=' + encodeURIComponent(search) : '' %><%= selectedType ? '&type=' + encodeURIComponent(selectedType) : '' %><%= dateSort ? '&dateSort=' + encodeURIComponent(dateSort) : '' %>">Previous</a>
     <% } %>
     <span>Page <%= currentPage %> of <%= totalPages %></span>
     <% if (currentPage < totalPages) { %>
-      <a href="?page=<%= currentPage + 1 %><%= search ? '&search=' + search : '' %><%= selectedType ? '&type=' + selectedType : '' %>">Next</a>
+      <a href="?page=<%= currentPage + 1 %><%= search ? '&search=' + encodeURIComponent(search) : '' %><%= selectedType ? '&type=' + encodeURIComponent(selectedType) : '' %><%= dateSort ? '&dateSort=' + encodeURIComponent(dateSort) : '' %>">Next</a>
     <% } %>
   </div>
   <% } %>
