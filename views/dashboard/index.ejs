@@ -3,8 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#99B7C6">
   <title><%= title %> | Ella Rises</title>
   <link rel="icon" type="image/png" href="/images/EllaRisesHeart.png">
+  <link rel="apple-touch-icon" href="/images/EllaRisesHeart.png">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/images/EllaRisesHeart.png">
+  <link rel="manifest" href="/manifest.json">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -175,27 +180,38 @@
 
     @media (max-width: 640px) {
       .metrics {
-        gap: 1.5rem;
-        margin: 2rem 0;
+        gap: 1rem;
+        margin: 1.5rem 0;
       }
 
       .metric {
-        min-height: 120px;
-        padding: 2rem 1.5rem;
+        min-height: 110px !important;
+        max-height: 110px !important;
+        height: 110px !important;
+        padding: 1.5rem 1.2rem !important;
+        box-sizing: border-box !important;
       }
 
       .metric h3 {
-        font-size: 2.5rem;
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .metric p {
+        font-size: 0.85rem;
       }
 
       .metric.donation-metric {
         grid-column: span 1;
-        min-height: 140px;
-        padding: 2.5rem 1.5rem;
+        min-height: 110px !important;
+        max-height: 110px !important;
+        height: 110px !important;
+        padding: 1.5rem 1.2rem !important;
+        box-sizing: border-box !important;
       }
 
       .metric.donation-metric h3 {
-        font-size: 2.8rem;
+        font-size: 2rem;
       }
 
       .metric-empty {
@@ -605,26 +621,38 @@
 
       .metrics {
         grid-template-columns: 1fr !important;
-        gap: 1.5rem;
-        margin: 2rem 0;
+        gap: 1rem;
+        margin: 1.5rem 0;
       }
 
       .metric {
-        padding: 2rem 1.5rem;
-        min-height: 140px;
+        padding: 1.5rem 1.2rem !important;
+        min-height: 110px !important;
+        max-height: 110px !important;
+        height: 110px !important;
+        box-sizing: border-box !important;
       }
 
       .metric h3 {
-        font-size: 2.5rem;
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .metric p {
+        font-size: 0.85rem;
       }
 
       .metric.donation-metric {
         grid-column: 1 !important;
-        min-height: 160px;
+        min-height: 110px !important;
+        max-height: 110px !important;
+        height: 110px !important;
+        padding: 1.5rem 1.2rem !important;
+        box-sizing: border-box !important;
       }
 
       .metric.donation-metric h3 {
-        font-size: 2.5rem;
+        font-size: 2rem;
       }
 
       .metric-modal-content {
@@ -644,12 +672,33 @@
     }
 
     @media (max-width: 480px) {
+      .metric {
+        padding: 1.3rem 1rem !important;
+        min-height: 100px !important;
+        max-height: 100px !important;
+        height: 100px !important;
+        box-sizing: border-box !important;
+      }
+
       .metric h3 {
-        font-size: 2rem;
+        font-size: 1.8rem;
+        margin-bottom: 0.4rem;
       }
 
       .metric p {
-        font-size: 0.9rem;
+        font-size: 0.8rem;
+      }
+
+      .metric.donation-metric {
+        min-height: 100px !important;
+        max-height: 100px !important;
+        height: 100px !important;
+        padding: 1.3rem 1rem !important;
+        box-sizing: border-box !important;
+      }
+
+      .metric.donation-metric h3 {
+        font-size: 1.8rem;
       }
 
       .dashboard-header h1 {

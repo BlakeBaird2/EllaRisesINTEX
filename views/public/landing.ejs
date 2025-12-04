@@ -4,7 +4,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= title %> | Ella Rises</title>
+
+  <!-- Favicon -->
   <link rel="icon" type="image/png" href="/images/EllaRisesHeart.png">
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#99B7C6">
+  <link rel="apple-touch-icon" href="/images/EllaRisesHeart.png">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/images/EllaRisesHeart.png">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ellarises.org/">
+  <meta property="og:title" content="Ella Rises - Empowering Young Women">
+  <meta property="og:description" content="Ella Rises empowers young women through education, community, and support. Join us in making a difference.">
+  <meta property="og:image" content="https://ellarises.org/images/EllaRisesLogo.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://ellarises.org/">
+  <meta property="twitter:title" content="Ella Rises - Empowering Young Women">
+  <meta property="twitter:description" content="Ella Rises empowers young women through education, community, and support. Join us in making a difference.">
+  <meta property="twitter:image" content="https://ellarises.org/images/EllaRisesLogo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Montserrat:wght@300;400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
@@ -12,9 +35,28 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
   <link rel="stylesheet" href="/css/style.css">
   <style>
+    /* Blue top section matching header */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 8px;
+      background: #99B7C6;
+      z-index: -1;
+    }
+
     /* Default desktop styling for hero-logo-circle */
     .hero-logo-circle {
       border-radius: 50%;
+    }
+
+    /* Hide side photos when window gets too small (but not on mobile) */
+    @media (max-width: 1100px) and (min-width: 769px) {
+      .hero-side-photos {
+        display: none !important;
+      }
     }
 
     @media (max-width: 768px) {
@@ -23,17 +65,23 @@
         border-top-right-radius: 0 !important;
         border-bottom-left-radius: 0 !important;
         border-bottom-right-radius: 0 !important;
-        padding: 2rem 1rem !important;
+        padding: 0.5rem 1rem 1.5rem 1rem !important;
       }
 
       .hero h1 {
-        font-size: 0.9rem;
-        margin-bottom: 0.75rem;
+        font-size: 1.3rem;
+        margin-bottom: 0.6rem;
         line-height: 1.3;
+        margin-top: 1rem !important;
+        font-weight: 600 !important;
+        padding: 0 1rem !important;
+        color: var(--primary) !important;
       }
 
       .hero p {
-        font-size: 1rem;
+        font-size: 0.85rem;
+        color: #555 !important;
+        padding: 0 1.5rem !important;
       }
 
       .hero-description {
@@ -44,7 +92,7 @@
       .hero-logo-circle {
         width: 180px !important;
         height: 115px !important;
-        border-radius: 90px !important;
+        border-radius: 110px !important;
       }
 
       /* Make hero section have pink background on mobile, stopping before text */
@@ -78,26 +126,76 @@
       }
 
       .mission, section {
-        padding: 2rem 1rem;
+        padding: 1.5rem 1rem;
       }
 
       .mission h2, section h2 {
         font-size: 2rem;
+        margin-bottom: 0.8rem !important;
       }
 
       .mission p, section p {
         font-size: 1rem;
+        line-height: 1.6 !important;
+      }
+
+      /* Reduce spacing in mission section on mobile */
+      .mission .container {
+        padding: 0 1.5rem;
+      }
+
+      .mission div[style*="width: 80px"] {
+        margin: 0 auto 1.2rem !important;
+      }
+
+      .mission p {
+        margin: 0 auto !important;
       }
 
       /* Impact cards */
       section[style*="grid"] {
         grid-template-columns: 1fr !important;
-        gap: 1.5rem;
+        gap: 1.2rem !important;
       }
 
       /* Mission and Impact sections mobile */
       section[style*="padding: 5rem"] {
-        padding: 3rem 1rem !important;
+        padding: 1.5rem 1rem !important;
+      }
+
+      section[style*="padding: 3.5rem"] .container {
+        padding: 0 2rem !important;
+      }
+
+      /* Impact section title spacing */
+      section[style*="pink-light"] h2 {
+        font-size: 2rem !important;
+        margin-bottom: 0.5rem !important;
+        margin-top: 0 !important;
+      }
+
+      section[style*="pink-light"] div[style*="margin-bottom: 3.5rem"] {
+        margin-bottom: 1.2rem !important;
+      }
+
+      /* Impact cards - reduce padding on mobile */
+      section[style*="pink-light"] div[style*="padding: 3rem 2rem"] {
+        padding: 1.5rem 1.2rem !important;
+      }
+
+      section[style*="pink-light"] div[style*="padding: 3rem 2rem"] h3 {
+        font-size: 1.4rem !important;
+        margin-bottom: 0.6rem !important;
+      }
+
+      section[style*="pink-light"] div[style*="padding: 3rem 2rem"] p {
+        font-size: 0.95rem !important;
+        line-height: 1.5 !important;
+      }
+
+      /* Reduce the decorative line margin in impact section */
+      section[style*="pink-light"] div[style*="width: 80px"] {
+        margin: 0 auto 1rem !important;
       }
 
       /* Remove rounded corners on pink backgrounds for mobile */
@@ -106,25 +204,59 @@
       }
 
       /* Support section */
+      section[style*="text-align: center"] {
+        padding: 3.5rem 0 1.5rem 0 !important;
+      }
+
       .container[style*="max-width: 700px"] {
-        padding: 0 1rem;
+        padding: 0 1.5rem;
       }
 
       .container[style*="max-width: 700px"] img {
-        width: 100px !important;
+        width: 90px !important;
+        margin-bottom: 1.5rem !important;
       }
 
       .container[style*="max-width: 700px"] h2 {
-        font-size: 2rem;
+        font-size: 2rem !important;
+        margin-bottom: 1rem !important;
       }
 
       .container[style*="max-width: 700px"] p {
-        font-size: 1.1rem;
+        font-size: 1rem !important;
+        line-height: 1.6 !important;
+        margin-bottom: 1.8rem !important;
       }
 
       .container[style*="max-width: 700px"] .btn {
         width: 100%;
-        margin: 0.5rem 0;
+        margin: 0.3rem 0;
+      }
+
+      /* Decrease gap between buttons in support section */
+      section[style*="text-align: center"] div[style*="display: flex"] {
+        gap: 1rem !important;
+      }
+
+      /* Footer spacing on mobile */
+      footer {
+        margin-top: 2rem !important;
+        padding: 0.3rem 0 !important;
+      }
+
+      footer img {
+        height: 3.5rem !important;
+        margin-top: 0.4rem !important;
+        margin-bottom: -0.3rem !important;
+      }
+
+      footer p {
+        margin-top: -0.4rem !important;
+        margin-bottom: 0.5rem !important;
+      }
+
+      footer a {
+        font-size: 1.1rem !important;
       }
     }
     .hero .btn-primary:hover {
@@ -227,13 +359,23 @@
     /* Mobile slideshow */
     @media (max-width: 768px) {
       .slideshow-section {
-        min-height: 220px;
+        min-height: 180px;
+        background: var(--pink-light) !important;
+        padding: 0.7rem 0 !important;
       }
 
       .slide-item {
-        min-height: 220px !important;
-        width: 250px !important;
-        aspect-ratio: 5 / 4 !important;
+        min-height: 180px !important;
+        width: 240px !important;
+        aspect-ratio: 5 / 3.5 !important;
+      }
+
+      .slideshow-swiper {
+        padding: 0.75rem 0;
+      }
+
+      .swiper-slide {
+        margin-right: 4px;
       }
 
       .slideshow-control-left,
@@ -259,16 +401,18 @@
       /* Restore pink background on mobile - only for logo area */
       .hero {
         background: white !important;
-        padding-top: 2rem !important;
-        padding-bottom: 2rem !important;
+        padding-top: 0.5rem !important;
+        padding-bottom: 1rem !important;
       }
 
       /* Add pink background behind logo container on mobile */
       .hero > .container > div[style*="display: flex"] {
         background: linear-gradient(135deg, var(--pink-light) 0%, var(--pink-light) 60%, rgba(244, 176, 146, 0.3) 100%);
-        padding: 1.5rem 1rem;
-        border-radius: 12px;
-        margin-bottom: 2rem;
+        padding: 0.1rem 1rem;
+        border-radius: 50px;
+        margin-bottom: 1rem;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
       }
 
       /* Hide pink circle on mobile */
@@ -413,13 +557,13 @@
   </section>
 
   <!-- Impact Section -->
-  <section style="padding: 5rem 0; background: linear-gradient(135deg, var(--pink-light) 0%, rgba(244, 176, 146, 0.4) 100%); position: relative;">
+  <section style="padding: 3.5rem 0 5rem 0; background: linear-gradient(135deg, var(--pink-light) 0%, rgba(244, 176, 146, 0.4) 100%); position: relative;">
     <div class="container" style="max-width: 1100px;">
       <div style="text-align: center; margin-bottom: 3.5rem;">
         <h2 style="font-size: 2.8rem; color: var(--primary); font-family: 'DM Serif Display', serif; margin-bottom: 1rem;">Our Impact</h2>
         <div style="width: 80px; height: 4px; background: linear-gradient(90deg, #9AB59D 0%, #3A3F3B 100%); margin: 0 auto; border-radius: 2px;"></div>
       </div>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin: 0 auto;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin: 0 auto; padding-bottom: 2rem;">
         <div style="text-align: center; padding: 3rem 2rem; background: white; border-radius: 20px; box-shadow: 0 6px 25px rgba(0,0,0,0.1); border: 2px solid rgba(154, 181, 157, 0.15); transition: all 0.3s ease; position: relative; overflow: hidden;">
           <div style="position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #9AB59D 0%, #3A3F3B 100%);"></div>
           <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.6rem; font-family: 'DM Serif Display', serif; margin-top: 0.5rem;">Education</h3>
@@ -440,7 +584,7 @@
   </section>
 
   <!-- Support Section -->
-  <section style="padding: 5rem 0; text-align: center; background: white;">
+  <section style="padding: 5rem 0 4rem 0; text-align: center; background: white;">
     <div class="container" style="max-width: 700px;">
       <img src="/images/EllaRisesHeart.png" alt="Ella Rises Heart" style="width: 120px; height: auto; margin-bottom: 2rem; display: block; margin-left: auto; margin-right: auto; filter: brightness(0) saturate(100%) invert(15%) sepia(5%) saturate(200%) hue-rotate(60deg) brightness(90%) contrast(85%);">
       <h2 style="font-size: 2.8rem; margin-bottom: 1.5rem; color: var(--primary); font-family: 'DM Serif Display', serif;">Join Our Mission</h2>
@@ -474,7 +618,7 @@
       breakpoints: {
         320: {
           slidesPerView: 'auto',
-          spaceBetween: 12,
+          spaceBetween: 16,
         },
         769: {
           slidesPerView: 'auto',

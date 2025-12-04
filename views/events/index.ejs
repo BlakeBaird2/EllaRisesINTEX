@@ -3,8 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#99B7C6">
   <title><%= title %> | Ella Rises</title>
   <link rel="icon" type="image/png" href="/images/EllaRisesHeart.png">
+  <link rel="apple-touch-icon" href="/images/EllaRisesHeart.png">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/images/EllaRisesHeart.png">
+  <link rel="manifest" href="/manifest.json">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -179,7 +184,7 @@
         flex: 1 1 100% !important;
         min-width: 0 !important;
         width: 100% !important;
-        margin-bottom: 0.75rem !important;
+        margin-bottom: 0 !important;
       }
 
       .search-container select {
@@ -187,12 +192,12 @@
         min-width: 0 !important;
         max-width: none !important;
         width: 100% !important;
-        margin-bottom: 0.75rem !important;
+        margin-bottom: 0 !important;
       }
 
-      /* Override global mobile styles - force buttons side by side */
+      /* Default: Search button full width (for regular users) */
       .search-container button[type="submit"] {
-        flex: 1 !important;
+        flex: 1 1 100% !important;
         min-width: 0 !important;
         max-width: 100% !important;
         width: 100% !important;
@@ -205,9 +210,45 @@
         margin: 0 !important;
       }
 
-      .search-container .btn-add,
-      .search-container a.btn-add {
-        flex: 1 1 calc(50% - 0.375rem) !important;
+      /* Default form container: full width (for regular users) */
+      .search-container form#search-form {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        display: flex !important;
+        box-sizing: border-box !important;
+        margin: 0 !important;
+      }
+
+      /* If .btn-add exists (manager view), make both buttons equal 50% width */
+      .search-container:has(.btn-add) form#search-form {
+        flex: 0 0 calc(50% - 0.375rem) !important;
+        min-width: 0 !important;
+        width: calc(50% - 0.375rem) !important;
+        max-width: calc(50% - 0.375rem) !important;
+        display: flex !important;
+        box-sizing: border-box !important;
+        margin: 0 !important;
+      }
+
+      .search-container:has(.btn-add) form#search-form button[type="submit"] {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        height: 48px !important;
+        padding: 0.75rem 1rem !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-sizing: border-box !important;
+        margin: 0 !important;
+      }
+
+      .search-container:has(.btn-add) .btn-add,
+      .search-container:has(.btn-add) a.btn-add {
+        flex: 0 0 calc(50% - 0.375rem) !important;
         min-width: 0 !important;
         max-width: calc(50% - 0.375rem) !important;
         width: calc(50% - 0.375rem) !important;
@@ -216,17 +257,6 @@
         padding: 0.75rem 1rem !important;
         align-items: center !important;
         justify-content: center !important;
-        box-sizing: border-box !important;
-        margin: 0 !important;
-      }
-
-      /* Force form container to be same width as button */
-      .search-container form#search-form {
-        flex: 1 1 calc(50% - 0.375rem) !important;
-        width: calc(50% - 0.375rem) !important;
-        max-width: calc(50% - 0.375rem) !important;
-        min-width: 0 !important;
-        display: flex !important;
         box-sizing: border-box !important;
         margin: 0 !important;
       }

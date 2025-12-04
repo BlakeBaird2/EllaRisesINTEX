@@ -1,0 +1,36 @@
+{
+  "name": "Ella Rises",
+  "short_name": "Ella Rises",
+  "description": "Ella Rises - Empowering Young Women Through Education and Community",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#99B7C6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/images/EllaRisesHeart.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/EllaRisesHeart.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/EllaRisesHeart.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/images/EllaRisesHeart.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
