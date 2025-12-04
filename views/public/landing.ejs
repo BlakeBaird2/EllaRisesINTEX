@@ -9,8 +9,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Montserrat:wght@300;400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
   <link rel="stylesheet" href="/css/style.css">
   <style>
+    /* Default desktop styling for hero-logo-circle */
+    .hero-logo-circle {
+      border-radius: 50%;
+    }
+
     @media (max-width: 768px) {
       .hero {
         border-top-left-radius: 0 !important;
@@ -21,7 +27,7 @@
       }
 
       .hero h1 {
-        font-size: 1.1rem;
+        font-size: 0.9rem;
         margin-bottom: 0.75rem;
         line-height: 1.3;
       }
@@ -37,7 +43,7 @@
       /* Mobile hero logo adjustments */
       .hero-logo-circle {
         width: 180px !important;
-        height: 130px !important;
+        height: 115px !important;
         border-radius: 90px !important;
       }
 
@@ -133,7 +139,7 @@
     }
 
 
-    /* Slideshow Styles */
+    /* Slideshow Styles - Swiper.js */
     .slideshow-section {
       user-select: none;
       -webkit-user-select: none;
@@ -144,57 +150,18 @@
       height: fit-content;
     }
 
-    .slideshow-wrapper {
-      position: relative;
-      -webkit-overflow-scrolling: touch;
-      scroll-behavior: smooth;
-      will-change: scroll-position;
+    .slideshow-swiper {
+      width: 100%;
+      padding: 0.75rem 0;
     }
 
-    .slideshow-wrapper:active {
-      cursor: grabbing;
+    .swiper-wrapper {
+      align-items: center;
     }
 
-    /* Desktop: disable grab cursor, use default */
-    @media (min-width: 769px) {
-      .slideshow-wrapper {
-        cursor: default;
-      }
-      .slideshow-wrapper:active {
-        cursor: default;
-      }
-    }
-
-    /* Mobile optimizations */
-    @media (max-width: 768px) {
-      .slideshow-wrapper {
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
-      }
-
-      .slide-item {
-        scroll-snap-align: start;
-      }
-    }
-
-    .slideshow-control-left:hover,
-    .slideshow-control-right:hover {
-      background: rgba(255, 255, 255, 1) !important;
-      transform: translateY(-50%) scale(1.1);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.25) !important;
-    }
-
-    .slideshow-control-left:active,
-    .slideshow-control-right:active {
-      transform: translateY(-50%) scale(0.95);
-    }
-
-    /* Hide arrows on mobile */
-    @media (max-width: 768px) {
-      .slideshow-control-left,
-      .slideshow-control-right {
-        display: none !important;
-      }
+    .swiper-slide {
+      width: auto;
+      height: auto;
     }
 
     /* Slide item styling */
@@ -204,7 +171,6 @@
       overflow: hidden;
       width: 400px;
       aspect-ratio: 4 / 3;
-      flex-shrink: 0;
     }
 
     .slide-item img {
@@ -212,6 +178,50 @@
       height: 100%;
       object-fit: cover;
       display: block;
+    }
+
+    /* Swiper navigation buttons */
+    .slideshow-swiper .swiper-button-prev,
+    .slideshow-swiper .swiper-button-next {
+      width: 50px;
+      height: 50px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid var(--pink-light);
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      transition: all 0.3s;
+    }
+
+    .slideshow-swiper .swiper-button-prev:hover,
+    .slideshow-swiper .swiper-button-next:hover {
+      background: rgba(255, 255, 255, 1);
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    }
+
+    .slideshow-swiper .swiper-button-prev:active,
+    .slideshow-swiper .swiper-button-next:active {
+      transform: scale(0.95);
+    }
+
+    .slideshow-swiper .swiper-button-prev::after,
+    .slideshow-swiper .swiper-button-next::after {
+      font-size: 1.2rem;
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    /* Hide arrows on mobile */
+    @media (max-width: 768px) {
+      .slideshow-swiper .swiper-button-prev,
+      .slideshow-swiper .swiper-button-next {
+        display: none !important;
+      }
+
+      .slide-item {
+        width: 250px;
+        aspect-ratio: 5 / 4;
+      }
     }
 
     /* Mobile slideshow */
@@ -296,7 +306,7 @@
         <!-- Center logo with circle -->
         <div style="position: relative; display: inline-block;">
           <!-- Pink circle behind logo -->
-          <div class="hero-logo-circle" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px; height: 300px; background: var(--pink-light); border-radius: 50%; border: 2px solid rgba(255, 255, 255, 0.3); z-index: 0; box-shadow: 0 4px 20px rgba(255, 216, 209, 0.4);"></div>
+          <div class="hero-logo-circle" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px; height: 300px; background: var(--pink-light); border: 2px solid rgba(255, 255, 255, 0.3); z-index: 0; box-shadow: 0 4px 20px rgba(255, 216, 209, 0.4);"></div>
           <img src="/images/EllaRisesTextLogo.png" alt="Ella Rises" style="max-width: 260px; width: 100%; margin-left: auto; margin-right: auto; display: block; transform: translate(5px, 5px); position: relative; z-index: 1;">
         </div>
 
@@ -318,53 +328,73 @@
   <!-- Image Slideshow -->
   <section class="slideshow-section" style="padding: 0.6rem 0 0 0; background: white; position: relative; overflow: hidden;">
     <div class="slideshow-container" style="position: relative; max-width: 100%; margin: 0 auto; width: 100%;">
-      <div class="slideshow-wrapper" style="display: flex; overflow-x: hidden; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; touch-action: pan-x; cursor: grab; position: relative;">
-        <div class="slideshow-track" style="display: flex; gap: 0.75rem; padding: 0; will-change: transform; align-items: center; position: relative;">
-          <div class="slide-item" style="overflow: hidden; position: relative;">
-            <img src="/images/ER Animation Workshop Feb 2021_029.jpg" alt="Workshop" loading="lazy" style="display: block;">
+      <div class="swiper slideshow-swiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <div class="slide-item">
+              <img src="/images/ER Animation Workshop Feb 2021_029.jpg" alt="Workshop" loading="lazy">
+            </div>
           </div>
-          <div class="slide-item" style="overflow: hidden; position: relative;">
-            <img src="/images/ER Animation Workshop Feb 2021_043.jpg" alt="Workshop" loading="lazy" style="display: block;">
+          <div class="swiper-slide">
+            <div class="slide-item">
+              <img src="/images/ER Animation Workshop Feb 2021_043.jpg" alt="Workshop" loading="lazy">
+            </div>
           </div>
-          <div class="slide-item" style="overflow: hidden; position: relative;">
-            <img src="/images/ER Animation Workshop Feb 2021_053.jpg" alt="Workshop" loading="lazy" style="display: block;">
+          <div class="swiper-slide">
+            <div class="slide-item">
+              <img src="/images/ER Animation Workshop Feb 2021_053.jpg" alt="Workshop" loading="lazy">
+            </div>
           </div>
-          <div class="slide-item" style="overflow: hidden; position: relative;">
-            <img src="/images/ER STEM Workshop Aug 2022-31.jpg" alt="STEM Workshop" loading="lazy" style="display: block;">
+          <div class="swiper-slide">
+            <div class="slide-item">
+              <img src="/images/ER STEM Workshop Aug 2022-31.jpg" alt="STEM Workshop" loading="lazy">
+            </div>
           </div>
-          <div class="slide-item" style="overflow: hidden; position: relative;">
-            <img src="/images/ER STEM Workshop Aug 2022-42.jpg" alt="STEM Workshop" loading="lazy" style="display: block;">
+          <div class="swiper-slide">
+            <div class="slide-item">
+              <img src="/images/ER STEM Workshop Aug 2022-42.jpg" alt="STEM Workshop" loading="lazy">
+            </div>
           </div>
-          <div class="slide-item" style="overflow: hidden; position: relative;">
-            <img src="/images/ER STEM Workshop Aug 2022-52.jpg" alt="STEM Workshop" loading="lazy" style="display: block;">
+          <div class="swiper-slide">
+            <div class="slide-item">
+              <img src="/images/ER STEM Workshop Aug 2022-52.jpg" alt="STEM Workshop" loading="lazy">
+            </div>
           </div>
-          <div class="slide-item" style="overflow: hidden; position: relative;">
-            <img src="/images/ER Summer Summit 2022-068.jpg" alt="Summer Summit" loading="lazy" style="display: block;">
+          <div class="swiper-slide">
+            <div class="slide-item">
+              <img src="/images/ER Summer Summit 2022-068.jpg" alt="Summer Summit" loading="lazy">
+            </div>
           </div>
-          <div class="slide-item" style="overflow: hidden; position: relative;">
-            <img src="/images/ER Summer Summit 2022-165.jpg" alt="Summer Summit" loading="lazy" style="display: block;">
+          <div class="swiper-slide">
+            <div class="slide-item">
+              <img src="/images/ER Summer Summit 2022-165.jpg" alt="Summer Summit" loading="lazy">
+            </div>
           </div>
-          <div class="slide-item" style="overflow: hidden; position: relative;">
-            <img src="/images/girl_drawing.jpg" alt="Girl Drawing" loading="lazy" style="display: block;">
+          <div class="swiper-slide">
+            <div class="slide-item">
+              <img src="/images/girl_drawing.jpg" alt="Girl Drawing" loading="lazy">
+            </div>
           </div>
-          <div class="slide-item" style="overflow: hidden; position: relative;">
-            <img src="/images/arts_crafts.jpg" alt="Arts and Crafts" loading="lazy" style="display: block;">
+          <div class="swiper-slide">
+            <div class="slide-item">
+              <img src="/images/arts_crafts.jpg" alt="Arts and Crafts" loading="lazy">
+            </div>
           </div>
-          <div class="slide-item" style="overflow: hidden; position: relative;">
-            <img src="/images/music_class.jpeg" alt="Music Class" loading="lazy" style="display: block;">
+          <div class="swiper-slide">
+            <div class="slide-item">
+              <img src="/images/music_class.jpeg" alt="Music Class" loading="lazy">
+            </div>
           </div>
-          <div class="slide-item" style="overflow: hidden; position: relative;">
-            <img src="/images/makerspace.jpeg" alt="Makerspace" loading="lazy" style="display: block;">
+          <div class="swiper-slide">
+            <div class="slide-item">
+              <img src="/images/makerspace.jpeg" alt="Makerspace" loading="lazy">
+            </div>
           </div>
         </div>
+        <!-- Arrow controls -->
+        <div class="swiper-button-prev slideshow-control-left"></div>
+        <div class="swiper-button-next slideshow-control-right"></div>
       </div>
-      <!-- Arrow controls -->
-      <button class="slideshow-control-left" aria-label="Previous image" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); width: 50px; height: 50px; background: rgba(255, 255, 255, 0.9); border: 2px solid var(--pink-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: all 0.3s; opacity: 1; pointer-events: auto;">
-        <i class="fa-solid fa-chevron-left" style="color: var(--primary); font-size: 1.2rem;"></i>
-      </button>
-      <button class="slideshow-control-right" aria-label="Next image" style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); width: 50px; height: 50px; background: rgba(255, 255, 255, 0.9); border: 2px solid var(--pink-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: all 0.3s; opacity: 1; pointer-events: auto;">
-        <i class="fa-solid fa-chevron-right" style="color: var(--primary); font-size: 1.2rem;"></i>
-      </button>
     </div>
   </section>
 
@@ -427,98 +457,32 @@
 </main>
 
 <%- include('../partials/footer') %>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="/js/main.js"></script>
 <script>
-  // Slideshow functionality
-  (function() {
-    const slideshowWrapper = document.querySelector('.slideshow-wrapper');
-    const slideshowTrack = document.querySelector('.slideshow-track');
-    const controlLeft = document.querySelector('.slideshow-control-left');
-    const controlRight = document.querySelector('.slideshow-control-right');
-    
-    if (!slideshowWrapper || !slideshowTrack) return;
-
-    let isDown = false;
-    let startX;
-    let scrollLeft;
-
-    // Left control - stop at beginning
-    if (controlLeft) {
-      controlLeft.addEventListener('click', (e) => {
-        e.stopPropagation();
-        e.preventDefault();
-        const scrollAmount = 420; // 400px image width + 1rem gap
-        const currentScroll = slideshowWrapper.scrollLeft;
-
-        // Only scroll if not at the beginning
-        if (currentScroll > 10) {
-          slideshowWrapper.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+  // Initialize Swiper for slideshow
+  document.addEventListener('DOMContentLoaded', function() {
+    const slideshowSwiper = new Swiper('.slideshow-swiper', {
+      slidesPerView: 'auto',
+      spaceBetween: 12,
+      freeMode: true,
+      grabCursor: true,
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      breakpoints: {
+        320: {
+          slidesPerView: 'auto',
+          spaceBetween: 12,
+        },
+        769: {
+          slidesPerView: 'auto',
+          spaceBetween: 12,
         }
-      });
-    }
-
-    // Right control - stop at end
-    if (controlRight) {
-      controlRight.addEventListener('click', (e) => {
-        e.stopPropagation();
-        e.preventDefault();
-        const scrollAmount = 420; // 400px image width + 1rem gap
-        const currentScroll = slideshowWrapper.scrollLeft;
-        const maxScroll = slideshowWrapper.scrollWidth - slideshowWrapper.clientWidth;
-
-        // Only scroll if not at the end
-        if (currentScroll < maxScroll - 10) {
-          slideshowWrapper.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-        }
-      });
-    }
-
-    // Touch/swipe support for mobile - use native scrolling for better performance
-    slideshowWrapper.addEventListener('touchstart', (e) => {
-      isDown = true;
-      startX = e.touches[0].pageX - slideshowWrapper.offsetLeft;
-      scrollLeft = slideshowWrapper.scrollLeft;
-    }, { passive: true });
-
-    slideshowWrapper.addEventListener('touchend', () => {
-      isDown = false;
-    }, { passive: true });
-
-    // Mouse drag support (mobile only - disabled on desktop)
-    slideshowWrapper.addEventListener('mousedown', (e) => {
-      // Only allow drag on mobile
-      if (window.innerWidth > 768) {
-        return;
       }
-      isDown = true;
-      startX = e.pageX - slideshowWrapper.offsetLeft;
-      scrollLeft = slideshowWrapper.scrollLeft;
-      slideshowWrapper.style.cursor = 'grabbing';
     });
-
-    slideshowWrapper.addEventListener('mouseleave', () => {
-      isDown = false;
-      slideshowWrapper.style.cursor = 'grab';
-    });
-
-    slideshowWrapper.addEventListener('mouseup', () => {
-      isDown = false;
-      slideshowWrapper.style.cursor = 'grab';
-    });
-
-    slideshowWrapper.addEventListener('mousemove', (e) => {
-      if (!isDown) return;
-      // Only allow drag on mobile
-      if (window.innerWidth > 768) {
-        isDown = false;
-        return;
-      }
-      e.preventDefault();
-      const x = e.pageX - slideshowWrapper.offsetLeft;
-      const walk = (x - startX) * 2;
-      slideshowWrapper.scrollLeft = scrollLeft - walk;
-    });
-  })();
+  });
 </script>
 </body>
 </html>
