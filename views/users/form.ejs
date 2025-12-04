@@ -142,8 +142,11 @@
   <div class="page-header">
     <h1><%= title %></h1>
   </div>
+  <% if (typeof error !== 'undefined' && error) { %>
+    <div class="alert error" style="margin-bottom: 1rem; padding: 0.75rem; background: #fee; color: #c33; border: 1px solid #fcc; border-radius: 8px; text-align: center;"><%= error %></div>
+  <% } %>
   <form method="POST" action="<%= action %>">
-    <input type="text" name="username" value="<%= user.username || '' %>" placeholder="Username *" required <%= user.user_id ? 'readonly' : '' %>>
+    <input type="text" name="username" value="<%= user.username || '' %>" placeholder="Username *" required>
     <input type="email" name="email" value="<%= user.email || '' %>" placeholder="Email *" required>
     <input type="password" name="password" placeholder="Password <%= user.user_id ? '(leave blank to keep current)' : '*' %>" <%= user.user_id ? '' : 'required' %>>
     <input type="text" name="first_name" value="<%= user.first_name || '' %>" placeholder="First Name *" required>
@@ -151,9 +154,6 @@
     <select name="role" required>
       <option value="">Select Role *</option>
       <option value="user" <%= user.role === 'user' || user.user_role === 'user' ? 'selected' : '' %>>Common User</option>
-      <% if (user.user_id) { %>
-        <option value="manager" <%= user.role === 'manager' || user.user_role === 'manager' ? 'selected' : '' %>>Manager</option>
-      <% } %>
       <option value="admin" <%= user.role === 'admin' || user.user_role === 'admin' ? 'selected' : '' %>>Admin</option>
     </select>
     <% if (user.user_id) { %>

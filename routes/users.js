@@ -143,10 +143,56 @@ router.get('/:id/edit', async (req, res) => {
 
 // Update user
 router.post('/:id', async (req, res) => {
-  const { email, first_name, last_name, role, is_active, password } = req.body;
+  const { username, email, first_name, last_name, role, is_active, password } = req.body;
 
   try {
+    // Validate username if provided
+    if (!username || username.trim() === '') {
+      const user = await db('websiteusers').where({ user_id: req.params.id }).first();
+      if (!user) return res.status(404).render('error', { title: 'Not Found', message: 'User not found' });
+
+      user.full_name = `${user.first_name || ''} ${user.last_name || ''}`.trim();
+      user.role = user.user_role;
+      user.is_active = user.account_status === 'active';
+
+      return res.render('users/form', {
+        title: 'Edit User',
+        user,
+        action: `/users/${req.params.id}`,
+        method: 'POST',
+        isManager: true,
+        error: 'Username is required.'
+      });
+    }
+
+    const trimmedUsername = username.trim();
+
+    // Check if username is being changed and if it's already taken by another user
+    const existingUser = await db('websiteusers')
+      .where({ username: trimmedUsername })
+      .whereNot({ user_id: req.params.id })
+      .first();
+
+    if (existingUser) {
+      const user = await db('websiteusers').where({ user_id: req.params.id }).first();
+      if (!user) return res.status(404).render('error', { title: 'Not Found', message: 'User not found' });
+
+      user.full_name = `${user.first_name || ''} ${user.last_name || ''}`.trim();
+      user.role = user.user_role;
+      user.is_active = user.account_status === 'active';
+
+      return res.render('users/form', {
+        title: 'Edit User',
+        user,
+        action: `/users/${req.params.id}`,
+        method: 'POST',
+        isManager: true,
+        error: 'Username is already taken. Please choose a different username.'
+      });
+    }
+
     const updateData = {
+      username: trimmedUsername,
       email,
       first_name,
       last_name,
@@ -161,6 +207,13 @@ router.post('/:id', async (req, res) => {
     }
 
     await db('websiteusers').where({ user_id: req.params.id }).update(updateData);
+
+    // Update session if the current user is editing their own profile
+    if (req.session.user && req.session.user.id === parseInt(req.params.id)) {
+      req.session.user.username = trimmedUsername;
+      req.session.save();
+    }
+
     res.redirect('/users?success=User updated successfully');
   } catch (error) {
     console.error('Error:', error);

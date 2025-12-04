@@ -21,7 +21,7 @@
       }
 
       .hero h1 {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         margin-bottom: 0.75rem;
         line-height: 1.3;
       }
@@ -37,7 +37,29 @@
       /* Mobile hero logo adjustments */
       .hero-logo-circle {
         width: 180px !important;
-        height: 180px !important;
+        height: 130px !important;
+        border-radius: 90px !important;
+      }
+
+      /* Make hero section have pink background on mobile, stopping before text */
+      .hero {
+        background: var(--pink-light) !important;
+        position: relative;
+      }
+
+      /* Add white background starting at the h1 text to separate from pink */
+      .hero h1 {
+        background: white;
+        margin-top: 2rem !important;
+        margin-left: -1rem !important;
+        margin-right: -1rem !important;
+        padding-top: 1.5rem !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+        padding-bottom: 1.5rem !important;
+        border-radius: 20px 20px 0 0;
+        position: relative;
+        z-index: 1;
       }
 
       .hero-logo-circle + img {
@@ -178,7 +200,7 @@
     /* Slide item styling */
     .slide-item {
       position: relative;
-      border-radius: 8px;
+      border-radius: 20px;
       overflow: hidden;
       width: 400px;
       aspect-ratio: 4 / 3;
@@ -195,12 +217,13 @@
     /* Mobile slideshow */
     @media (max-width: 768px) {
       .slideshow-section {
-        min-height: 300px;
+        min-height: 220px;
       }
 
       .slide-item {
-        min-height: 300px !important;
+        min-height: 220px !important;
         width: 250px !important;
+        aspect-ratio: 5 / 4 !important;
       }
 
       .slideshow-control-left,
